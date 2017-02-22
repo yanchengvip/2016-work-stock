@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+    <%= content_for?(:title) ? yield(:title) : "进货宝" %>
+    </title>
+    <%= yield :head if content_for?(:head) %>
+    <%= csrf_meta_tags %>
+</head>
+
+<body>
+    <%= yield %>
+    <% if Rails.env.development? %>
+      <script src="http://127.0.0.1:35729/livereload.js?ext=Chrome"></script>
+    <% end %>
+    <%= render 'shared_mobile/tongji'%>
+</body>
+</html>

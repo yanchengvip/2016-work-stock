@@ -1,0 +1,350 @@
+/*
+ *= require vendors/jquery.fullpage.min
+ */
+
+html,
+body,
+main,
+.layer {
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    max-width: 100%;
+}
+
+#arrow {
+    width: 3rem;
+    position: fixed;
+    bottom: 1rem;
+    left: 14.5rem;
+    display: none;
+}
+
+#back {
+    position: fixed;
+    z-index: 5000;
+    top: 1rem;
+    left: 1.5rem;
+    width: 2.2rem;
+    display: none;
+    a {
+        display: block;
+        padding: .5rem;
+    }
+}
+
+// #audio {
+//     display: none;
+//     position: fixed;
+//     top: 1rem;
+//     right: 1rem;
+//     width: 5rem;
+//     height: 5rem;
+//     background-size: 100% 100%;
+//     z-index: 110;
+//     audio {
+//         display: none;
+//     }
+//     &.play {
+//         background-image: image-url("mobile/invitationLetter/audio.png");
+//         // -webkit-animation: rotating 1.6s linear infinite;
+//         // -moz-animation: rotating 1.6s linear infinite;
+//         // -o-animation: rotating 1.6s linear infinite;
+//         // animation: rotating 1.6s linear infinite;
+//     }
+//     &.mute {
+//         background-image: image-url("mobile/invitationLetter/mute.png");
+//     }
+// }
+.section {
+    display: none;
+    &.active {
+        display: block;
+    }
+}
+
+#fullpage.started {
+    .section {
+        background-image: image-url("mobile/events/new_year/p/logo.png"), image-url("mobile/events/new_year/p/bg.png");
+        background-size: 100% 100%, 100% 100%;
+    }
+}
+
+.section {
+    background-image: image-url("mobile/events/new_year/p/bg.png");
+    background-size: 100% 100%;
+}
+
+.layer {
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.l1 {
+    z-index: 100;
+}
+
+.l2 {
+    z-index: 200;
+}
+
+.l3 {
+    z-index: 300;
+}
+
+.l4 {
+    z-index: 400;
+}
+
+.l5 {
+    z-index: 500;
+}
+
+.l6 {
+    z-index: 600;
+}
+
+.l7 {
+    z-index: 700;
+}
+
+.l8 {
+    z-index: 800;
+}
+
+.l9 {
+    z-index: 900;
+}
+
+.l10 {
+    z-index: 1000;
+}
+
+#p1 {
+    .l1 {
+        background-image: image-url("mobile/events/new_year/p1/1.png");
+        display: none;
+    }
+    .l2 {
+        background-image: image-url("mobile/events/new_year/p1/2.png");
+        display: none;
+    }
+    .l3 {
+        background-image: image-url("mobile/events/new_year/p/1.png");
+        display: none;
+    }
+    .l4 {
+        background-image: image-url("mobile/events/new_year/p/2.png");
+        display: none;
+    }
+    .l5 {
+        background-image: image-url("mobile/events/new_year/p1/gift.png");
+        display: none;
+    }
+}
+
+#p2 {
+    .l1 {
+        background-image: image-url("mobile/events/new_year/p2/1.png");
+        display: none;
+    }
+    .l2 {
+        background-image: image-url("mobile/events/new_year/p2/2.png");
+        display: none;
+    }
+}
+
+#p3 {
+    .l1 {
+        background-image: image-url("mobile/events/new_year/p3/1.png");
+        display: none;
+    }
+    .l2 {
+        background-image: image-url("mobile/events/new_year/p3/2.png");
+        display: none;
+    }
+}
+
+#p4 {
+    .l1 {
+        background-image: image-url("mobile/events/new_year/p4/1.png");
+        display: none;
+    }
+    .l2 {
+        background-image: image-url("mobile/events/new_year/p4/2.png");
+        display: none;
+    }
+}
+
+#p5 {
+    .l1 {
+        background-image: image-url("mobile/events/new_year/p5/1.png");
+        display: none;
+    }
+    .l2 {
+        background-image: image-url("mobile/events/new_year/p5/2.png");
+        display: none;
+    }
+}
+
+#p6 {
+    .l1 {
+        background-image: image-url("mobile/events/new_year/p6/event.png");
+        display: none;
+    }
+    input,
+    input:active,
+    input:focus {
+        display: block;
+        position: absolute;
+        width: 83.4%;
+        // top: 23.7rem;
+        top: 42%;
+        // left: 3.5rem;
+        left: 50%;
+        margin-left: -44.5%;
+        height: 3.5rem;
+        font-size: 1.9rem;
+        border-radius: .5rem;
+        box-shadow: none;
+        outline-width: 0;
+        text-align: center;
+        border: 0;
+        &::-webkit-input-placeholder {
+            text-align: center;
+        }
+        &:-moz-placeholder {
+            text-align: center;
+        }
+        &::-moz-placeholder {
+            text-align: center;
+        }
+        &:-ms-input-placeholder {
+            text-align: center;
+        }
+    }
+    a.button {
+        display: block;
+        width: 40%;
+        position: absolute;
+        // top: 29.35rem;
+        top: 53%;
+        left: 50%;
+        margin-left: -20%;
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+}
+
+#pop-up {
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+.close {
+    background-image: image-url("mobile/events/new_year/p6/close.png");
+    background-size: 100% 100%;
+    &>* {
+        display: none;
+    }
+}
+
+.success,
+.fail {
+    background-image: image-url("mobile/events/new_year/p6/result.png");
+    background-size: 100% 100%;
+    .download,
+    .share {
+        position: absolute;
+        display: block!important;
+        width: 10rem;
+        // top: 37.5rem;
+        top: 68%;
+    }
+    .download {
+        // left: 5rem;
+        left: 14%;
+    }
+    .share {
+        // left: 17.35rem;
+        left: 54%;
+    }
+    .line-1,
+    .line-2 {
+        display: none;
+    }
+    .line-1,
+    .line-2,
+    .num {
+        font-size: 2.5rem;
+        line-height: 2.5rem;
+        height: 2.5rem;
+        letter-spacing: .3rem;
+        font-weight: bold;
+        font-family: "Microsoft YaHei", "Arial Black";
+        color: #fff;
+    }
+    .line-1,
+    .line-2,
+    .num {
+        width: 100%;
+        text-align: center;
+        position: absolute;
+    }
+    .line-1 {
+        // top: 16.75rem;
+        top: 30%;
+    }
+    .line-2 {
+        // top: 20.5rem;
+        top: 36%;
+        .price-text {
+            color: #fddb31;
+        }
+    }
+    .num {
+        // top: 28.3rem;
+        top: 50%;
+        color: #ed482a;
+    }
+}
+
+.success {
+    .success-text {
+        display: block;
+    }
+}
+
+.fail {
+    .fail-text {
+        display: block;
+    }
+}
+
+.close-btn {
+    display: block;
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    top: 24%;
+    right: 7%;
+}
+
+.share-tip {
+    background-image: image-url("mobile/invitationLetter/p8/share-tip.png");
+    z-index: 3000;
+}

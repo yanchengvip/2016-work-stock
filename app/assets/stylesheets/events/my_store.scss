@@ -1,0 +1,63 @@
+/*
+ *= require vendors/jquery.fullpage.min
+ *= require base
+ *= require common
+ */
+
+
+a {
+    text-decoration: none;
+}
+html,
+body,
+main {
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    width: auto;
+    display: block;
+}
+
+#back {
+    position: fixed;
+    z-index: 5000;
+    top: 1rem;
+    left: 1.5rem;
+    width: 2.2rem;
+    display: none;
+    a {
+        display: block;
+        padding: .5rem;
+    }
+}
+
+.section {
+    display: none;
+    &.active {
+        display: block;
+    }
+}
+
+.layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.part {
+    width: 100%;
+    display: block;
+    text-align: center;
+    img {
+        float: left;
+        display: block;
+    }
+}

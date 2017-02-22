@@ -1,0 +1,16 @@
+<header class="back-share">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back">
+      <%= image_tag "mobile/back.png" %>
+    </a>
+  </div>
+  <% if true or  (request.env["HTTP_USER_AGENT"] or "").downcase.include?('jinhuobao') %>
+    <div class="header-right">
+      <a href="javascript:shareToWechat(location.href)">
+        <%= image_tag "mobile/base/share.png" %>
+      </a>
+    </div>
+  <% end %>
+</header>
+
+

@@ -1,0 +1,91 @@
+<% content_for :head do %>
+    <% content_for :title do %>
+    进货宝 - 一次未来社区商业的奇异之旅
+    <% end %>
+    <%= stylesheet_link_tag 'events/invitation_letter', media: 'all', 'data-turbolinks-track' => true %>
+    <meta name="description" content="进货宝。" />
+    <div id='wx_pic' style='margin:0 auto;display:none;'>
+      <%= image_tag "mobile/300.png" %>
+    </div>
+<% end %>
+<main class="normal">
+    <div id="audio" class="play">
+        <audio src="http://7xp1gb.media1.z0.glb.clouddn.com/Scabs-员工上台音乐.mp3" loop="loop"></audio>
+    </div>
+
+ <div id="fullpage">
+    <div class="section" id="p1">
+        <div class="layer l2"></div>
+        <div class="layer l3"></div>
+        <div class="layer l4"></div>
+        <div class="layer l5"></div>
+        <div class="layer l6"></div>
+        <div class="layer l7"></div>
+        <div class="layer l8"></div>
+        <div class="layer l9"></div>
+        <div class="layer l10"></div>
+    </div>
+    <div class="section" id="p2">
+        <div class="layer l1"></div>
+        <div class="layer l2"></div>
+        <div class="layer l3"></div>
+        <div class="layer l4"></div>
+    </div>
+    <div class="section" id="p3">
+        <div class="layer l1"></div>
+        <div class="layer l2"></div>
+        <div class="layer l3"></div>
+        <div class="layer l4"></div>
+    </div>
+    <div class="section" id="p4">
+        <div class="layer l1"></div>
+        <div class="layer l2"></div>
+        <div class="layer l3"></div>
+        <div class="layer l4"></div>
+        <div class="layer l5"></div>
+        <div class="layer l6"></div>
+        <div class="layer l7"></div>
+    </div>
+    <div class="section" id="p5">
+        <div class="layer l1"></div>
+        <div class="layer l2">
+            <%= image_tag "mobile/invitationLetter/p5/l2.png" %>
+        </div>
+        <div class="layer l3"></div>
+        <div class="layer l4"></div>
+        <div class="layer l5"></div>
+        <div class="layer l6"></div>
+    </div>
+    <div class="section" id="p6">
+        <div class="layer l1"></div>
+        <div class="layer l2"></div>
+        <div class="layer l3"></div>
+        <div class="layer l4"></div>
+        <div class="layer l5"></div>
+        <div class="layer l6"></div>
+    </div>
+    <div class="section" id="p7">
+        <div class="layer l2"></div>
+    </div>
+    <div class="section" id="p8">
+        <!-- <div class="layer l1"></div> -->
+        <div class="addr-pic">
+            <%= image_tag "mobile/invitationLetter/p8/addr_.png" %>
+        </div>
+        <div class="map">
+            <%= image_tag "mobile/invitationLetter/p8/map.png" %>
+        </div>
+        <div class="info">
+            <div class="name">77剧场</div>
+            <div class="addr">（北京市东城区美术馆后街77号77文创园内）</div>
+        </div>
+        <div class="share">
+            <a href="javascript:share()"><%= image_tag "mobile/invitationLetter/p8/share.png" %></a>
+        </div>
+        <div class="layer share-tip"></div>
+    </div>
+</div>
+<div id="arrow"><a href="javascript:goToNext();"><%= image_tag "mobile/invitationLetter/arrow.png" %></a></div>
+</main>
+
+<%= javascript_include_tag 'invitation_letter', 'data-turbolinks-track' => true %>

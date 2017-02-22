@@ -1,0 +1,84 @@
+<!-- 门店认证页面 -->
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+    <%= stylesheet_link_tag    'vendors/picker', media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+<% content_for :header do %>
+<header class="no-search">
+    <div class="header-left">
+        <a href="javascript:goBack()" id=""></a>
+  </div>
+  <div class="ordersHeader_title">认证地址</div>
+</header>
+<% end %>
+<% content_for :main do %>
+<script>
+  var fromID = null;
+</script>
+<main class="address-new certified">
+    <%= form_tag verify_user_address_path(@address), method: "post", id: "address-new-form" do %>
+          <input type="hidden" name="user_address[ShipName]" value="<%= @address.ShipName %>" required>
+          <input type="hidden" name="user_address[Mobile]" value="<%= @address.Mobile %>" required>
+          <input type="hidden" name="user_address[FaceName]" value="<%= @address.FaceName %>" placeholder="例如:红旗超市" >
+          <div type="hide" id="picker" readonly=readonly placeholder="请选择省/市/区" required></div>
+          <input type="hidden" name="user_address[Detailedaddress]" value="<%= @address.Detailedaddress %>" onfocus="this.value = this.value;" disabled="true" required>
+          <input type="hidden" name="IsChain" value="<%= @address.store_information.try(:IsChain) %>">
+          <input type="hidden" name="user_address[Province]" value="<%= @address.Province %>">
+          <input type="hidden" name="user_address[City]" value="<%= @address.City %>">
+          <input type="hidden" name="user_address[County]" value="<%= @address.County %>">
+          <input type="hidden" name="LicencePhotoCover" value="<%= @address.store_information.try(:LicencePhotoCoverNiuID) %>" required>
+          <div class="info-input">
+            <input type="hidden" name="StoreType" value="<%= @address.store_information.try(:StoreType) %>" required>
+            <input type="hidden" name="StoreArea" value="<%= @address.store_information.try(:StoreArea) %>" required>
+            <input type="hidden" name="Nearby" value="<%= @address.store_information.try(:Nearby) %>" required>
+          </div>
+    <% end %>
+    <div class="upload-box">
+      <div class="upload-item" id="licenseimg">
+        <div id="fileupload-licenseimg" class="img-box">
+          <img id="LicencePhotoCover-img"   src="" data-holder-rendered="true">
+          <i></i>
+        </div>
+      </div>
+
+    </div>
+    <div class="store-info-box clearfix">
+      <!-- 此顺序和下面选择具体信息的顺序必须相同 -->
+      <div class="store-info store-type" val="<%= @address.store_information.try(:StoreType) %>">店铺类型</div>
+      <div class="store-info store-size" val="<%= @address.store_information.try(:StoreArea) %>">店铺面积</div>
+      <div class="store-info store-position" val="<% @address.store_information.try(:Nearby) %>">店铺位置</div>
+    </div>
+    <a href="javascript:;" class="sub-btn">提交</a>
+    <div class="info-cont-box">
+      <div class="info-cont type-info">
+        <ul class="clearfix">
+          <% {0 => "小卖部", 2 => "超市", 5 => "餐饮", 6 => "批零兼营", 7 => "网吧", 8 => "旅馆", 9 => "报亭", 10 => "烟酒店", 11 => "批发"}.each do |index, name| %>
+            <li value="<%= index %>" class="type<%= index %>"><%= name%></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="info-cont size-info">
+        <ul class="clearfix">
+          <% {0 => "50平米以下", 1 => "50-100平米", 2 => "100-200平米", 3 => "200平米以上"}.each do |index, name| %>
+              <li value="<%= index %>" class="size<%= index %>"><%= name%></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="info-cont position-info">
+        <ul class="clearfix">
+          <% {0 => "写字楼周边", 1 => "医院周边", 2 => "学校周边", 3 => "交通枢纽周边", 5 => "社区周边"}.each do |index, name| %>
+            <li value="<%= index %>" class="position<%= index %>"><%= name%></li>
+          <% end %>
+        </ul>
+      </div>
+      <i class="closed"></i>
+    </div>
+</main>
+<script type="text/javascript">
+</script>
+<% end %>
+
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'address', 'data-turbolinks-track' => true %>
+<% end %>

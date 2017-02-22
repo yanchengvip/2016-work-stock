@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="27px" height="27px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.5.2 (25235) - http://www.bohemiancoding.com/sketch -->
+    <title>Oval 440 + Rectangle 997</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="进货宝" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="首页－定位与" sketch:type="MSArtboardGroup" transform="translate(-172.000000, -72.000000)" fill="#C0C0C0">
+            <g id="Oval-440-+-Rectangle-997" sketch:type="MSLayerGroup" transform="translate(187.152543, 87.152543) rotate(-45.000000) translate(-187.152543, -87.152543) translate(174.152543, 71.652543)">
+                <path d="M13,26 C20.1797017,26 26,20.1797017 26,13 C26,5.82029825 20.1797017,0 13,0 C5.82029825,0 -9.23705556e-14,5.82029825 -9.23705556e-14,13 C-9.23705556e-14,20.1797017 5.82029825,26 13,26 Z M13,24.4705882 C19.335031,24.4705882 24.4705882,19.335031 24.4705882,13 C24.4705882,6.66496905 19.335031,1.52941176 13,1.52941176 C6.66496905,1.52941176 1.52941176,6.66496905 1.52941176,13 C1.52941176,19.335031 6.66496905,24.4705882 13,24.4705882 Z" id="Oval-440" sketch:type="MSShapeGroup"></path>
+                <path d="M12,24.5857864 L13,24.5857864 L14,24.5857864 L14,29.5950085 C14,30.1422 13.5561352,30.5857864 13,30.5857864 L13,30.5857864 C12.4477153,30.5857864 12,30.1348113 12,29.5950085 L12,24.5857864 Z" id="Rectangle-997" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

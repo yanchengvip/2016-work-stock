@@ -1,0 +1,15 @@
+<div id="shop-cart" class="<%= params[:formScanner] == "true" ? "at-bottom" : ""  %>">
+    <div class="mask"></div>
+    <div class="check-box">
+      全选
+    </div>
+    <% cart_num, cart_price = current_user.cart_for_nav(session[:depot_ids], session[:company_id], true)%>
+    <div class="price-amount">
+      <div class="price-total">
+        合计:￥<span class="cart-price"><%= cart_price %></span>
+      </div>
+      <a class="ready" href="<%= if (!current_user.default_address) then 'javascript:showFillAddress()' else 'javascript:checkOut()' end %>">结算(<span class="cart-num"><%= cart_num %></span>)</a>
+      <a class="not-ready" href="javascript:;">不足&yen;</a>
+    </div>
+    <a href="javascript:;" class="batch-delete">删除</a>
+</div>

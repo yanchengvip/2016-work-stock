@@ -1,0 +1,98 @@
+<% content_for :header do %>
+  <%= render 'shared_mobile/search_back_header' %>
+<% end %>
+<% content_for :main do %>
+<% hash_params = params['q'].present? %>
+<main class="product second-page <%= 'has-category' if not hash_params %>">
+  <% if not hash_params %>
+    <div class="category">
+      <% groups = ProductGroup.first_groups(cookies[:company_id]).includes(:second_groups) %>
+      <div class="tabs">
+        <% groups.each do |group| %>
+          <div class="tab" data-id="<%= group.ID%>"><span><%= group.Name %></span></div>
+        <% end %>
+      </div>
+      <% groups.each do |group| %>
+        <div class="category-list"  style="display:none" id="<%= group.ID%>">
+          <a class="category-item heading" href="/products?fid=<%=group.ID%>">全部<%= group.Name%></a>
+          <% group.second_groups.each do |sg| %>
+            <a href="/products?sid=<%=sg.ID%>" class="category-item"><%= sg.Name%></a>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<!--   <div class="page-title center-align">
+      -为您推荐的产品-
+  </div> -->
+  <% if @products.present? %>
+    <!-- <div class="line"></div> -->
+    <div class="list_c">
+      <% @products.each do |product| %>
+        <% if Company.need_stock?(product.CompanyID) %>
+          <% next if !@stocks or !@stocks[product.ID] or @stocks[product.ID].State != 2 %>
+        <% else %>
+          <% next if product.SellState != 2 %>
+        <% end %>
+      <div class="list-item" id="p-<%= product.ID %>" data-data="<%= product.list_attrs_json %>"  data-image-url="<%= product.cover_url %>" data-name="<%= product.Name %>">
+        <div class="padding">
+          <a href="javascript:;" _href="<%= product_path(product) %>">
+            <%= image_tag product.cover_url, class: "responsive-img image-item" %>
+            <% if Company.need_stock?(product.CompanyID) and @stocks[product.ID].Stock + @stocks[product.ID].PreSaleQuantity <= 0 %>
+              <div class="cover">补货中</div>
+            <% end %>
+            <% if product.CornerMark.present? %>
+              <i class="img-tip"><%= product.CornerMark %></i>
+            <% end %>
+          </a>
+          <div class="desc clearfix" style="position: relative;">
+            <div class="word left" _onclick="window.location = '<%= product_path(product) %>'">
+              <div class='title'>
+                <% if product.company.ThirdType.to_i == 0 %>
+                  <i class="text-tip"><%= params[:company_id] %>自营</i>
+                <% end %>
+                <span><%= product.Name %></span>
+              </div>
+              <div style="position: relative;">
+                <span class="price-market">
+                  <% if product.Type != 0 and product.OriginalPrice %>
+                  ￥<%= product.OriginalPrice %>/<%= product.Unit %>
+                  <% end %>
+                </span><br>
+                <div class="price">&yen;<%= product.ProductPrice %><i>/<%= product.Unit %></i>
+                  <% if product.MinBuyCount.to_i > 1%>
+                    <span style="font-size:1.2rem; float: right; margin-right: 3rem; margin-top: 0.1rem; color:#F5A623;"><%= product.MinBuyCount %><%= product.Unit%>起订</span>
+                  <% end %>
+                </div>
+                <div class="item-console <%= 'show-console' if product.cart_for(current_user) > 0 %>">
+                  <a href="javascript:;" onclick="setAmount.add('<%= product.ID %>')" class="add-item">＋</a>
+                  <div class="item-num" data-min-buycount="<%= product.MinBuyCount || 1 %>">
+                    <input id="<%= product.ID %>" class="number" num="<%= product.cart_for(current_user) %>" value="<%= product.cart_for(current_user) %>" data-id="<%= product.ID %>" type="num" disabled>
+                  </div>
+                  <a href="javascript:;" onclick="setAmount.reduce('<%= product.ID %>')" class="remove-item">－</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% end %>
+    </div>
+    <script>
+        // console.log(setAmount)
+        $(".item-console").click(function(event){
+          event.stopPropagation()
+        })
+    </script>
+    <!-- <%= paginate @products %> -->
+  <% else %>
+  <p class="center-align big-text">这个分类暂时没有商品，<a href="/products/list" class="jhb-red">来这里逛逛</a>？</p>
+  <% end %>
+</main>
+<% end %>
+<% content_for :footer do %>
+  &nbsp;
+<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'product', 'data-turbolinks-track' => true %>
+<% end %>

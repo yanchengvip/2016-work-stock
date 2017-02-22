@@ -1,0 +1,130 @@
+<div class="buy_car">
+    <span class="car" id="end"></span>
+    <em style="padding-left:20px;">我的购物车</em>
+    <i class="url"></i>
+    <div class="buy_car_pro">
+        <div class="title">
+            <a href="javascript:void(0);">商品</a>
+            <a href="javascript:void(0);">数量</a>
+            <a href="javascript:void(0);">价格</a>
+            <a href="javascript:void(0);">删除</a>
+        </div>
+
+        <div class="pro_buy_list">
+            <ul id="PayCartList">
+            </ul>
+
+        </div>
+        <div class="bottom">
+            <span style="color:#e61c44;">总计：<font id="totalPrice"></font></span>
+            <input type="button" value="去结算" id="submit" onclick="CheckAddress();" />
+        </div>
+    </div>
+    <div id="msg">已成功加入购物车！</div>
+</div>
+<% flag = (sign_in? and !current_user.default_address) %>
+<% if flag %>
+  <%= render 'shared/address_modal'%>
+<% end %>
+
+<script type="text/javascript">
+    $(function () {
+        $(".nav_sub .buy_car").mouseenter(function (event) {
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: 'Get',
+                url: "/carts",
+                success: function (e) {
+                    if (e.status == 'ok') {
+                        CreateList(e.data);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                    // alert(e);
+                }
+            });
+
+            event.stopPropagation();
+        })
+
+    })
+
+    function CreateList(data) {
+        var arr = new Array();
+        cart_list = data.cart_list
+        for (var i = 0; i < cart_list.length; i++) {
+            arr.push("<li class=\"pro_number clearfix\">");
+            arr.push("<a href=\"/products/" + cart_list[i].product_id + "\"><img width=\"44\" height=\"44\" src=\"" + cart_list[i].product_img + "\" alt=\"商品\"></a>");
+            arr.push("<a href=\"javascript:void(0);\" class=\"left\" style=\"display:block; width:36px; margin-left:34px;\">" + cart_list[i].number + "</a>");
+            arr.push("<span class=\"left sum_h\">" + (cart_list[i].number * 10000 * cart_list[i].product_price/10000) + "</span>");
+            arr.push("<em class=\"url\" onclick=\"CartDelete('" + cart_list[i].id + "', this);\"></em>");
+            arr.push("</li>");
+        }
+        $("#PayCartList").html(arr.join(""));
+
+        var sum = 0.00;
+        var sum_b = $("span.sum_h");
+        for(var i=0; i<sum_b.length; i++){
+            sum += parseFloat(sum_b[i].innerHTML);
+        }
+        $("#totalPrice").html(sum.toFixed(2));
+        if (sum >= leastOrderMoney) {
+            $("#submit").val("去结算");
+            $("#submit").removeAttr("disabled");
+        } else {
+            $("#submit").val("<%= Settings.order_money[cookies[:company_id]] %>元起订");
+            $("#submit").attr("disabled", "disabled");
+        }
+    }
+
+    function CartDelete(id, node) {
+        if (!confirm("您确定要删除商品？")) {
+            return false
+        }
+
+        $.ajax({
+            cache: false,
+            dataType: "json",
+            type: 'Delete',
+            url: "/carts/" + id,
+            success: function (e) {
+                if (e.status == 'ok') {
+                    $(node).parent().remove();
+                }
+            },
+            error: function (e) {
+                alert(e);
+            }
+        });
+    }
+
+    function CheckAddress() {
+      if (<%= flag %>) {
+        notifyAddress();
+      } else {
+        window.location.href = '/carts';
+      }
+    }
+
+    /*function totalPrice(){
+        var totalPrice = $('#totalPrice').val();
+        $('.pro_number').each(function(){
+            var price = parseInt($(this).find(".sum_h").val());
+            totalPrice +=price;
+        });
+    }*/
+
+    /*$(function(){
+        var sum = 0;
+        var sum_b = $("span.sum_h");
+        for(var i=0; i<sum_b.length; i++){
+            console.log(sum_b[i]);
+            sum += parseFloat(sum_b[i].innerHTML);
+        }
+        $("#bax_1").text(sum);
+
+    });*/
+
+</script>

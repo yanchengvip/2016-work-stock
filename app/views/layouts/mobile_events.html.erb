@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+    <% if content_for?(:title) %>
+        <%= yield :title %>
+    <% else %>
+        进货宝
+     <% end %>
+    </title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <%= stylesheet_link_tag 'vendors/base-min', media: 'all', 'data-turbolinks-track' => true %>
+    <% if content_for?(:head) %>
+        <%= yield :head %>
+    <% end %>
+    <%= csrf_meta_tags %>
+</head>
+
+<body>
+    <%= yield %>
+    <% if Rails.env.development? %>
+        <script src="http://127.0.0.1:35729/livereload.js?ext=Chrome"></script>
+    <% end %>
+    <% if content_for?(:tongji) %>
+        <%= yield :tongji %>
+    <% else %>
+        <%= render 'shared_mobile/tongji'%>
+     <% end %>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<%= stylesheet_link_tag  'pc/help_center'%>
+<%= javascript_include_tag 'index_new', 'data-turbolinks-track' => true %>
+<div class="top-img reports">
+  <div class="shadow"></div>
+  <div class="text-box w1200">
+    <p class="big">我们的努力你可以看到</p>
+    <p class="small">快消品一站式采购平台</p>
+  </div>
+</div>
+<div class="reports-content w1200">
+  <div class="item-cont">
+    <% pre = nil %>
+    <% @reports.each_with_index do |report, index| %>
+      <% if pre.nil? %>
+        <div class="year-box">
+          <div class="year"><span><%= report.MediaReportDate.year %>年</span></div>
+      <% elsif pre.MediaReportDate.year != report.MediaReportDate.year  %>
+        </div>
+        <div class="year-box">
+          <div class="year"><span><%= report.MediaReportDate.year %>年</span></div>
+      <% end %>
+          <% if pre.nil? %>
+            <dl class="month-box clearfix ">
+              <dt><%= report.MediaReportDate.month %>月</dt>
+          <% elsif pre.MediaReportDate.year != report.MediaReportDate.year or pre.MediaReportDate.month != report.MediaReportDate.month %>
+            </dl>
+            <dl class="month-box clearfix ">
+              <dt><%= report.MediaReportDate.month %>月</dt>
+          <% end %>
+            <dd class="<%= 'big' if index == 0 %>">
+              <a href="/reports/<%= report.ID %>" target="_blank">
+                <%= image_tag report.cover_url %>
+                <i></i>
+                <p><span class="text-title"><%= report.Title %></span><span class="time"><%= report.MediaReportDate.strftime("%m月%d日") %></span></p>
+              </a>
+            </dd>
+          <% if index + 1 == @reports.size %>
+          </dl>
+        </div>
+          <% end %>
+      <% pre = report %>
+    <% end %>
+  </div>
+  <%= paginate @reports %>
+  <%= image_tag 'newPC/moren.png', id:"img_url",style:"display:none"%>
+</div>
+
+<script>
+$(function(){
+  $(".text-title").each(function(){
+    $(this).text().length > 17 ? $(this).text($(this).text().slice(0,14)+ '...') : '';
+  })
+})
+$(".reports-content dd img").each(function(){
+  var that = this;
+  this.onload = function(){
+    $(that).show();
+  }
+  if(!$(this).attr("src")){
+    $(this).attr("src",$("#img_url").attr("src"));
+  }
+})
+</script>

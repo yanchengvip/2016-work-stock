@@ -1,0 +1,21 @@
+
+<% content_for :header do %>
+<header class="search second-page-header">
+  <div class="search-back">
+    <a href="javascript:goBack()">
+      <%= image_tag 'mobile/base/back.svg'%>
+    </a>
+  </div>
+  <div class="search-btn">
+    <a href="javascript:$('form').submit();" class="btn-submit">
+      <!-- <%= image_tag 'mobile/base/search_btn.png'%> -->
+      搜索
+    </a>
+  </div>
+  <form action="/products" class="search-input">
+    <input type="search" name="q" placeholder="搜索进货宝商品" value="<%= params['q']%>" >
+    <input type="submit" class="hidden">
+    <div></div>
+  </form>
+</header>
+<% end %>

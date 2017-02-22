@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render 'shared/head'%>
+  </head>
+  <body class="black" style="background:#fff;">
+    <div class="main-wrapper">
+      <% if content_for :header %>
+        <%= yield :header %>
+      <% else %>
+        <%= render 'shared/header' %>
+      <% end %>
+      <%= yield %>
+    </div>
+    <%= render 'shared/right_nav' %>
+    <%= render 'shared/footer' %>
+
+    <% if Rails.env.production? %>
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?0a6477c3e0a39e5749fa4f2284f5f2ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    <% end %>
+
+    <% if Rails.env.development? %>
+      <script src="http://127.0.0.1:35729/livereload.js?ext=Chrome"></script>
+    <% end %>
+    <script type="text/javascript">
+      var isLimitBuy = <%= sign_in? ? current_user.IsLimitBuy : true %>
+    </script>
+    
+  </body>
+</html>

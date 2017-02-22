@@ -1,0 +1,67 @@
+<div class="header gray_bg">
+    <div class="head_top" style="background:#e8e9e9;">
+        <div class="head_top_box clearfix">
+            <ul class="left">
+                <%= render 'shared/logon' %>
+            </ul>
+            <ul class="right">
+                <li style="margin-top:2px;" class="app_down">APP下载
+                   <i></i>
+                   <div class="code_box"></div>
+                </li>
+                <li style="margin-top:2px;">客服中心热线：010-67832728</li>
+                <li class="my_bao">
+                    <div class="my_bao_top">
+                        <a href="javascript:;" class="my_bao_a">我的进货宝<b class="url"></b></a>
+                    </div>
+                    <div class="text_box">
+                        <ul>
+                            <li><a href="/my/orders">我的订单</a></li>
+                            <li><a href="/my/favorites">我的收藏夹</a></li>
+                            <!-- <li><a href="/my/integral">我的积分</a></li> -->
+                            <li><a href="/my/coupons">我的优惠券</a></li>
+                            <li><a href="/my/info">我的资料</a></li>
+                            <li><a href="/my/password">修改密码</a></li>
+                            <li><a href="/my/address">我的收货地址</a></li>
+                        </ul>
+                    </div>
+                    <div class="bor"></div>
+                </li>
+                <li class="collect">
+                    <div class="collect_top">
+                        <a href="javascript:;" class="collent_a"><i class="url btn_b"></i>收藏夹 <%= sign_in? ? current_user.enshrines.count : 0 %> 件<b class="url"></b></a>
+                    </div>
+                    <div class="car_box">
+                        <h3>最近加入的宝贝</h3>
+                        <div class="pro_list">
+                              <% current_user.enshrines.includes(:product).each do |item| %>
+                                <div class="clearfix pro_class">
+                                    <%= image_tag(item.product.cover_url, width: "55", height: "63") %>
+                                    <span class="sp_t"><%= item.product.Name%></span>
+                                    <div class="price">
+                                        <span><i>&yen;<%= item.product.ProductPrice%></i></span>
+                                        <a href="javascript:DCollect('<%= item.ID%>')" class="delete">删除</a>
+                                    </div>
+                                </div>
+                              <% end if sign_in? %>
+                        </div>
+                        <div class="btn">
+                            <a href="/my/favorites"><input type="button" value="查看我的收藏夹" /></a>
+                            <div class="border_02"></div>
+                        </div>
+                    </div>
+                    <div class="bord"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="login_title">
+    <div class="login_top w990 clearfix">
+        <h1 class="left"><a href="/"><%= image_tag 'index/logox.png'%></a></h1>
+        <div class="wrods left">
+            <%= image_tag 'index/words.png'%>
+        </div>
+
+    </div>
+</div>

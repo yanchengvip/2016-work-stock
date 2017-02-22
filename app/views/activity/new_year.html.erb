@@ -1,0 +1,65 @@
+<% content_for :head do %>
+    <% content_for :title do %>
+    进货宝 - 给大伙儿的2.5亿压岁钱
+    <% end %>
+    <%= stylesheet_link_tag 'events/new_year', media: 'all', 'data-turbolinks-track' => true %>
+    <meta name="description" content="进货宝。" />
+    <div id='wx_pic' style='margin:0 auto;display:none;'>
+        <%= image_tag "mobile/events/new_year/share.jpg" %>
+    </div>
+
+<% end %>
+<main class="normal">
+ <div id="fullpage">
+    <div class="section" id="p1">
+        <div class="layer l1"></div>
+        <div class="layer l2"></div>
+        <div class="layer l3"></div>
+        <div class="layer l4"></div>
+        <div class="layer l5"></div>
+    </div>
+    <div class="section" id="p2">
+        <div class="layer l1"></div>
+        <div class="layer l2"></div>
+    </div>
+    <div class="section" id="p3">
+        <div class="layer l1"></div>
+        <div class="layer l2"></div>
+    </div>
+    <div class="section" id="p4">
+        <div class="layer l1"></div>
+        <div class="layer l2"></div>
+    </div>
+    <div class="section" id="p5">
+        <div class="layer l1"></div>
+        <div class="layer l2"></div>
+    </div>
+    <div class="section" id="p6">
+        <div class="layer l1"></div>
+        <div class="layer l2">
+            <input type="tel" placeholder="请输入手机号" id="tel" name="Phone">
+            <a href="javascript:;" class="button"><%= image_tag "mobile/events/new_year/p6/submit.png" %></a>
+        </div>
+    </div>
+</div>
+<% ua = (request.env["HTTP_USER_AGENT"] or "").downcase %>
+<% isInApp = ua.include?('jinhuobao') %>
+
+<div id="pop-up">
+    <a href="<%= if isInApp then '/products/list' else '/common/wechat_download' end %>" class="download"><%= image_tag "mobile/events/new_year/p6/use_button.png" %></a>
+    <a href="javascript:shareNow()" class="share"><%= image_tag "mobile/events/new_year/p6/share_button.png" %></a>
+    <div class="line-1 success-text">你成功领取</div>
+    <div class="line-1 fail-text">哎，您已领取过了</div>
+    <div class="line-2 success-text"><span class="price-text"></span>元优惠券</div>
+    <div class="line-2 fail-text">把机会留给别人吧</div>
+    <div class="num">&yen;<span class="price-text"></span></div>
+    <a href="javascript:closePopup()" class="close-btn"></a>
+</div>
+<div class="layer share-tip"></div>
+<div id="arrow"><a href="javascript:goToNext();"><%= image_tag "mobile/invitationLetter/arrow.png" %></a></div>
+<% if isInApp %>
+    <div id="back"><a href="/"><%= image_tag "mobile/back.png" %></a></div>
+<% end %>
+</main>
+
+<%= javascript_include_tag 'events/new_year', 'data-turbolinks-track' => true %>

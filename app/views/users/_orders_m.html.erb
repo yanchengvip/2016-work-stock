@@ -1,0 +1,95 @@
+<!-- 我的订单页 -->
+<header class="no-search clearfix">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">我的订单</div>
+</header>
+<!-- <div class="order-title jhb-grey">我的订单</div> -->
+<div class="line"></div>
+<div class="row">
+  <div class="col s12">
+    <ul class="tabs">
+      <li class="tab col s3"><a href="/my/orders" class="<%= 'active' if !params.key?(:status) %> jhb-grey">全&emsp;&emsp;部</a></li>
+      <li class="tab col s3"><a class="<%= 'active' if params[:status] == '0' %> jhb-grey" href="/my/orders?status=0">待发货</a></li>
+      <li class="tab col s3"><a class="<%= 'active' if params[:status] == '1' %> jhb-grey" href="/my/orders?status=1">待收货</a></li>
+      <li class="tab col s3"><a class="<%= 'active' if params[:status] == '2' %> jhb-grey" href="/my/orders?status=2">已完成</a></li>
+    </ul>
+    <div class="line"></div>
+  </div>
+</div>
+<!--=============================================New================================================ -->
+<!-- 全部订单 Begin -->
+<div class="new-order-items clearfix">
+<% @orders.each do |order| %>
+  <div class="new-order-item" id=<%= order.OrderCode%> data-id=<%= order.OrderCode%> data-order-status=<%= order.status_show %> >
+    <div class="title">
+      <!--自营 or 非自营 -->
+      <div><%= order.company.show_name %></div>
+      <div class="fr order-red status"><%= order.status_show %></div>
+    </div>
+    <div class="goods-list">
+      <div class="goods-img-box">
+        <% order.order_products.each do |order_product| %>
+          <div class="goods-img">
+            <%= image_tag order_product.product.cover_url('v100') %>
+          </div>
+        <% end %>
+      </div>
+      <div class="goods-total">
+        共<%= order.order_products.inject(0){|sum, op| sum+op.Quantity}%>件商品
+      </div>
+    </div>
+    <div class="bottom-box">
+      <% if order.CanceledStatus.blank? or order.CanceledStatus == 0  %>
+        <button class="remove-order" data-code=<%=order.OrderCode%>>取消订单</button>
+      <% elsif order.CanceledStatus == 1 %>
+        <button class="remove-order" disabled="disabled" data-code=<%=order.OrderCode%>>等待取消</button>
+      <% elsif order.CanceledStatus == 2 %>
+        <!-- <button class="remove-order" disabled="disabled" data-code=<%=order.OrderCode%>>取消成功</button>-->
+      <% elsif order.CanceledStatus == 3 %>
+        <button class="remove-order" disabled="disabled" data-code=<%=order.OrderCode%>>取消失败</button>
+      <% end if order.OrderStatus.in?([1,2,7,10]) %>
+
+      <% if order.OrderStatus.in?([4,5,8])%>
+        <!-- <a href="/orders/<%= order.OrderCode%>/reviews" class="link-to">去评价</a> -->
+      <% end %>
+      <div class="total-amount fr">
+        <!--chaneg by lzh-->
+        <!--合计：¥<-%= order.Money.round(2)%>-->
+        合计：¥<%= order.Money.round(2) %>
+        <!--change by lzh-->
+      </div>
+    </div>
+  </div>
+<% end %>
+</div>
+<!-- 全部订单 End  -->
+<!--取消订单 Begin -->
+<div id="show-box">
+  <div id="cancel-reason-box">
+    <div class="title">选择取消原因</div>
+    <ul class="cancel-reason">
+      <li>现在不想买</li>
+      <li>卖家无法配送</li>
+      <li>无法支付订单</li>
+      <li>需要修改订单</li>
+      <li>其他</li>
+    </ul>
+    <div class="button-group">
+      <a href="javascript:void(0);" class="confirm">确认</a>
+    </div>
+  </div>
+  <a href="javascript:void(0);" class="cancel"></a>
+</div>
+<!--取消订单 End -->
+<script type="text/javascript">
+   $('ul.tabs').tabs();
+   $('.tab>a').click(function () {
+     location.href = this.href;
+   })
+</script>
+
+<% content_for :script do %>
+    <%= javascript_include_tag 'my_orders', 'data-turbolinks-track' => true %>
+<% end %>

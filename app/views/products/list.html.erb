@@ -1,0 +1,111 @@
+<% content_for :head do %>
+<style>
+body {height: 100%;overflow: hidden;}
+header.fake-search {position: relative;}
+</style>
+<% end %>
+<% content_for :header do %>
+  <% if params[:fromCart] == "true" %>
+    <header class="clearfix" id="header-lpt">
+      商品列表
+    </header>
+  <% else %>
+    <%= render 'shared_mobile/search_header' %>
+  <% end %>
+<% end %>
+<% content_for :main do %>
+<% ua = (request.env["HTTP_USER_AGENT"] or "").downcase %>
+<% is_ios = (ua.include?("iphone") or ua.include?("ipad") or ua.include?("ipod")) %>
+<main class="list">
+<!--     <div class="justify main-list-header">
+        <a href="/products/list?type=group" class="pure-button">按分类</a>
+        <a href="/products/list?type=brand" class="pure-button">按品牌</a>
+    </div>
+ -->
+  <% (cookies['company_id'] == '22294f4c-dacc-48d6-aba8-d6c8fbe8cf7e') or (cookies['company_id'] == 'd1d929ec-3af1-45f3-8047-b9abd47e8de5') and (Time.now < Time.parse("2016-10-24 00:00")) %>
+  <% if Time.now < Time.parse("2016-10-24 00:00") %>
+    <div id="main-list-ad">
+      <%= image_tag "mobile/volume.png" %>
+      周年庆订单暴增，配送可能会有延迟，敬请谅解！
+    </div>
+  <% end %>
+  <div id="main-list-wrapper">
+    <div id="main-list-categories">
+        <% @left_list.each_with_index do |tag, index| %>
+          <div class="main-list-category-item <%= params[:type] == 'group' ? 'big-category off' : '' %>">
+            <a href="javascript:;" data-id="<%= tag.ID%>"><%= tag.try(:Name) || tag.try(:BrandName) %>
+                <span class="dot"></span>
+                <!-- <span class="bg-dot"> </span> -->
+            </a>
+          </div>
+          <div class="small-categories c-<%= tag.ID %>">
+            <% tag.second_groups_by(session[:city_id]).each do |sg| %>
+              <div class="main-list-category-item">
+                <a href="javascript:;" data-id="<%= sg.ID%>"><%= sg.try(:Name) %><!-- <i class="right-icon"></i> --></a>
+              </div>
+            <% end if params[:type] == 'group' %>
+          </div>
+        <% end %>
+    </div>
+
+    <div id="main-list-page">
+        <div id="main-list-current-title">
+          <ul class="screen-box">
+            <li class="brand-box">
+              <a href="javascript:;" class="brand">品牌:<span>全部</span></a>
+            </li>
+            <li class="sales-box">
+              <a href="javascript:;" class="sales">排序:<span>默认</span></a>
+            </li>
+          </ul>
+        </div>
+        <div id="ptr" class="list-ptr">
+          <div class="genericon genericon-next">
+          </div>
+        </div>
+        <div id="content" class="main-list-items">
+        </div>
+
+        <div class="brand-shadow">
+          <div class="shadow"></div>
+          <ul class="brand-list">
+          </ul>
+          <div class="select-btn-box">
+            <a href="javascript:;" class="all">全部</a>
+            <a href="javascript:;" class="sure">确定</a>
+          </div>
+        </div>
+    </div>
+  </div>
+
+
+</main>
+<% end %>
+<% content_for :footer do %>
+  <% if Time.now > Time.parse('2016-10-14 23:00') && Time.now < Time.parse('2016-10-21 00:00') %>
+    <%= render 'shared_mobile/nav_footer_anniver' %>
+  <!--<-% elsif true %>-->
+  <% elsif params[:fromCart] == "true"  %>
+    <footer class="footer-lpt">
+      <div class="statistic">
+        <div class="price-total">
+          <!--change by lzh-->
+          小计:¥<span class="subtotal">0</span>
+          <!--<-% cart_num, cart_price = current_user.cart_for_nav(cookies[:company_id], true)%>-->
+          <!--小计:¥<span class="cart-price"><-%= cart_price %></span>-->
+          <!--change by lzh-->
+        </div>
+        <div class="discount">
+          这里显示优惠活动这里显示优惠活动这里显示优惠活动
+        </div>
+      </div>
+      <a href="/carts" class="go-shopping-cart">去购物车</a>
+    </footer>
+  <% else %>
+    <%= render 'shared_mobile/nav_footer' %>
+  <% end %>
+<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'list', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'shop_carts', 'data-turbolinks-track' => true %>
+<% end %>

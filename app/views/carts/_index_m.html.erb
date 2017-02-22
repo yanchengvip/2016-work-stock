@@ -1,0 +1,260 @@
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+<% end %>
+<% content_for :header do %>
+  <% if params[:formScanner] == "true"  %>
+  <header class="no-search second-page-header">
+    <div class="header-left">
+      <a href="javascript:goBack();" id="back"></a>
+    </div>
+    <div class="ordersHeader_title">购物车</div>
+    <span class="edit-lpt">编辑</span>
+  </header>
+  <% else %>
+   <header class="title carts">
+    购物车
+    <span class="edit-lpt">编辑</span>
+  </header>
+  <% end %>
+<% end %>
+<% content_for :main do %>
+    <main class="cart">
+      <% if !@carts_group.present? %>
+          <div class="line"></div>
+          <div class="no-content center-align">
+            <%= image_tag "mobile/carts_01.png", class: "responsive-img" %>
+            <span class="sp_1 jhb-grey">购物车肚子空空</span>
+            <span class="sp_2 jhb-grey">挑点什么呢？</span>
+            <a class="pure-button jhb-grey button-small" href="/products/list">去逛逛</a>
+          </div>
+      <% else %>
+          <% @carts_group.each do |key, carts| %>
+              <%
+                 company = Company.find_by(ID: key)
+                 company_city = CompanyCity.find_by(CompanyID: key, CityID: cookies[:city_id])
+              %>
+              <div class="cart-product-box" deliver-price="<%= company_city.try(:SendPrice).to_i %>">
+                <div class="product-seller checked" company-id=<%= company.ID %>>
+                  <div class="check-box"></div>
+                  <div class="seller-title">
+                    <% if company.ThirdType == 0 %>
+                        <h2 class="self-support"><%= company.show_name %>
+                          <a companyId="<%= company.id %>" href="javascript:;" class="right showCoupon">优惠券</a>
+                        </h2>
+                    <% else %>
+                        <h2 class="non-self"><%= company.show_name %>
+                          <a companyId="<%= company.id %>" href="javascript:;" class="right showCoupon">优惠券</a>
+                        </h2>
+                    <% end %>
+                  </div>
+                </div>
+                <div class="zhanwei"></div>
+                <% if @activities[key].present? %>
+                    <div class="promotion-box">
+                      <div class="active-tag">
+                        满送
+                      </div>
+                      <div class="seller-discount">
+                        <% @activities[key].each do |activity| %>
+                            <%= activity.Title %>
+                            <!--<span> activity.ActivityPrice </span> -->
+                        <% end %>
+                      </div>
+                      <!--跳转到商品列表 -->
+                      <a class="assem-products" href="/products/list?fromCart=true&company_id=<%= company.id %>">
+                      <!--<a class="assem-products" href="/products/list?company_id=<-%= company.id %>&fromCart=true">-->
+                        去凑单
+                      </a>
+                    </div>
+                <% end %>
+                <!--change by lzh-->
+                <% carts.each_with_index do |cart,index| %>
+                  <%
+                    if Company.need_stock?(cart.product.CompanyID)
+                      stock = @stocks[cart.ProductID].present? ? (@stocks[cart.ProductID].Stock + @stocks[cart.ProductID].PreSaleQuantity) : 0
+                      if !@stocks[cart.product.id] or @stocks[cart.product.id].State != 2 or cart.product.State != 2
+                        @dated_products << cart.product
+                        @cart_ids << cart.ID
+                        @dated_reasons << "商品已经下架"
+                        next
+                      elsif stock <= 0
+                        @dated_products << cart.product
+                        @cart_ids << cart.ID
+                        @dated_reasons << "库存不足"
+                        next
+                      end
+                    else
+                      if cart.product.State != 2 or cart.product.SellState != 2
+                        @dated_products << cart.product
+                        @cart_ids << cart.ID
+                        @dated_reasons << "商品已经下架"
+                        next
+                      end
+                    end
+                    if cart.product.Type != 2 && cart.product.ActivityBeginTime && cart.product.ActivityEndTime && (Time.now > cart.product.ActivityEndTime or (Time.now > cart.product.ActivityBeginTime - 1.hour and cart.product.MaxActivityAmount == cart.product.CurrentActivityAmount) )
+                      @dated_products << cart.product
+                      @cart_ids << cart.ID
+                      @dated_reasons << "活动商品过期"
+                      next
+                    end
+                  %>
+                  <div class="cart-product <%= "checked" if cart.is_checked? %> <%= 'out-of-stock' if Company.need_stock?(cart.product.CompanyID) and stock < cart.Number.to_i %>" data-key=<%= cart.product.ID %>  data-min-buy=<%= cart.product.MinBuyCount || 1 %> data-max-buy="<%=cart.product.MaxSaleAmountDay || 99999999 %>"  <%= "data-ckey=#{ cart.ID}" if cart.product.Type != 4 %>  id=product-<%= cart.ID %> <%= "data-stock=#{stock}" if Company.need_stock?(cart.product.CompanyID) and stock <= 50 %>>
+                      <div class="content">
+                        <div class="img">
+                          <%= image_tag cart.product.cover_url('v150') %>
+
+                          <% if Company.need_stock?(cart.product.CompanyID) and stock <= 50 %>
+
+                            <% if  ![4,5].include? cart.product.Type %>
+                              <span class="commodity-stocks">仅剩 <%= stock %>件</span>
+                            <% end  %>
+                          <% end %>
+                          <div class="corner-mark"><%=cart.product.CornerMark %></div>
+                          <!-- <div class="cover hidden">库存不足</div>-->
+                        </div>
+                        <div class="info">
+                          <div class="title"><%=cart.product.Name%></div>
+                          <!--change by lzh 添加商品规格-->
+
+                          <!--<div class="specification"><-%= @stocks[cart.product.id].State %>&#45;&#45;<-%= @stocks[cart.product.id].CreateTime %>-<-%= cart.product.State %>&#45;&#45;&#45;&#45; <-%=cart.product.product_info.Specification %></div>-->
+
+                          <div class="countdown-box">
+                            <!--change by lzh-->
+                            <% if is_show_valid_time(cart) %>
+                                <div class="activity-countdown">
+                                  <!--距活动结束: <span><-%= ( Date.parse( cart.product.ActivityEndTime.strftime("%Y-%m-%d %H:%M:%S") ) - Date.parse(Time.now.strftime("%Y-%m-%d %H:%M:%S") ) ).to_i %>天</span>-->
+                                  剩<span><%= valid_time(cart) %></span>
+                                </div>
+                                <!--距活动结束: <span><-%= ( cart.product.ActivityEndTime - Time.now ) %></span>-->
+                                <!--.strftime("%Y.%m.%d")-->
+                                <!-- Time.parse("2016-07-22 00:00"-->
+                                <!--距活动结束: <span>1天</span>-->
+                            <% end %>
+                            <!--change by lzh-->
+                          </div>
+                          <div class="specification"></div>
+                          <div class="info-box">
+                            <div class="price">
+                              <span class="main-red">¥</span>
+                              <% if [4,5].include? cart.product.Type%>
+                                  <span class="price-gift-num main-red"><%= (cart.product.ProductPrice*100).round.to_f/100 %></span>/<%=cart.product.Unit%>
+                              <%else%>
+                                  <span class="price-num main-red"><%= (cart.product.ProductPrice*100).round.to_f/100 %></span>/<%=cart.product.Unit%>
+                              <%end%>
+                            </div>
+                          </div>
+                        </div>
+                        <!--number-box -->
+                        <% if [4,5].include? cart.product.Type%>
+                          <div class="number-box">
+                            <!--  <a class="minus" href="javascript:setAmountCart.reduce('#count<%= cart.ID %>')">－</a>-->
+                            <div class="number-wrapper" data-min-buycount="<%= cart.product.MinBuyCount || 1 %>">
+                                <input  id="count<%= cart.ID %>" type="tel" class="number" data-id="<%= cart.ID %>" value=<%= cart.Number %> num="<%= cart.Number %>" disabled="disabled">
+                            </div>
+                            <!-- <a class="plus" href="javascript:setAmountCart.add('#count<%= cart.ID %>')">＋</a>-->
+                          </div>
+                        <%else%>
+                          <div class="number-box">
+                            <a class="minus" href="javascript:setAmountCart.reduce('#count<%= cart.ID %>')">－</a>
+                            <div class="number-wrapper" data-min-buycount="<%= cart.product.MinBuyCount || 1 %>">
+                                <input  id="count<%= cart.ID %>" type="tel" class="number" data-id="<%= cart.ID %>" value=<%= cart.Number %> num="<%= cart.Number %>">
+                            </div>
+                            <a class="plus" href="javascript:setAmountCart.add('#count<%= cart.ID %>')">＋</a>
+                          </div>
+                        <% end %>
+                        <!--end -->
+                      </div>
+                      <div class="restrict">限购<%= cart.product.MaxSaleAmountDay %><%=cart.product.Unit%></div>
+                      <div class="tool">
+                        <% if [4,5].include? cart.product.Type%>
+
+                        <% else %>
+                          <div class="check-box"></div>
+                        <% end %>
+                        <% name = cart.product.Name %>
+                        <% shortName = name.length > 20 ? name.slice(0, 20)+'..' : name%>
+                      </div>
+                      <!-- 套餐详情  -->
+                      <% if cart.product.is_group_product? %>
+                          <div class="folding">套餐详情</div>
+                      <% end %>
+                      <!--套餐详情数据 -->
+                      <% if cart.product.is_group_product? %>
+                          <div class="sub-cart-products">
+                            <% cart.product.group_products.includes(:sub_product => [:product_info]).each_with_index do |g_product, index| %>
+                                <% product = g_product.sub_product %>
+                                <div class="sub-cart-product">
+                                  <% name = product.Name %>
+                                  <% shortName = name.length > 15 ? name.slice(0, 15)+'..' : name%>
+                                  <div class="title"><%= shortName %></div>
+                                  <div class="price-count">
+                                    <div class="count main-red">
+                                      X<%= g_product.Number %>
+                                    </div>
+                                    <div class="price">
+                                      <span class="main-red">￥<%= product.ProductPrice%></span>/<%= product.Unit%>
+                                    </div>
+                                  </div>
+                                </div>
+                            <% end %>
+                          </div>
+                      <% end %>
+                    </div>
+                <% end %>
+                <!--change by lzh  -->
+                <div class="product-item-price">
+                  <span class="price">小计:¥0</span><span style="display:none">(<%= company_city.try(:SendPrice).to_i %>元起送)</span>
+                </div>
+              </div>
+          <% end %>
+      <% end %>
+      <!-- 失效商品列表 -->
+      <div class="failure-list">
+        <% @dated_products.each_with_index do |dated_product,index| %>
+            <!--失效商品 -->
+            <div class="goods"  data-key=<%= dated_product.ID %> data-ckey=<%= @cart_ids[index] %> id=product-<%= @cart_ids[index] %> >
+              <div class="tag">失效</div>
+              <div class="content">
+                <div class="product-details">
+                  <div class="img">
+                    <%= image_tag dated_product.cover_url('v150'), class: "image" %>
+                    <div class="invalid-reason">
+                      <%= @dated_reasons[index] %>
+                    </div>
+                  </div>
+                  <div class="info">
+                    <div class="title"><%= dated_product.Name %></div>
+                    <div class="specification"></div>
+                    <div class="price">
+                      <span>¥</span>
+                      <span class="price-gift-num"><%= dated_product.ProductPrice%></span>/<%= dated_product.Unit%>
+                    </div>
+                    <a href="javascript:;" class="remove"></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <% end %>
+
+        <% if @dated_products.length != 0 %>
+            <div class="empty-box">
+              <div class="empty-lpt">清空失效商品</div>
+            </div>
+        <% end %>
+
+      </div>
+    </main>
+<% end %>
+<% content_for :footer do %>
+  <%= render 'shared_mobile/shop_cart' %>
+  <% if params[:formScanner] != "true"  %>
+    <% if Time.now > Time.parse('2016-10-14 23:00') && Time.now < Time.parse('2016-10-21 00:00') %>
+      <%= render 'shared_mobile/nav_footer_anniver' %>
+    <% else %>
+      <%= render 'shared_mobile/nav_footer' %>
+    <% end %>
+  <% end %>
+<% end %>
+<% content_for :script do %>
+    <%= javascript_include_tag 'carts', 'data-turbolinks-track' => true %>
+<% end %>

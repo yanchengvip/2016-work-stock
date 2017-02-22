@@ -1,0 +1,9 @@
+<%= stylesheet_link_tag  'pc/help_center'%>
+
+<div class="content w1200">
+  <div class="sm">
+    <h4 style="font-size:20px;text-align: center;"><%= @report.Title %></h4>
+    <%= @report.HtmlShow.to_s.html_safe %>
+  </div>
+</div>
+

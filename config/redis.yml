@@ -1,0 +1,24 @@
+defaults: &defaults
+  redis:
+    :host: 127.0.0.1
+    :port: 6379
+    :db: 0
+
+development:
+  redis:
+    :host: xxx.com
+    :port: 14279
+    :db: 0
+
+test:
+  <<: *defaults
+
+qa:
+  <<: *defaults
+
+production:
+  redis:
+    :host: 192.16.1.1
+    :port: 6379
+    :db: 0
+

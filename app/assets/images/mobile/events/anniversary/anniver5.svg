@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard 2 Copy 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="4.3726457" y="0.131695469" width="5" height="12"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-1" y="-1" width="7" height="14">
+            <rect x="3.3726457" y="-0.868304531" width="7" height="14" fill="white"></rect>
+            <use xlink:href="#path-1" fill="black"></use>
+        </mask>
+        <rect id="path-3" x="26.3726457" y="0.131695469" width="5" height="12"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-1" y="-1" width="7" height="14">
+            <rect x="25.3726457" y="-0.868304531" width="7" height="14" fill="white"></rect>
+            <use xlink:href="#path-3" fill="black"></use>
+        </mask>
+        <path d="M0,0 L18,0 L18,17 C18,17 13.6812744,19 9.12084961,19 C4.5604248,19 0,17 0,17 L0,0 Z" id="path-5"></path>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-1" y="-1" width="20" height="21">
+            <rect x="-1" y="-1" width="20" height="21" fill="white"></rect>
+            <use xlink:href="#path-5" fill="black"></use>
+        </mask>
+        <path d="M0.705810547,8.00195312 C1.20381611,4.01790865 3.2578125,0.0260620117 3.2578125,0.0260620117 C3.2578125,0.0260620117 7.54266357,2 12.0284424,2 C16.5142212,2 20.7351074,0.0260620117 20.7351074,0.0260620117 C20.7351074,0.0260620117 22.7801151,3.52510042 23.3397217,8.00195312 C23.356819,8.13873181 24,17 24,17 L0,17 C0,17 0.207804988,11.9859976 0.705810547,8.00195312 Z" id="path-7"></path>
+        <mask id="mask-8" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-1" y="-1" width="26" height="18.973938">
+            <rect x="-1" y="-0.973937988" width="26" height="18.973938" fill="white"></rect>
+            <use xlink:href="#path-7" fill="black"></use>
+        </mask>
+        <rect id="path-9" x="0" y="0" width="6" height="6" rx="2"></rect>
+        <mask id="mask-10" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-1" y="-1" width="8" height="8">
+            <rect x="-1" y="-1" width="8" height="8" fill="white"></rect>
+            <use xlink:href="#path-9" fill="black"></use>
+        </mask>
+        <rect id="path-11" x="3" y="0" width="6" height="6" rx="2"></rect>
+        <mask id="mask-12" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-1" y="-1" width="8" height="8">
+            <rect x="2" y="-1" width="8" height="8" fill="white"></rect>
+            <use xlink:href="#path-11" fill="black"></use>
+        </mask>
+    </defs>
+    <g id="周年庆" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-2-Copy-3">
+            <g id="我的-copy" transform="translate(5.000000, 3.000000)">
+                <g id="我的icon-hover" transform="translate(2.000000, 0.000000)">
+                    <g id="胳膊" transform="translate(0.000000, 25.000000)">
+                        <circle id="Oval-9" stroke="#282828" fill="#FDF8E2" cx="2" cy="11" r="2"></circle>
+                        <circle id="Oval-9-Copy" stroke="#282828" fill="#FDF8E2" cx="33.6875" cy="11" r="2"></circle>
+                        <g id="Rectangle-62" transform="translate(6.872646, 6.131695) rotate(-314.000000) translate(-6.872646, -6.131695) ">
+                            <use fill="#FE818E" fill-rule="evenodd" xlink:href="#path-1"></use>
+                            <use stroke="#282828" mask="url(#mask-2)" stroke-width="2" xlink:href="#path-1"></use>
+                        </g>
+                        <g id="Rectangle-62-Copy" transform="translate(28.872646, 6.131695) scale(-1, 1) rotate(-315.000000) translate(-28.872646, -6.131695) ">
+                            <use fill="#FE818E" fill-rule="evenodd" xlink:href="#path-3"></use>
+                            <use stroke="#282828" mask="url(#mask-4)" stroke-width="2" xlink:href="#path-3"></use>
+                        </g>
+                    </g>
+                    <g id="脸" transform="translate(9.000000, 8.000000)">
+                        <g id="Rectangle-51">
+                            <use fill="#FDF8E2" fill-rule="evenodd" xlink:href="#path-5"></use>
+                            <use stroke="#282828" mask="url(#mask-6)" stroke-width="2" xlink:href="#path-5"></use>
+                        </g>
+                    </g>
+                    <g id="衣服" transform="translate(6.000000, 25.000000)">
+                        <g id="Rectangle-60">
+                            <use fill="#FE818E" fill-rule="evenodd" xlink:href="#path-7"></use>
+                            <use stroke="#282828" mask="url(#mask-8)" stroke-width="2" xlink:href="#path-7"></use>
+                        </g>
+                    </g>
+                    <g id="帽子">
+                        <path d="M18,11 C22.418278,11 26,10.8659932 26,7 C26,3.13400675 22.418278,0 18,0 C13.581722,0 10,3.13400675 10,7 C10,10.8659932 13.581722,11 18,11 Z" id="Oval-5" stroke="#282828" fill="#282828"></path>
+                        <path d="M9,8 L27,8 L27,14 C27,14 22.7191772,13 18.1461182,13 C13.5730591,13 9,14 9,14 L9,8 Z" id="Rectangle-52" fill="#282828"></path>
+                        <g id="左耳" transform="translate(0.000000, 10.000000)">
+                            <use id="Rectangle-53" stroke="#282828" mask="url(#mask-10)" stroke-width="2" xlink:href="#path-9"></use>
+                            <rect id="Rectangle-54" fill="#282828" x="7" y="2" width="2" height="2"></rect>
+                        </g>
+                        <g id="右耳" transform="translate(27.000000, 10.000000)">
+                            <use id="Rectangle-53-Copy" stroke="#282828" mask="url(#mask-12)" stroke-width="2" xlink:href="#path-11"></use>
+                            <rect id="Rectangle-54-Copy" fill="#282828" x="0" y="2" width="2" height="2"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

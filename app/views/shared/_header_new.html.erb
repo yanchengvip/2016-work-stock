@@ -1,0 +1,48 @@
+<%= stylesheet_link_tag  'pc/pc_new'%>
+<div class="top-nav">
+    <nav class="w1200">
+      <div class="logo fl">
+        <h1>
+          <a href="http://jinhuobao.com.cn">进货宝</a>
+        </h1>
+      </div>
+      <div class="right-nav fr">
+        <ul class="nav-list">
+          <li>
+            <a href="/common/about">关于我们</a>
+            <div class="second">
+              <ul class="w1200 clearfix">
+                <li><a href="/common/about" class="active">公司介绍</a></li>
+                <li><a href="/common/team">团队介绍</a></li>
+              </ul>
+            </div>
+          </li>
+          <li><a href="/common/reports">进货宝资讯</a></li>
+          <li><a href="/common/join_us">加入我们</a></li>
+          <li><a href="/common/contact_us">合作共赢</a></li>
+        </ul>
+        <div class="app">
+          <a href="javascript:;" class="code-box">
+            客户端
+            <i></i>
+          </a>
+          <a href="//m.jinhuobao.com.cn" class="web" target="_blank">立即进货</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <script type="text/javascript">
+(function() {
+  var a, i, j, len, ref, results;
+  a = document.querySelector('a.active');
+  a && a.classList.remove('active');
+  ref = document.querySelectorAll('a');
+  for (j = 0, len = ref.length; j < len; j++) {
+    i = ref[j];
+    if (i.getAttribute("href") === location.pathname) {
+      i.classList.add('active');
+      break;
+    }
+  }
+})();
+  </script>

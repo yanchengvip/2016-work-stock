@@ -1,0 +1,263 @@
+<!--<-% @products = activity_floor.products.joins("left join DepotProductStocks dps on dps.ProductID = Products.ID").where("Products.State = 2 and dps.State = 2 and dps.DepotID in (?)",session[:depot_ids]) %>-->
+<% content_for :head do %>
+    <%= stylesheet_link_tag  'scan_product', media: 'all', 'data-turbolinks-track' => true %>
+    <style>
+      body{
+        background-color: #f4f4f4;
+      }
+    </style>
+<% end %>
+
+<% content_for :header do %>
+<header class="no-search second-page-header scan-products-title">
+  <div class="header-left">
+    <a href="javascript:;" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">商品详情</div>
+  <div class="header-right">
+    <a href="/carts?formScanner=true"><i class="num cart-num"><%= sign_in? ? current_user.cart_for_nav(session[:depot_ids], session[:company_id]).first : 0 %></i></a>
+  </div>
+</header>
+<% end %>
+<% content_for :main do %>
+<main class="second-page scan-product">
+
+  <!--<-% @stocks = DepotProductStock.stocks_for(@products.map(&:ID), session[:depot_ids]) if @products %>-->
+  <!--<-%-->
+     <!--if @products-->
+       <!--@stocks = DepotProductStock.stocks_for(@products.map(&:ID), session[:depot_ids])-->
+     <!--else-->
+       <!--@stocks = DepotProductStock.stocks_for(@product.ID, session[:depot_ids])-->
+     <!--end-->
+  <!--%>-->
+
+  <% if !@product.nil? %>
+      <!--<-% @products.each do |product| %>-->
+      <div class="product-detail" data-data="<%= @product.list_attrs_json %>" id="p-<%= @product.ID %>">
+        <div class="product-img">
+          <%= image_tag @product.cover_url %>
+
+          <%  stock = @product.stock_for session[:depot_ids]  %>
+          <!--return false, "该商品已下架" if product.State != 2 or !stock or stock.State != 2-->
+          <!--if !stock or (stock.Stock + stock.PreSaleQuantity) <= 0-->
+          <!--return false, "库存不足"-->
+          <!--elsif stock.Stock + stock.PreSaleQuantity < sum-->
+          <!--return false, "库存不足，剩余#{stock.Stock + stock.PreSaleQuantity}个"-->
+          <!--end-->
+
+          <!--<-% if @stocks[@product.id] && @stocks[@product.id].State != 2 or product.State !=2 %>-->
+              <!--<span class="status-tip">商品下架</span>-->
+          <!--<-% elsif @stocks[@product.id] && @stocks[@product.id].Stock <= 0 %>-->
+              <!--<span class="status-tip">补货中</span>-->
+          <!--<-% elsif @stocks[@product.id] && @stocks[@product.id].Stock && @stocks[@product.id].Stock > 0 && @stocks[@product.id].Stock < 50 %>-->
+              <!--<span class="status-tip">仅剩<-%= @stocks[@product.id].Stock %></span>-->
+          <!--<-% end %>-->
+
+          <% if @product.State != 2 or !stock or stock.State != 2 %>
+              <span class="status-tip">商品下架</span>
+          <% else %>
+              <% if !stock or (stock.Stock + stock.PreSaleQuantity) <= 0 %>
+                  <span class="status-tip">补货中</span>
+              <% elsif stock.Stock + stock.PreSaleQuantity <= 50 %>
+                  <span class="status-tip">仅剩<%= stock.Stock + stock.PreSaleQuantity %></span>
+              <% end %>
+          <% end %>
+        </div>
+        <div class="product-info">
+          <div class="product-title">
+            <% if @product.company.ThirdType == 0 %>
+                <span class="text-tip">自营</span>
+            <% else %>
+                <span class="text-tip">第三方</span>
+            <% end %>
+            <% @name = @product.Name %>
+            <span class="title-name"><%= truncate(@name,length: 38)  %></span>
+          </div>
+          <div class="price-box">
+            <span class="price">&yen;<%= @product.ProductPrice %></span>/<%= @product.Unit %>
+            <% if @product.OriginalPrice %>
+                <span class="old-price">&yen;<%= @product.OriginalPrice %>/<%= @product.Unit %></span>
+            <% end %>
+            <% if @product.MaxSaleAmountDay  %>
+                <span class="max-buy">限购<%= @product.MaxSaleAmountDay %></span>
+            <% end %>
+          </div>
+          <p>规格：<%= @product.Specification %></p>
+          <p>品牌：<%= @product.product_brandname %></p>
+        </div>
+      </div>
+      <div class="scan-buy">
+        <% if (@product.MinBuyCount || 1) > 1 %>
+            <span class="min-buy">
+              <%= @product.MinBuyCount || 1 %><%= @product.Unit %>起订
+            </span>
+        <% end %>
+        <div class="item-console <%= 'show-console' if @product.cart_for(current_user) > 0 %>">
+          <a href="javascript:;" onclick="setAmount.add('<%= @product.ID %>')" class="add-item">＋</a>
+          <div class="item-num" data-min-buycount="<%= @product.MinBuyCount || 1 %>" data-max-buycount="<%= @product.MaxSaleAmountDay || -1 %>" style="display: block;">
+            <input id="<%= @product.ID %>" class="number" data-id="<%= @product.ID %>" type="num" num="<%= @product.cart_for(current_user) %>" value="<%= @product.cart_for(current_user) %>" disabled>
+          </div>
+          <a href="javascript:;" onclick="setAmount.reduce('<%= @product.ID %>')" class="remove-item" style="display: block;">－</a>
+        </div>
+      </div>
+      <!-- 名称:    <%= @product.Name %><br> -->
+      <!-- 促销价格: <%= @product.ProductPrice %><br>
+          价格:    <%= @product.OriginalPrice %><br>
+          限购:    <%= @product.MaxSaleAmountDay %><br>
+          品牌:    <%= @product.product_brandname %><br>
+          规格:    <%= @product.Specification %><br>
+          保质期:  <%= @product.product_info.Shelflife %><br>
+          <div>图片:</div><%= image_tag @product.cover_url %><br> -->
+      <!--product.cover_url-->
+      <br>
+      <!--<-% end %>-->
+  <% elsif @products.length == 1 %>
+      <% product = @products.first %>
+        <div class="product-detail" data-data="<%= product.list_attrs_json %>" id="p-<%= product.ID %>">
+          <div class="product-img">
+            <%= image_tag product.cover_url %>
+
+            <%  stock = product.stock_for session[:depot_ids]  %>
+            <% if product.State != 2 or !stock or stock.State != 2 %>
+                <span class="status-tip">商品下架</span>
+            <% else %>
+                <% if !stock or (stock.Stock + stock.PreSaleQuantity) <= 0 %>
+                    <span class="status-tip">补货中</span>
+                <% elsif stock.Stock + stock.PreSaleQuantity <= 50 %>
+                    <span class="status-tip">仅剩<%= stock.Stock + stock.PreSaleQuantity %></span>
+                <% end %>
+            <% end %>
+
+            <!--<-% if @stocks[product.id] && @stocks[product.id].State != 2 or product.State !=2 %>-->
+                <!--<span class="status-tip">商品下架</span>-->
+            <!--<-% elsif @stocks[product.id] && @stocks[product.id].Stock <= 0 %>-->
+              <!--<span class="status-tip">补货中</span>-->
+            <!--<-% elsif @stocks[product.id] && @stocks[product.id].Stock && @stocks[product.id].Stock > 0 && @stocks[product.id].Stock < 50 %>-->
+              <!--<span class="status-tip">仅剩<-%= @stocks[product.id].Stock %></span>-->
+            <!--<-% end %>-->
+
+          </div>
+          <div class="product-info">
+            <div class="product-title">
+              <% if product.company.ThirdType == 0 %>
+                <span class="text-tip">自营</span>
+              <% else %>
+                <span class="text-tip">第三方</span>
+              <% end %>
+              <% @name = product.Name %>
+              <span class="title-name"><%= truncate(@name,length: 38)  %></span>
+            </div>
+            <div class="price-box">
+              <span class="price">&yen;<%= product.ProductPrice %></span>/<%= product.Unit %>
+              <% if product.OriginalPrice %>
+                <span class="old-price">&yen;<%= product.OriginalPrice %>/<%= product.Unit %></span>
+              <% end %>
+              <% if product.MaxSaleAmountDay  %>
+                  <span class="max-buy">限购<%= product.MaxSaleAmountDay %></span>
+              <% end %>
+            </div>
+            <p>规格：<%= product.Specification %></p>
+            <p>品牌：<%= product.product_brandname %></p>
+          </div>
+        </div>
+        <div class="scan-buy">
+          <% if (product.MinBuyCount || 1) > 1 %>
+            <span class="min-buy">
+              <%= product.MinBuyCount || 1 %><%= product.Unit %>起订
+            </span>
+          <% end %>
+          <div class="item-console <%= 'show-console' if product.cart_for(current_user) > 0 %>">
+            <a href="javascript:;" onclick="setAmount.add('<%= product.ID %>')" class="add-item">＋</a>
+            <div class="item-num" data-min-buycount="<%= product.MinBuyCount || 1 %>" data-max-buycount="<%= product.MaxSaleAmountDay || -1 %>" style="display: block;">
+              <input id="<%= product.ID %>" class="number" data-id="<%= product.ID %>" type="num" num="<%= product.cart_for(current_user) %>" value="<%= product.cart_for(current_user) %>" disabled>
+            </div>
+            <a href="javascript:;" onclick="setAmount.reduce('<%= product.ID %>')" class="remove-item" style="display: block;">－</a>
+          </div>
+        </div>
+
+          <!-- 名称:    <%= product.Name %><br> -->
+          <!-- 促销价格: <%= product.ProductPrice %><br>
+          价格:    <%= product.OriginalPrice %><br>
+          限购:    <%= product.MaxSaleAmountDay %><br>
+          品牌:    <%= product.product_brandname %><br>
+          规格:    <%= product.product_info.Specification %><br>
+          保质期:  <%= product.product_info.Shelflife %><br>
+          <div>图片:</div><%= image_tag product.cover_url %><br> -->
+          <!--product.cover_url-->
+          <br>
+      <!--<-% end %>-->
+
+  <% elsif @products.length > 1 %>
+      <% @products.each do |product| %>
+          <div class="main-list-item" onclick="window.location.href='/products/barcode_scanner?ID=<%= product.ID %>&MoreThanOne=true'" >
+            <div class="img" style="width: 20%;">
+              <%= image_tag product.cover_url %>
+            </div>
+            <div class="info">
+              <div class="title">
+                <% @name = product.Name %>
+                <% if product.company.ThirdType == 0 %>
+                    <span class="text-tip">自营</span>
+                <% else %>
+                    <span class="text-tip">第三方</span>
+                <% end %>
+                <span class="title-name"><%= truncate(@name,length: 38)  %></span>
+              </div>
+              <div class="info-wrapper">
+                <div class="price-line"><span class="price">￥<%= product.ProductPrice %></span>/<%= product.Unit %>
+                </div>
+              </div>
+            </div>
+          </div>
+      <% end %>
+  <% else %>
+
+      <%
+         company_id = cookies[:company_id] || City.beijing.CompanyID
+         @floors = HFloor.includes(:floor_items).joins("left join HPageConfigs hpc on hpc.ID = HFloors.HPageConfigID").where("hpc.IsEnabled = true and hpc.CompanyID = ? and hpc.TerminalType = 1 and hfloors.IsEnabled = true and hfloors.LayoutType = 2", company_id).order("Sort")
+         items = @floors.first.floor_items
+      %>
+
+      <% if items.present? %>
+        <%
+           item = items.first
+           product = item.rush_products(session[:depot_ids]).where("ActivityBeginTime > ?", Time.now).order("ActivityBeginTime").first
+           product_current = item.rush_products(session[:depot_ids]).where("ActivityBeginTime < ? and ActivityBeginTime > ?", Time.now, Date.today).order("ActivityBeginTime").last
+           product_current ||= product
+        %>
+
+          <div class="no-product">
+            <p>抱歉没有找到该商品</p>
+          </div>
+          <% if product_current %>
+              <div class="area-box">
+                <p class="area-title" >进入专区,欲购从速</p>
+                <div class="area go-seckill" nowTime="<%= Time.now.strftime('%Y/%m/%d %H:%M:%S') %>" data-time="<%= product.ActivityBeginTime.strftime('%Y/%m/%d %H:%M:%S') if product %>" onClick="window.location.href='<%= item.recommend_link || item.LinkUrl %>'">
+                  <div class="area-cont">
+                    <div class="content seckill-time">
+                      <h6><span>秒杀</span>专区</h6>
+
+                          <% if product %>
+                              <% if product.ActivityBeginTime >= Date.tomorrow %>
+                                  <p>距离明天场还剩  <span></span>  </p>
+                              <% else %>
+                                  <p>距离<%= product.ActivityBeginTime.hour %>点场还剩<span></span>   </p>
+                              <% end %>
+                          <% else %>
+                              <p><span>&nbsp;</span></p>
+                          <% end %>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+          <% end %>
+      <% end %>
+  <% end %>
+</main>
+<% end %>
+
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'barcode', 'data-turbolinks-track' => true %>
+<% end %>

@@ -1,0 +1,120 @@
+main.detail {
+    .slider {
+        .slides {
+            background: none;
+            li {
+                text-align: center;
+                width: 100%;
+                img {
+                    width: auto;
+                    height: 100%;
+                    background-repeat: no-repeat;
+                    background-size: auto 100%;
+                }
+            }
+        }
+    }
+    section {
+        padding: 0 3rem;
+    }
+    .detail-title {
+        padding: 1rem 0;
+        font-size: 1rem;
+        color: #000;
+    }
+    .detail-desc {
+        font-size: 1rem;
+        color: #737373;
+    }
+    .detail-slider {
+        // margin: 1.5rem 0;
+        .indicators {
+            .indicator-item {
+                width: 10px;
+                height: 10px;
+                margin: 0 5px;
+            }
+            .indicator-item.active {
+                background-color: #e73046;
+            }
+        }
+    }
+    .price {
+        height: 3rem;
+        line-height: 3rem;
+        .price-now {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e73046;
+        }
+        .price-market {
+            font-size: .9rem;
+            color: #737373;
+        }
+    }
+    .sales,
+    .specifiction {
+        color: #737373;
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+        font-size: .9rem;
+        line-height: 1.9rem;
+        letter-spacing: .05rem;
+    }
+    .sales {
+        .special {
+            display: inline-block;
+            padding: .9rem 1.8rem;
+            line-height: 1.8rem;
+            color: #e73046;
+            border: 1px solid #e73046;
+            border-radius: .5rem;
+        }
+    }
+    .specifiction {
+        position: relative;
+        .cover,
+        .amount {
+            margin: .5rem auto;
+        }
+        .amount {
+            height: 3rem;
+            &>div:first-child {
+                float: left;
+                margin: .3rem 0;
+                display: inline-block;
+                height: 2.4rem;
+                line-height: 2.4rem;
+            }
+        }
+        .name {
+            display: inline-block;
+            margin-top: 0.2rem;
+        }
+        .add-to-carts.buy-now {
+            margin-top: 0.3rem;
+        }
+        .buy-now {
+            margin-top: 0.5rem;
+        }
+    }
+    .recommend {
+        padding: 0 2rem;
+    }
+    .add-to-carts {
+        position: absolute;
+        bottom: 1.1rem;
+        right: 1.3rem;
+    }
+}
+
+.detail-show-img {
+    // border-bottom: 2px solid #cdcdcd;
+}
+
+.detail-section-header {
+    margin: 1rem 0;
+    .col {
+        padding: 0;
+    }
+}

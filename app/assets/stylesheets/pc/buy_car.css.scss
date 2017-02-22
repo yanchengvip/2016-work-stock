@@ -1,0 +1,1660 @@
+﻿@charset "utf-8";
+
+/* CSS Document */
+
+
+/* 公共png */
+
+.url {
+    background: image-url('index/sprite.png') no-repeat 0 0;
+}
+
+
+/*头部购物车进度*/
+
+.content {
+    padding-bottom: 340px;
+}
+
+.progress {
+    color: #fff;
+    font-size: 14px;
+}
+
+.progress ul {
+    width: 602px;
+    margin: 66px -186px 0 0;
+}
+
+.progress ul li {
+    width: 150px;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+}
+
+.progress ul .red_left,
+.progress ul .gray_center,
+.progress ul .red_center {
+    margin-right: -14px;
+}
+
+.progress ul li div {
+    float: left;
+    width: 110px;
+    height: 30px;
+    text-align: center;
+}
+
+.progress ul .red_left div,
+.progress ul .red_center div,
+.progress ul .red_right div {
+    background: #e61c44;
+}
+
+.progress ul .gray_right div,
+.progress ul .gray_center div,
+.progress ul .gray_left div {
+    background: #d2d2d2;
+}
+
+.progress ul li i {
+    display: inline-block;
+    width: 16px;
+    height: 30px;
+}
+
+.progress ul .gray_left i.left {
+    background: #d2d2d2;
+}
+
+.progress ul .red_left i.left {
+    background: #e61c44;
+}
+
+.progress ul .gray_left i.right {
+    float: left;
+    background: image-url('buycar/gray_right.png') no-repeat;
+}
+
+.progress ul .red_left i.right {
+    float: left;
+    background: image-url('buycar/red_right.png') no-repeat;
+}
+
+.progress ul .gray_center i.left {
+    background: image-url('buycar/gray_left.png') no-repeat;
+}
+
+.progress ul .gray_center i.right {
+    float: left;
+    background: image-url('buycar/gray_right.png') no-repeat;
+}
+
+.progress ul .red_center i.left {
+    background: image-url('buycar/red_left.png') no-repeat;
+}
+
+.progress ul .red_center i.right {
+    float: left;
+    background: image-url('buycar/red_right.png') no-repeat;
+}
+
+.progress ul .gray_right i.left {
+    background: image-url('buycar/gray_left.png') no-repeat;
+}
+
+.progress ul .gray_right i.right {
+    float: left;
+    background: #d2d2d2;
+}
+
+.progress ul .red_right i.left {
+    background: image-url('buycar/red_left.png') no-repeat;
+}
+
+.progress ul .red_right i.right {
+    background: #e61c44;
+}
+
+.address {
+    margin: 12px 0 42px 0;
+}
+
+.more_address {
+    width: 20px;
+    text-align: center;
+    color: #e83957;
+    position: absolute;
+    left: -22px;
+    bottom: 0;
+    cursor: pointer;
+    background: #d2d2d2;
+}
+
+.address .old_address .active {
+    background: image-url('buycar/border.png') no-repeat;
+    color: #262626;
+}
+
+.old_address .add_son {
+    width: 282px;
+    height: 154px;
+    padding: 14px 10px 10px 10px;
+    background: image-url('buycar/border_01.png') no-repeat;
+    float: left;
+    margin: 20px 28px 0 0;
+    cursor: pointer;
+    color: #a3a3a3;
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+.old_address .add_son ul {
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+.old_address .add_son .hover a {
+    display: block;
+}
+
+.old_address .add_son .hover {
+    display: none;
+}
+
+.old_address .add_son .hover a.default {
+    width: 68px;
+    height: 26px;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    /* margin: 14px 0 86px 0; */
+    text-align: center;
+    line-height: 26px;
+    position: absolute;
+    right: 20px;
+    top: 24px;
+}
+
+.old_address .add_son .hover a.modify {
+    width: 42px;
+    height: 26px;
+    line-height: 26px;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    text-align: center;
+    /* margin: 80px 0 0 10px; */
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+
+.old_address .add_son li {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px dashed #d2d2d2;
+    padding: 0 20px 0 10px;
+}
+
+.old_address .add_son li:last-child {
+    border: none;
+}
+
+.old_address .add_son span {
+    display: block;
+}
+
+.old_address .add_son .contacts,
+.old_address .add_son .phone {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    position: relative;
+    top: 10px;
+    left: 0;
+}
+
+.old_address .add_son .contacts {
+    background: image-url('buycar/contacts.png') no-repeat;
+}
+
+.old_address .add_son .phone {
+    background: image-url('buycar/phone.png') no-repeat;
+}
+
+.old_address .add_son .position {
+    display: inline-block;
+    width: 28px;
+    height: 32px;
+    background: image-url('buycar/position.png') no-repeat;
+    position: relative;
+    top: 10px;
+    left: 0;
+}
+
+.old_address .add_son .last_address span {
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.add {
+    margin-top: 20px;
+    float: left;
+    /* margin-right: 8px; */
+    display: inline;
+    width: 298px;
+    height: 172px;
+    border: 1px dashed #d2d2d2;
+    text-align: center;
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+.add a {
+    /* display: inline-block;
+    text-align: center; */
+    font-size: 16px;
+    color: #b2b2b2;
+}
+
+.add a span {
+    display: block;
+    font-size: 60px;
+    color: #b2b2b2;
+    margin-top: 20px;
+}
+
+.car_list {
+    margin-top: 12px;
+}
+
+.car_list h4,
+.address h4 {
+    font-size: 16px;
+    color: #353535;
+    font-weight: normal;
+}
+
+.car_list h4 span {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background-position: -242px -44px;
+    position: relative;
+    top: 4px;
+    left: 0;
+    margin-right: 4px;
+}
+
+.car_list_top {
+    height: 34px;
+    border: 1px solid #F5F5F5;
+    margin-top: 16px;
+    line-height: 34px;
+}
+
+.car_list_top span {
+    display: block;
+    float: left;
+    border-right: 1px solid #F5F5F5;
+}
+
+.car_list_top .p1 {
+    width: 358px;
+}
+
+.car_list_top .p1 input {
+    margin: 0 10px;
+    position: relative;
+    top: 2px;
+    left: 0;
+}
+
+.car_list_top .p2,
+.car_list_top .p3,
+.car_list_top .p4,
+.car_list_top .p5,
+.car_list_top .p6 {
+    text-align: center;
+}
+
+.car_list_top .p2 {
+    width: 130px;
+}
+
+.car_list_top .p3 {
+    width: 150px;
+}
+
+.car_list_top .p4 {
+    width: 114px;
+}
+
+.car_list_top .p5 {
+    width: 128px;
+}
+
+.car_list_top .p6 {
+    width: 102px;
+    border-right: none;
+}
+
+.message {
+    // border: 1px solid #d2d2d2;
+    // margin-top: 30px;
+    border-bottom: none;
+}
+
+
+/* table */
+
+.message table {
+    border-collapse: collapse;
+    width: 100%;
+    color: #434343;
+    border: 1px solid #d2d2d2
+}
+
+.message td,
+th {
+    margin: 0;
+    padding: 0;
+}
+
+.tr_1,
+.tr_2 {
+    border-bottom: 1px solid #d2d2d2;
+}
+
+//组合
+.message .tr_2 {
+    border-top: 1px dashed #ccc;
+    background: #f7f7f7;
+}
+
+.message .tr_2 td {
+    padding: 10px 70px;
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+.message .tr_2 .td_zh .lunbo {
+    overflow: hidden;
+    height: 112px;
+}
+
+.message .tr_2 .td_zh .sanj {
+    display: block;
+    background: image-url('buycar/sanj.png') no-repeat 0 0;
+    width: 32px;
+    height: 16px;
+    position: absolute;
+    top: -13px;
+    left: 450px;
+}
+
+.message .tr_2 .td_zh .lunbo li {
+    float: left;
+}
+
+.message .tr_2 .td_zh .lunbo-box {
+    height: 112px;
+    overflow: hidden;
+}
+
+.message .tr_2 .td_zh .lunbo-box p {
+    border: 1px solid #d2d2d2;
+}
+
+.message .tr_2 .td_zh .lunbo-box .text {
+    margin-left: 20px;
+    color: #bcbcbc;
+    width: 154px;
+}
+
+.message .tr_2 .td_zh .lunbo-box .text span {
+    margin-bottom: 6px;
+}
+
+.message .tr_2 .td_zh .lunbo-box .text .sp1 {
+    font-size: 12px;
+}
+
+.message .tr_2 ul li span {
+    display: block;
+    text-align: left;
+}
+
+.message .tr_2 .lft-btn {
+    display: block;
+    background: image-url('buycar/left.png') no-repeat 0 0;
+    width: 24px;
+    height: 42px;
+    position: absolute;
+    top: 38px;
+    left: 24px;
+    cursor: pointer;
+}
+
+.message .tr_2 .rgt-btn {
+    display: block;
+    background: image-url('buycar/right.png') no-repeat 0 0;
+    width: 24px;
+    height: 42px;
+    position: absolute;
+    top: 38px;
+    right: 24px;
+    cursor: pointer;
+}
+
+//组合结束
+.message .tr_1 .td_1 {
+    width: 358px;
+}
+
+.message td {
+    text-align: center;
+    vertical-align: top;
+    padding-top: 22px;
+}
+
+.message td i {
+    font-size: 16px;
+}
+
+.td_1_left {
+    float: left;
+}
+
+.td_1_left input {
+    text-align: center;
+    float: left;
+    margin: 0 16px;
+    position: relative;
+    top: 34px;
+}
+
+.td_1_left p {
+    float: left;
+    width: 105px;
+    height: 105px;
+    border: 1px solid #d2d2d2;
+    margin: -10px 20px 12px 0;
+    cursor: pointer;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.td_1_left .low_stocks {
+    display: block;
+    width: 107px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background: #e73046;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    /*border: 1px solid #fff;*/
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+    margin-left: -1px;
+    font-size: 19px;
+}
+
+.td_1_right {
+    float: left;
+    width: 168px;
+}
+
+.td_1_right .p1 {
+    font-size: 16px;
+}
+
+.td_1_right .purchase_number {
+    color: #e61c44;
+}
+
+.message .td_2 a {
+    display: block;
+}
+
+.message .td_3 .pro_number {
+    clear: both;
+    border-bottom: none;
+    width: 78px;
+    margin-left: 24px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.message .td_3 .pro_number input[type="text"] {
+    width: 52px;
+    text-align: center;
+    border: 1px solid #d2d2d2;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+}
+
+.message .td_3 .pro_number input[type="button"] {
+    width: 16px;
+    height: 14px;
+    line-height: 14px;
+    background: #f8f8f8;
+    border: 1px solid #d2d2d2;
+    position: relative;
+    top: 0;
+    left: 2px;
+    float: left;
+}
+
+.message .td_3 .pro_number input.pro_less {
+    margin-top: 4px;
+}
+
+.message .td_3 .stock {
+    color: #e61c44;
+}
+
+.message .td_3 .pijia_up {
+    border: 1px solid #d2d2d2;
+    height: 48px;
+    line-height: 24px;
+    color: #999;
+}
+
+.message .td_3 .pijia_up span {
+    display: block;
+}
+
+.message .td_3 .pijia_up span em {
+    font-size: 18px;
+}
+
+.car_list_bottom {
+    height: 50px;
+    border: 1px solid #d2d2d2;
+    line-height: 50px;
+    margin-top: 30px;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.car_list_bottom .rb_code_box {
+    background: image-url('index/rb_code_box.png') no-repeat 0 0;
+    width: 306px;
+    height: 200px;
+    position: absolute;
+    top: -76px;
+    right: -324px;
+}
+
+.car_list_bottom input {
+    margin: 0 10px;
+    position: relative;
+    top: 2px;
+    left: 0;
+}
+
+.car_list_bottom .bto_l {
+    height: 38px;
+    line-height: 38px;
+    width: 640px;
+    border-right: 1px solid #d2d2d2;
+    margin-top: 6px;
+}
+
+.car_list_bottom .bto_l span {
+    padding-right: 30px;
+}
+
+.car_list_bottom .bto_l a {
+    padding-right: 30px;
+}
+
+.car_list_bottom .bto_l .bto_l_r {
+    margin-right: 10px;
+}
+
+.car_list_bottom .bto_l .bto_l_r i {
+    font-size: 18px;
+    font-style: italic;
+    color: #e61c44;
+    font-weight: 700;
+}
+
+.car_list_bottom .bto_r {
+    width: 336px;
+}
+
+.car_list_bottom .bto_r input {
+    height: 52px;
+    background: #e61c44;
+    border: 0;
+    text-align: center;
+    color: #fff;
+    width: 120px;
+    font-size: 20px;
+    font-weight: 700;
+    margin: -4px 0 0 -4px;
+}
+
+.by_way {
+    margin-top: 74px;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.by_way .red_triangle {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid #d10e00;
+    position: absolute;
+    top: 26px;
+    left: 60px;
+}
+
+.by_way h3 {
+    width: 120px;
+    height: 28px;
+    background: #d70e00;
+    border: 1px solid #9d0700;
+    border-radius: 6px;
+    color: #fff;
+    text-align: center;
+    line-height: 28px;
+    font-size: 14px;
+    margin-left: 5px;
+    font-weight: normal;
+}
+
+.by_way .pro_look {
+    height: 312px;
+    border: 2px solid #9d0700;
+    margin-top: -4px;
+    background: #fff;
+}
+
+.by_way .pro_look ul li {
+    float: left;
+    width: 196px;
+    height: 155px;
+    border-right: 1px dashed #d2d2d2;
+    border-bottom: 1px dashed #d2d2d2;
+}
+
+.by_way .pro_look ul li.last {
+    border-right: none;
+}
+
+.by_way .pro_look ul li.bto_boder {
+    border-bottom: none;
+}
+
+.by_way .pro_look .pro_img {
+    width: 65px;
+    height: 65px;
+    border: 1px solid #d2d2d2;
+    float: left;
+    margin: 30px 12px 0 12px;
+    cursor: pointer;
+}
+
+.by_way .pro_look .pro_product {
+    margin-top: 30px;
+}
+
+.by_way .pro_look .pro_product .p1 {
+    width: 88px;
+    height: 50px;
+    color: #737373;
+}
+
+.by_way .pro_look .pro_product span {
+    font-size: 14px;
+}
+
+.by_way .pro_look .pro_product .sp1 {
+    text-decoration: line-through;
+    padding-right: 6px;
+    color: #737373;
+}
+
+.by_way .pro_look .pro_product .sp2 {
+    color: #9b0800;
+}
+
+.by_way .pro_look .pro_product a {
+    display: block;
+    width: 80px;
+    height: 18px;
+    background: #c20d00;
+    border: 1px solid #971000;
+    color: #fff;
+    text-align: center;
+    line-height: 18px;
+    border-radius: 4px;
+    margin-top: 4px;
+}
+
+.by_way .pro_look .pro_product a:hover {
+    background: #d11f10;
+}
+
+
+/* 确认订单信息 */
+
+.confirm .p1 {
+    padding-left: 46px;
+}
+
+.tr_1 .p_l {
+    margin-left: 46px;
+}
+
+.confirm .p2,
+.confirm .p4 {
+    width: 150px;
+}
+
+.confirm .p5 {
+    border-right: none;
+}
+
+.express {
+    margin-top: 0;
+    border-top: none;
+    height: 62px;
+    line-height: 62px;
+}
+
+.express .illustrate {
+    width: 522px;
+    border-right: 1px solid #d2d2d2;
+    margin-left: 46px;
+}
+
+.express input {
+    width: 356px;
+    height: 26px;
+    border: 1px solid #d2d2d2;
+    padding-left: 8px;
+}
+
+.way span {
+    padding: 0 40px;
+}
+
+
+/* 提交订单 */
+
+.invoice {
+    width: 988px;
+    border: 1px solid #d2d2d2;
+    margin-top: 10px;
+}
+
+.invoice p {
+    margin: 4px 0;
+}
+
+.invoice p span {
+    padding: 0 16px 0 44px;
+}
+
+.order_information {
+    margin-top: 30px;
+}
+
+.information {
+    text-align: left;
+    border: 1px solid #e61c44;
+    padding: 22px 16px;
+    font-size: 14px;
+}
+
+
+/*.information span{ font-size: 18px; color: #e61c44; font-weight: bold;}*/
+
+.information p {
+    margin-bottom: 4px;
+}
+
+.information p .nm {
+    width: 90px;
+    text-align: left;
+    display: inline-block;
+}
+
+.information .p2 {
+    margin: 6px 0 4px 0;
+    width: 320px;
+}
+
+.order_information input[type="button"] {
+    float: right;
+    width: 120px;
+    height: 50px;
+    background: #e61c44;
+    color: #fff;
+    text-align: center;
+    line-height: 50px;
+    font-size: 20px;
+    font-weight: 700;
+    border: none;
+}
+
+
+/*遮罩层*/
+
+.zhezhao {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.2;
+    filter: alpha(opacity=80);
+    z-index: 99;
+    display: none;
+}
+
+.layer {
+    position: absolute;
+    width: 660px;
+    height: 470px;
+    background: #fff;
+    color: #434343;
+    z-index: 100;
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.3);
+    display: none;
+}
+
+.layer h4 {
+    font-size: 14px;
+    font-weight: normal;
+    color: #000;
+    height: 34px;
+    line-height: 34px;
+    background: #f8f8f8;
+    padding-left: 5px;
+}
+
+.layer .layer_con {
+    padding: 20px 35px;
+}
+
+.layer .layer_con i {
+    color: #e6514c;
+}
+
+.layer .layer_con ul li {
+    line-height: 28px;
+    padding: 8px 0;
+}
+
+.layer .layer_con ul li.pad65 {
+    padding-left: 94px;
+    padding-top: 0;
+}
+
+.layer .layer_con ul li .select_box {
+    width: 108px;
+    height: 28px;
+    border: 1px solid #d6d6d6;
+    margin-right: 10px;
+    padding-left: 6px;
+}
+
+.layer .layer_con ul li span {
+    display: inline-block;
+    width: 90px;
+    margin-right: 5px;
+    float: left;
+    text-align: right;
+}
+
+.layer .layer_con ul li input,
+.layer .layer_con ul li label,
+.layer .layer_con ul li em {
+    float: left;
+}
+
+.layer .layer_con ul li input.txt {
+    width: 270px;
+    height: 28px;
+    border: 1px solid #d6d6d6;
+    padding-left: 6px;
+}
+
+.layer .layer_con ul li textarea {
+    width: 384px;
+    height: 64px;
+    padding-left: 6px;
+    resize: none;
+    border: 1px solid #d6d6d6;
+}
+
+.layer .layer_con ul li em {
+    margin: 0 4px;
+}
+
+.layer .layer_con ul li input.txt1 {
+    width: 82px;
+    height: 28px;
+    border: 1px solid #d6d6d6;
+}
+
+.layer .layer_con ul li input.checkbox {
+    margin: 8px 3px 0 0;
+}
+
+.layer .layer_con ul li.btn input {
+    height: 24px;
+    line-height: 22px;
+    width: 50px;
+    font-size: 14px;
+    font-family: "Microsoft YaHei";
+    color: #434343;
+    background: #f1f1f1;
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    margin: 0 8px 0 0;
+}
+
+.layer .layer_con ul li .select_box1 {
+    width: 272px;
+    color: #d2d2d2;
+}
+
+.layer .btnCancel {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    width: 17px;
+    height: 18px;
+}
+
+
+/* 在线支付 */
+
+.pay_online,
+.pay_success {
+    margin-top: 42px;
+}
+
+.pay_online h4 {
+    font-style: normal;
+    font-size: 15px;
+    font-weight: normal;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #000;
+}
+
+.zf_pro p {
+    padding: 10px 0 10px 10px;
+    border-bottom: 1px dashed #d2d2d2;
+}
+
+.zf_pro {
+    font-size: 15px;
+}
+
+.zf_pro .p1 {
+    padding: 20px 0 16px 10px;
+    border-bottom: 1px dashed #d2d2d2;
+}
+
+.zf_pro .p1 span {
+    display: block;
+}
+
+.zf_pro .p1 span.right {
+    color: #8d8d8d;
+    font-weight: bold;
+}
+
+.zf_pro .zf_way {
+    padding-left: 10px;
+    border-bottom: 1px dashed #d2d2d2;
+}
+
+.zf_pro .zf_way a,
+.yl_zf .zf_way a,
+.xy_zf .zf_way a {
+    display: inline-block;
+    width: 176px;
+    height: 50px;
+    border: 2px solid #d2d2d2;
+    margin: 10px 22px 10px 70px;
+}
+
+.zf_pro .zf_way img,
+.yl_zf .zf_way img,
+.xy .zf_way img {
+    width: 140px;
+    height: 50px;
+}
+
+.pay_online a.active {
+    border: 2px solid #7cbf13;
+    background: image-url('buycar/sel_01.png') no-repeat right bottom;
+}
+
+.yl_zf {
+    padding-left: 10px;
+    border-bottom: 1px dashed #d2d2d2;
+}
+
+.yl_zf h3,
+.xy_zf h3 {
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.xy_zf {
+    padding-left: 10px;
+}
+
+.order_btn input {
+    width: 208px;
+    height: 40px;
+    background: #e61c44;
+    line-height: 40px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    border: 0;
+    margin-top: 74px;
+}
+
+
+/* 支付成功 */
+
+.pay_success h4 {
+    font-style: normal;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.success_meg {
+    border: 1px solid #d2d2d2;
+    margin-top: 24px;
+}
+
+.success_meg_t {
+    padding: 46px 0 0 44px;
+}
+
+.success_meg_t img {
+    float: left;
+    margin-right: 40px;
+}
+
+.success_meg_t .p1 {
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.success_meg_t .p1 span {
+    color: #e61c44;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.success_meg_t .p2 {
+    color: #5c5c5c;
+    margin-bottom: 10px;
+}
+
+.success_meg_t a {
+    display: inline-block;
+    background: #353535;
+    padding: 8px 28px;
+    border: 1px solid #040000;
+    color: #fff;
+    margin: 10px 8px 48px 0;
+}
+
+.success_meg_b {
+    padding: 26px 0 34px 0;
+    /* width: 952px; */
+    border-top: 1px solid #d2d2d2;
+    padding-left: 44px;
+}
+
+.success_meg_b p {
+    color: #5c5c5c;
+    margin-bottom: 10px;
+}
+
+
+/* 商品列表 */
+
+.today_lowest {
+    margin: 32px 0 0 0;
+    border: 1px solid #d3d3d3;
+}
+
+.today_lowest ul li {
+    width: 248px;
+    height: 366px;
+    float: left;
+}
+
+.today_lowest ul li.first {
+    width: 250px;
+    background: #e61c44;
+    color: #fff;
+    text-align: center;
+}
+
+.today_lowest ul li.first h3 {
+    font-size: 82px;
+    margin-top: 36px;
+}
+
+.today_lowest ul li.first span {
+    font-size: 54px;
+    font-weight: 700;
+}
+
+.today_lowest ul li.first span.sale {
+    display: block;
+    color: #e61c44;
+    width: 162px;
+    height: 60px;
+    background: #fff;
+    text-align: center;
+    line-height: 60px;
+    margin: 0 auto;
+    font-weight: 700;
+    margin-top: 14px;
+}
+
+.today_lowest ul .second {
+    width: 229px;
+    height: 366px;
+    border-left: 1px solid #d3d3d3;
+    border-bottom: 1px solid #d3d3d3;
+    padding-left: 16px;
+    position: relative;
+}
+
+.today_lowest ul .second img {
+    vertical-align: middle;
+    margin: 22px 0 10px 0;
+}
+
+.today_lowest ul .second p {
+    width: 206px;
+    height: 50px;
+    color: #b0b0b0;
+}
+
+.today_lowest ul .second .old_price {
+    display: block;
+    color: #d1d1d1;
+    text-decoration: line-through;
+}
+
+.today_lowest ul .second .now_price {
+    display: block;
+    font-size: 20px;
+    color: #dd2727;
+}
+
+.today_lowest ul .second i {
+    display: block;
+    width: 60px;
+    height: 28px;
+    background: #f15353;
+    color: #fff;
+    border-radius: 14px;
+    position: absolute;
+    right: 58px;
+    top: 208px;
+    text-align: center;
+    line-height: 28px;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.today_lowest ul .second .buy_car {
+    display: block;
+    width: 42px;
+    height: 42px;
+    background-position: -54px -36px;
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+}
+
+.today_lowest ul li.four {
+    border-left: none;
+    border-bottom: none;
+    width: 234px;
+}
+
+.today_lowest ul li.five {
+    border-bottom: none;
+}
+
+
+/* 订单物流详情 */
+
+.logistics_pro {
+    padding-top: 16px;
+}
+
+.logistics_pro .line,
+.payment .line,
+.coupon .line {
+    height: 1px;
+    background: image-url('buycar/line.png');
+    background-repeat: repeat-x;
+}
+
+.logistics_pro ul li {
+    float: left;
+    width: 134px;
+    text-align: center;
+    margin: 0 14px 0 16px;
+}
+
+.logistics_pro ul li h3 {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    color: #000;
+    margin: 14px 0 10px 0;
+}
+
+.logistics_pro ul li .red_b {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background: image-url('buycar/red_b.png') no-repeat center center;
+    margin: 0 auto;
+}
+
+.logistics_pro ul li .gray_b {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background: image-url('buycar/gray_b.png') no-repeat center center;
+    margin: 0 auto;
+}
+
+.logistics_pro ul li span {
+    display: block;
+    margin: 22px 0 14px 0;
+}
+
+.logistics_pro ul {
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+.logistics_pro ul .em_1,
+.logistics_pro ul .em_2,
+.logistics_pro ul .em_3,
+.logistics_pro ul .em_4,
+.logistics_pro ul .em_5 {
+    display: block;
+    width: 136px;
+    height: 3px;
+}
+
+.logistics_pro ul .em_1 {
+    position: absolute;
+    top: 58px;
+    left: 97px;
+}
+
+.logistics_pro ul .em_2 {
+    position: absolute;
+    top: 58px;
+    left: 262px;
+}
+
+.logistics_pro ul .em_3 {
+    position: absolute;
+    top: 58px;
+    left: 425px;
+}
+
+.logistics_pro ul .em_4 {
+    position: absolute;
+    top: 58px;
+    left: 589px;
+}
+
+.logistics_pro ul .em_5 {
+    position: absolute;
+    top: 58px;
+    left: 754px;
+}
+
+.logistics_pro ul .line_red {
+    background: #e61c44;
+}
+
+.logistics_pro ul .line_gray {
+    background: #b2b2b2;
+}
+
+.received_message {
+    width: 580px;
+    // border-right: 1px solid #d2d2d2;
+    padding: 14px 22px 0 32px;
+    font-size: 14px;
+    color: #707070;
+}
+
+.received_message .top {
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.received_message .top p {
+    margin-bottom: 30px;
+}
+
+.received_message .top p .ellipsis {
+    display: block;
+    width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.received_amount {
+    position: relative;
+    left: 0;
+    top: 0;
+    background: #f8f8f8;
+    border: 1px solid #d2d2d2;
+    border-bottom: none;
+    margin-top: 20px;
+}
+
+.received_amount .line_sj {
+    width: 990px;
+    height: 5px;
+    background: image-url('buycar/line_sj.png');
+    background-repeat: repeat-x;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    margin-top: 10px;
+}
+
+.received_money {
+    font-size: 14px;
+    color: #707070;
+    padding: 34px 20px 0 10px;
+}
+
+.received_money input {
+    width: 220px;
+    height: 50px;
+    line-height: 50px;
+    background: #e61c44;
+    color: #fff;
+    text-align: center;
+    border: 0;
+    border-radius: 5px;
+    font-size: 24px;
+}
+
+.received_money p {
+    margin-bottom: 18px;
+}
+
+.zf_message {
+    border: 1px solid #d2d2d2;
+    margin-top: 10px;
+    padding: 14px 0 0 60px;
+}
+
+.zf_message span {
+    display: block;
+}
+
+.to_pay .sp_1 {
+    font-size: 14px;
+    padding-right: 30px;
+}
+
+.to_pay .sp_2 {
+    color: #676767;
+}
+
+.to_pay .bottom {
+    margin-top: 16px;
+}
+
+.to_pay .bottom span {
+    padding-bottom: 14px;
+}
+
+.to_pay .sp_3 {
+    padding: 10px 30px 0 0;
+}
+
+.zf_message em,
+.zf_message i {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: image-url('buycar/radiu.png');
+    position: relative;
+    top: 4px;
+    left: -10px;
+    cursor: pointer;
+}
+
+.zf_message em.radiu,
+.zf_message i.radiu_01 {
+    background: image-url('buycar/radiu_b.png');
+}
+
+.coupon p {
+    margin-top: 10px;
+    padding-left: 32px;
+}
+
+.coupon p span {
+    padding-top: 12px;
+    font-size: 15px;
+}
+
+.coupon p select {
+    width: 446px;
+    height: 46px;
+    margin-left: 20px;
+    padding-left: 20px;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    background: #f2f2f2;
+    color: #e61c44;
+}
+
+.coupon p select option {
+    padding-left: 20px;
+    width: 446px;
+    height: 46px;
+    line-height: 46px;
+}
+
+.coupon p select option:hover {
+    background: #e6e6e6;
+    color: #e61c44;
+}
+
+.message_buy {
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    margin-top: 10px;
+    height: 54px;
+    padding: 18px 0 0 18px;
+    width: 562px;
+    resize: none;
+}
+
+
+/* switch */
+
+.switch_layer {
+    position: absolute;
+    width: 360px;
+    height: 240px;
+    background: #fff;
+    color: #434343;
+    z-index: 100;
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.3);
+    display: none;
+    border-radius: 5px;
+}
+
+.switch_layer h3 {
+    height: 64px;
+    line-height: 64px;
+    font-size: 19px;
+    background: #e61c44;
+    color: #fff;
+    border-radius: 5px;
+    padding-left: 24px;
+}
+
+.switch_layer p {
+    width: 200px;
+    font-size: 17px;
+    color: #343434;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 50px;
+}
+
+.switch_layer .button {
+    float: right;
+    margin-top: 38px;
+}
+
+.switch_layer a {
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+    font-size: 19px;
+    text-align: center;
+    margin: 10px 136px 0 0;
+}
+
+.switch_layer a.no {
+    background: #e6e6e6;
+}
+
+.switch_layer a.yes {
+    background: #7ac475;
+    color: #fff;
+}
+
+.cart-title {
+    font-size: 14px;
+    padding: 20px 0 20px 38px;
+    input {
+        display: inline-block;
+    }
+    img {
+        top: 6px;
+        position: relative;
+        margin: 0 3px 0 6px;
+    }
+}
+
+.main-red {
+    color: #E62E46;
+}
+
+// 5.21
+
+.coupon-and-price {
+    border-bottom: 1px solid #F5F5F5;
+    .coupon-left{
+        width: 610px;
+        float: left;
+    }
+    .coupon-right{
+        // margin-left: 610px;
+    }
+}
+.seller-cont{
+    p{
+        text-align: left;
+        padding-left: 57px;
+        height: 60px;
+        line-height: 60px;
+        font-size: 14px;
+        color:  #222222;
+        img,span{
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        .deliver-price{
+            color: #E61C44;
+        }
+    }
+
+}
+.order-item {
+    // margin-bottom: 
+}
+.order-item-price{
+    padding: 30px 0;
+    font-size: 14px;
+    line-height: 34px;
+    float: right;   
+    margin-right: 32px;      
+}
+.select-num {
+    font-size: 14px;
+    font-weight: bold;
+}
+.red-color{
+    color: #E61C44;
+}
+
+.illustrate{
+    padding-left: 32px;
+    span{
+        font-size: 15px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

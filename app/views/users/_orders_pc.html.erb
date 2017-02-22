@@ -1,0 +1,152 @@
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/common'%>
+<%= stylesheet_link_tag  'pc/account'%>
+
+<div class="my_account w990">
+  <div class="trade_t">
+    <h3>我的账户</h3>
+  </div>
+  <div class="trade_b clearfix">
+    <%= render 'subnav' %>
+
+    <div class="my_order left">
+      <div class="title">
+        <h3><span>我的进货宝</span>&nbsp;>我的订单</h3>
+      </div>
+      <a class="ordersearch <%= 'selected' if !params.key?(:status) %>" href="/my/orders">全部订单</a>
+      <a class="ordersearch <%= 'selected' if params[:status] == '0' %>" href="/my/orders?status=0">等待付款</a>
+      <a class="ordersearch <%= 'selected' if params[:status] == '1' %>" href="/my/orders?status=1">正在备货</a>
+      <a class="ordersearch <%= 'selected' if params[:status] == '2' %>" href="/my/orders?status=2">等待收货</a>
+      <a class="ordersearch <%= 'selected' if params[:status] == '3' %>" href="/my/orders?status=3">已完成</a>
+      <div class="top_mess">
+        <ul class="clearfix">
+          <li>宝贝：</li>
+          <li>产品信息：</li>
+          <li class="num">数量：</li>
+          <li class="last"> 小计：</li>
+        </ul>
+      </div>
+      <% @orders.each do |order| %>
+        <div class="order_mess">
+          <div class="order_t clearfix">
+            <span class="left">
+              订单编号：<%= order.OrderCode%> &nbsp;
+              <font>创建时间：<%= order.CreateTime.strftime('%Y-%m-%d %H:%M:%S') if order.CreateTime.present? %></font>
+              <% if order.PayStatus != 0 %>
+                <font>付款时间：<%= order.PayDatetime.strftime('%Y-%m-%d %H:%M:%S') if order.PayDatetime.present?%></font>
+              <%end %>
+            </span>
+            <span class="right">
+              <% if order.OrderStatus == 0 %>
+                <a href="/orders/<%=order.OrderCode%>">去付款</a>&emsp;
+                <a href="/orders/<%=order.OrderCode%>" data-method="delete" >删除订单</a>
+              <% else %>
+                <a href="/orders/<%=order.OrderCode%>/logistics">查看</a>
+                <% if order.OrderStatus.in?([4, 5, 8]) %>
+                  &emsp;<a href="/orders/<%=order.OrderCode%>/buy_again" data-method="post">再次购买</a>
+                <% end %>
+              <% end %>
+            </span>
+          </div>
+          <div class="order-b clearfix">
+            <% order.order_products.each do |order_product| %>
+              <div class="first_div">
+                  <div class="left" style="margin:4px 0 0 10px;"><a href="/products/<%= order_product.ProductID%>"> <%= image_tag order_product.product.cover_url('v100'), width: "90", height: "90" %> </a></div>
+                  <div class="left" style="width:140px; margin:15px 34px 0px 10px;"><%= order_product.product.Name%></div>
+                  <div class="left type" style="width: 140px; margin: 15px 0px 0px 10px; ">
+                    <%= order_product.product.Specification%>
+                  </div>
+                  <div class="left" style="width: 50px; margin: 15px 0px 0px 24px; ">x <%= order_product.Quantity %> </div>
+                  <div class="left" style="width: 80px; margin: 15px 0px 0px 100px; ">&yen;
+                    <%= order_product.Quantity*order_product.Price %>
+                  </div>
+                  <div class="clearfix"></div>
+              </div>
+              <% if order_product.product.is_group_product? %>
+                <div class="second">
+                  <div class="lunbo">
+                    <ul class="lunbo-box clearfix">
+                      <% order_product.product.group_products.includes(:sub_product).each do |g_product| %>
+                        <% sub_product = g_product.sub_product %>
+                        <li class="clearfix">
+                            <p class="left">
+                              <a href="" title="" >
+                                <%= image_tag sub_product.cover_url('v100'), width: "60", height: "60" %>
+                              </a>
+                            </p>
+                            <div class="left text">
+                              <span class="sp1"><%= sub_product.Name%></span>
+                              <span>￥<%= sub_product.ProductPrice %>/<%= sub_product.Unit %></span>
+                              <span>数量：<%= g_product.Number %></span>
+                            </div>
+                        </li>
+                        <% end %>
+                    </ul>
+                    <a href="javascript:;" class="lft-btn"></a>
+                    <a href="javascript:;" class="rgt-btn"></a>
+                    <div class="sanj"></div>
+                  </div>
+                </div>
+              <% end %>
+          <% end %>
+              <div class="meass_pro right">
+                <span><%= order.RandNum %></span><br>
+                订单总金额:<span>¥ <%= order.CostItem.to_f %></span></br>
+                共<%= order.order_products.inject(0){|sum, op| sum+op.Quantity}%>件商品
+                <span>已优惠：¥ <%= order.giveaway_total.round(2)%></span></br>
+                <% if order.AppDiscount.to_f > 0%>
+                <span>APP下单减免：<%= order.AppDiscount.to_f.round(2)%>元</span></br>
+                <% end %>
+                <span class="red">合计：¥ <%= order.Money.round(2)%></span>
+              </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+  <div class="btm clearfix">
+    <ul id="fenye">
+      <%
+        current_page = @orders.current_page
+        total_pages = @orders.total_pages
+        status_param = params.key?(:status) ? "&status=#{params[:status]}" : ""
+      %>
+      <li class="up"><a href="/my/orders?page=<%= current_page - 1 > 0 ? current_page - 1 : 1 %><%= status_param%>">&lt;</a></li>
+      <% if total_pages < 6 %>
+        <% 1.upto(total_pages > 6 ? 6 : total_pages).each do |index| %>
+          <li><a class="<%= 'now' if index == current_page %>" href="/my/orders?page=<%= index %><%= status_param%>"><%= index %></a></li>
+        <% end %>
+      <% else %>
+        <% (current_page - 2 < 1 ? 1 : current_page - 2).upto(current_page + 3 > total_pages ? total_pages : current_page + 3).each do |index| %>
+          <li><a class="<%= 'now' if index == current_page %>" href="/my/orders?page=<%= index %><%= status_param%>"><%= index %></a></li>
+        <% end %>
+        <% if current_page + 6 <= total_pages %>
+          <li><p><a href="/my/orders?page=<%= current_page + 6 %><%= status_param%>">...</a></p></li>
+        <% end %>
+      <% end %>
+      <li class="down"><a href="/my/orders?page=<%= current_page + 1 <= total_pages ? current_page + 1 : total_pages %><%= status_param%>">&gt;</a></li>
+      <li class="total">共<%= total_pages %>页</li>
+      <li class="total">去第<input type="text" name="go" id="go">页</li>
+    </ul>
+  </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(document).keydown(function (event_e) {
+            if (window.event)
+                event_e = window.event;
+            var int_keycode = event_e.charCode || event_e.keyCode;
+            if (int_keycode == 13) {
+                try {
+                    var index = parseInt($("#go").val());
+                    if (index > 0) {
+                    window.location = "/my/orders?page=" + index + "<%= status_param.html_safe %>";
+                    }
+                } finally {
+
+                }
+            }
+        });
+    })
+</script>

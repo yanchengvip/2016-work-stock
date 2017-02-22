@@ -1,0 +1,57 @@
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+    <%= stylesheet_link_tag    'vendors/picker', media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+<header class="no-search clearfix">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">商品详情</div>
+</header>
+<div id="points-detail-img">
+  <%= image_tag @point_product.cover_url %>
+  <div class="points-count-cover"><span id="points-need"><%= @point_product.Point %></span> 积分</div>
+</div>
+<div id="points-detail-description" data-type="<%= @point_product.Type %>">
+  <p>商品名称：<%= @point_product.Name %></p>
+  <p>使用规则：<%= @point_product.Regulation %></p>
+  <p>限兑数量：<%= @point_product.MaxExchangeNumber %></p>
+  <p>商品简介：<%= @point_product.Summary %></p>
+</div>
+<div id="exchange-dialog">
+  <div class="header">
+    <div class="close">
+      <a href="javascript:hideExchange()" ><%= image_tag 'mobile/base/close.svg' %></a>
+    </div>
+    <span>总计: <span id="points-total"><%= @point_product.Point %></span> 积分</span>
+    <div class="limit">
+      限兑<span><%= @point_product.MaxExchangeNumber %></span>
+    </div>
+  </div>
+  <div class="body">
+    <a class="minus" href="javascript:reduceNum('#count')">－</a>
+    <input id="count" class="number" value=1 disabled="true">
+    <a class="plus" href="javascript:addNum('#count')">＋</a>
+  </div>
+  <% if @point_product.Type == 1 %>
+    <%= form_tag "", id: "address-new-form", class: "points-mall-address" do %>
+      <div class="input-item"><div class="input-tag">收货人：</div><input type="text" name="Consignee"  required></div>
+      <div class="input-item"><div class="input-tag">手机号码：</div><input type="tel" name="Mobile" required></div>
+      <div class="input-item"><div class="input-tag">收货地址：</div><input type="text" id="picker" readonly="readonly" required>
+      </div>
+      <div class="input-item"><div class="input-tag">详细位置：</div><input type="text" name="detail" required></div>
+    <% end %>
+  <% end %>
+</div>
+<div id="exchange-bar" class="row">
+  <div class="col s6">我的积分:<span id="my-integral"><%= current_user.Integral %></span></div>
+  <a class="col s6<%= ' not-ready' if @point_product.Type == 1 %>" id="exchange-btn" href="javascript:exchangeNow()">确认兑换</a>
+  <a href="javascript:selectCount()" class="col s12">选择数量</a>
+</div>
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <script>
+    var ID = '<%= @point_product.ID %>';
+  </script>
+    <%= javascript_include_tag 'mall', 'data-turbolinks-track' => true %>
+<% end %>

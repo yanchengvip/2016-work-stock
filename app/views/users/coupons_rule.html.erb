@@ -1,0 +1,41 @@
+<% content_for :header do %>
+  <header class="wallet">
+    <a href="javascript:goBack()" id="back" class="header-link">
+      <%= image_tag "mobile/back.png" %> <span>我的钱包</span>
+    </a>
+    <a href="/my/coupons_rule" class="header-link rule"><span><i></i>使用规则</span></a>
+</header>
+<% end %>
+
+<div class="head valign-wrapper row">
+  <div class="coupons_title col s4">
+    <span class="my_coupons"><a href="/my/coupons">我的优惠券</a></span>
+  </div>
+  <div class="col s4"></div>
+    <div class="col s4 right-align rule">
+        <a href="javascript:;">当前积分: <%= current_user.Integral.to_i %></a>
+    </div>
+</div>
+<div class="padding" style="font-size: 1.2rem">
+  <p class="big-text jhb-red">关于优惠券</p>
+  <p class="indent">本券是进货宝发放给用户，用户在下单购物中用于抵扣订单金额的电子券；</p>
+  <div class="line"></div>
+  <p class="big-text jhb-red">怎样获得优惠券？</p>
+  <p class="indent">
+    用户需通过进货宝线上活动获得优惠券，进货宝会根据不同的微信活动发放不同的优惠券。
+  </p>
+  <div class="line"></div>
+  <p class="big-text jhb-red">优惠券如何使用？</p>
+  <p class="indent">
+    优惠券只能抵扣商品金额，不设找零、不可兑换现金；多张优惠券不能同时使用，每次购物仅限使用一张优惠券；每张优惠券都有使用期限，该券仅能在注明的有效期内使用，逾期作废；
+  </p>
+  <div class="line"></div>
+  <p class="big-text jhb-red">关于积分</p>
+  <p class="indent">用户消费1元可获得1个积分。积分在订单完成交易后，系统自动发放到您的账号中，可能会有延迟。</p>
+</div>
+<% content_for :footer do %>
+  <%= render 'shared_mobile/footer' %>
+<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'coupons', 'data-turbolinks-track' => true %>
+<% end %>

@@ -1,0 +1,146 @@
+<header class="fake-search location-header">
+    <% if not from_app? %>
+        <div id="top-down-button" class='hidden'>
+          <%= image_tag "mobile/base/down.png"%>
+          <a href="javascript:;" class="link">&nbsp;</a>
+        </div>
+    <% end %>
+    <div class="header-wrapper <%= from_app? ? 'app' : 'app' %> ">
+      <a href="/location" class="header-2-l">
+        <span id="county-name"></span>
+        <%= image_tag "mobile/base/down.svg", id:"arrow-down", class:"hidden" %>
+      </a>
+      <a href="/products/search" class="header-2-m">
+        <div class="fake-input">一机在手，进货无忧</div>
+      </a>
+      <div class="header-2-r">
+        <a href="javascript:;" class="scan-code"></a>
+        <% if from_app? %>
+          <!-- <a href="javascript:;" class="scan-code"></a> -->
+        <% end %>
+        <a href="/notice" class="message">
+          <span><%= sign_in? ? current_user.unread_notifications.size : 0 %></span>
+        </a>
+      </div>
+    </div>
+</header>
+<script>
+   // 检测是否在首页
+  var isInIndex = function() {
+    return location.pathname === "/";
+  };
+   // 首页搜索框fixed，默认为过渡透明背景，滚动一定距离后改变背景色
+  var header = $('header');
+  if (isInIndex()){
+    header.addClass('index-search')
+  }
+  var doc = document.documentElement;
+  var clientWidth = Math.min(doc.clientWidth, 640);
+  headerHeight = 20 * (clientWidth / 640);
+  headerHeight = 8 * headerHeight;
+  document.addEventListener("scroll",function(e){
+    var top = $(document).scrollTop()
+    if (top<0 && isInIndex()){
+      header.css({"opacity":"0"});
+    }else if (top>headerHeight){
+      header.css({"opacity":"1"});
+      header.addClass('bg-jhb-red');
+    }else{
+      header.css({"opacity":"1"});
+      header.removeClass('bg-jhb-red');
+    }
+  })
+  if($(".header-2-r span").html() - 0 > 9){
+    $(".header-2-r span").html("9+");
+  }else if($(".header-2-r span").html() - 0 == 0){
+    $(".header-2-r span").hide();
+  }
+  var scanFn, versionCompare;
+  var isLogin = <%= sign_in? ? true : false %>
+  // 版本判断
+  versionCompare = function(v1, v2, options) {
+    var i, isValidPart, lexicographical, v1parts, v2parts, zeroExtend;
+    lexicographical = options && options.lexicographical;
+    zeroExtend = options && options.zeroExtend;
+    v1parts = v1.split('.');
+    v2parts = v2.split('.');
+    isValidPart = function(x) {
+      return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
+    };
+    if (!v1parts.every(isValidPart) || !v2parts.every(isValidPart)) {
+      return NaN;
+    }
+    if (zeroExtend) {
+      while (v1parts.length < v2parts.length) {
+        v1parts.push('0');
+      }
+      while (v2parts.length < v1parts.length) {
+        v2parts.push('0');
+      }
+    }
+    if (!lexicographical) {
+      v1parts = v1parts.map(Number);
+      v2parts = v2parts.map(Number);
+    }
+    i = 0;
+    while (i < v1parts.length) {
+      if (v2parts.length === i) {
+        return 1;
+      }
+      if (v1parts[i] === v2parts[i]) {
+        ++i;
+        continue;
+      } else if (v1parts[i] > v2parts[i]) {
+        return 1;
+      } else {
+        return -1;
+      }
+      ++i;
+    }
+    if (v1parts.length !== v2parts.length) {
+      return -1;
+    }
+    return 0;
+  };
+  scanFn = function() {
+    var objStr, objStrArr, scanFlag;
+    if (isInApp()) {
+      scanFlag = false;
+      objStr = navigator.userAgent.match(/JinHuoBao\/(.+)/g);
+      objStrArr = objStr.toString().split("/");
+      if (isAndroid()) {
+        if (versionCompare(objStrArr[1].toString(),"1.7") > -1) {
+          return Android.scanBtnClicked();
+        } else {
+          return showDialog("请升级到最新版本");
+        }
+      } else if (isiOS()) {
+        if (versionCompare(objStrArr[1].toString(),"1.1.3") > -1) {
+          return window.webkit.messageHandlers.scanBtnClicked.postMessage({});
+        } else {
+          return showDialog("请升级到最新版本");
+        }
+      }
+    }else{
+      showDialog("请在进货宝APP中使用此功能")
+    }
+  };
+  $(".scan-code").click(function() {
+    if (isLogin === false) {
+      $.cookie("scanFlag", "true");
+      window.location = "/sign_in";
+      return;
+    }
+    $.cookie("scanFlag", "false");
+    return scanFn();
+  });
+
+  if (isLogin === true && $.cookie("scanFlag") === "true") {
+    scanFn();
+  }
+  $.cookie("scanFlag", "false");
+
+</script>
+
+
+

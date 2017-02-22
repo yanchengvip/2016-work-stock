@@ -1,0 +1,375 @@
+<!-- 订单评价页 -->
+<style type="text/css">
+  body{
+    background-color: #f3f4f5;
+  }
+  main{
+    padding-bottom: 0;
+  }
+</style>
+<header class="no-search clearfix">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">评价</div>
+</header>
+<main class="reviews">
+  <div class="content">
+    <div class="item salesman">
+      <h2>对业务员评分</h2>
+      <div class="start-box">
+        <a href="javascript:;" class="start"></a>
+        <a href="javascript:;" class="start"></a>
+        <a href="javascript:;" class="start"></a>
+        <a href="javascript:;" class="start"></a>
+        <a href="javascript:;" class="start"></a>
+      </div>
+      <ul class="tip-box bad clearfix">
+        <li>服务差</li>
+        <li>从不回访</li>
+        <li>态度差</li>
+        <li>订货后就不管了</li>
+        <li>没诚信</li>
+      </ul>
+      <ul class="tip-box good clearfix">
+        <li>服务周到</li>
+        <li>经常回访</li>
+        <li>帮助卸货</li>
+        <li>有责任心</li>
+        <li>热情</li>
+        <li>守时</li>
+        <li>对业务员信任度高</li>
+      </ul>
+    </div>
+    <div class="item driversman">
+      <h2>对配送员评分</h2>
+      <div class="start-box">
+        <a href="javascript:;" class="start"></a>
+        <a href="javascript:;" class="start"></a>
+        <a href="javascript:;" class="start"></a>
+        <a href="javascript:;" class="start"></a>
+        <a href="javascript:;" class="start"></a>
+      </div>
+      <ul class="tip-box bad clearfix">
+        <li>卸货粗鲁</li>
+        <li>态度差</li>
+        <li>无责任心</li>
+        <li>不帮助卸货</li>
+        <li>不守时</li>
+        <li>没诚信</li>
+      </ul>
+      <ul class="tip-box good clearfix">
+        <li>卸货态度好</li>
+        <li>热情</li>
+        <li>有责任心</li>
+        <li>服务周到</li>
+        <li>按时送达</li>
+      </ul>
+    </div>
+    <div class="item evaluate">
+      <textarea cols="30" rows="10" placeholder="您可以对业务员和配送员做出评价"></textarea>
+    </div>
+    <a href="javascript:void(0);" class="subBtn">提交</a>
+    <!-- <a href="javascript:;" id="back-home">暂不评价,返回首页</a> -->
+  </div>
+</main>
+<% content_for :footer do %>
+    &nbsp;
+<% end %>
+<script>
+  var obj ={
+    "order_code": "",
+    "sales_score": "",
+    "sales_evaluate": "",
+    "driver_score": "",
+    "sale_score_tags": "",
+    "driver_score_tags": ""
+  }
+  var salesBad = [],
+      salesGood =[],
+      driverBad = [],
+      driverGood = [];
+  var ajaxFlag = true;
+  function start(ele){
+    var index = ele.index();
+    ele.parent().attr({"start":index + 1,"isOk":"ok"})
+    ele.siblings().removeClass("checked");
+    for(var i = 0;i <= index;i++){
+      ele.parent().find("a").eq(i).addClass("checked");
+    }
+    var textBox = ele.parent().siblings("h2").find("span");
+    switch(index){
+      case 0:
+        textBox.html("非常不满意");
+        break;
+      case 1:
+        textBox.html("不满意");
+        break;
+      case 2:
+        textBox.html("评价一般");
+        break;
+      case 3:
+        textBox.html("满意");
+        break;
+      default:
+        textBox.html("非常满意")
+        break;
+    }
+  }
+  function checked(){
+    var flag = $(".start-box").length;
+    var num = 0;
+    $(".start-box").each(function(){
+      if($(this).attr("isok") == "ok"){
+        num++;
+      }
+    })
+    if(flag == num){
+      $(".subBtn").addClass("isOk");
+    }
+  }
+
+  $(".salesman .start-box a").click(function () {
+    // $(".salesman h2").html("对业务员<span></span>").css("color","#F5A623");
+    var index = $(this).index()
+    if(index <=2){
+      obj.sale_score_tags = salesBad.join(",");
+      $(this).parent().siblings(".bad").show().siblings("ul").hide();
+    }else{
+      obj.sale_score_tags = salesGood.join(",");
+      $(this).parent().siblings(".good").show().siblings("ul").hide();
+    }
+    obj.sales_score = index + 1;
+    start($(this));
+    checked();
+  })
+  $(".salesman .good li").click(function(){
+    var textStr = $(this).text();
+    if($(this).attr("isClick") == undefined || $(this).attr("isClick") == "false"){
+      $(this).attr("isClick","true");
+      $(this).css({"border-color":"#e62e46","color":"#E62E46"});
+      $(this).find("i").addClass("dele")
+      salesGood.push(textStr);
+    }else{
+      $(this).attr("isClick","false");
+      $(this).css({"border-color":"#f0f0f0","color":"#606060"});
+      $(this).find("i").removeClass("dele")
+      // 删除元素
+      for(var i =0;i < salesGood.length;i++){
+        if(salesGood[i] == textStr){
+          salesGood.splice(i,1);
+          break;
+        }
+      }
+    }
+    obj.sale_score_tags = salesGood.join(",");
+    // console.log(salesGood,obj.sale_score_tags)
+  })
+  $(".salesman .bad li").click(function(){
+    var textStr = $(this).text();
+    if($(this).attr("isClick") == undefined || $(this).attr("isClick") == "false"){
+      $(this).attr("isClick","true");
+      $(this).css({"border-color":"#e62e46","color":"#E62E46"});
+      $(this).find("i").addClass("dele")
+      salesBad.push(textStr);
+    }else{
+      $(this).attr("isClick","false");
+      $(this).css({"border-color":"#f0f0f0","color":"#606060"});
+      $(this).find("i").removeClass("dele")
+      // 删除元素
+      for(var i =0;i < salesBad.length;i++){
+        if(salesBad[i] == textStr){
+          salesBad.splice(i,1);
+          break;
+        }
+      }
+    }
+    obj.sale_score_tags = salesBad.join(",");
+    // console.log(salesBad,obj.sale_score_tags)
+  })
+
+  $(".driversman .start-box a").click(function(){
+    // $(".driversman h2").html("对配送员<span></span>").css("color","#F5A623");
+    var index = $(this).index();
+    if(index <= 2){
+      obj.driver_score_tags = driverBad.join(",");
+      $(this).parent().siblings(".bad").show().siblings("ul").hide();
+    }else{
+      obj.driver_score_tags = driverGood.join(",");
+      $(this).parent().siblings(".good").show().siblings("ul").hide();
+    }
+    obj.driver_score = index + 1;
+    start($(this));
+    checked();
+  })
+  $(".driversman .good li").click(function(){
+    var textStr = $(this).text();
+    if($(this).attr("isClick") == undefined || $(this).attr("isClick") == "false"){
+      $(this).attr("isClick","true");
+      $(this).css({"border-color":"#e62e46","color":"#E62E46"});
+      $(this).find("i").addClass("dele")
+      driverGood.push(textStr);
+    }else{
+      $(this).attr("isClick","false");
+      $(this).css({"border-color":"#f0f0f0","color":"#606060"});
+      $(this).find("i").removeClass("dele")
+      // 删除元素
+      for(var i =0;i < driverGood.length;i++){
+        if(driverGood[i] == textStr){
+          driverGood.splice(i,1);
+          break;
+        }
+      }
+    }
+    obj.driver_score_tags = driverGood.join(",");
+    // console.log(driverGood,obj.driver_score_tags)
+  })
+  $(".driversman .bad li").click(function(){
+    var textStr = $(this).text();
+    if($(this).attr("isClick") == undefined || $(this).attr("isClick") == "false"){
+      $(this).attr("isClick","true");
+      $(this).css({"border-color":"#e62e46","color":"#E62E46"});
+      $(this).find("i").addClass("dele")
+      driverBad.push(textStr);
+    }else{
+      $(this).attr("isClick","false");
+      $(this).css({"border-color":"#f0f0f0","color":"#606060"});
+      $(this).find("i").removeClass("dele")
+      // 删除元素
+      for(var i =0;i < driverBad.length;i++){
+        if(driverBad[i] == textStr){
+          driverBad.splice(i,1);
+          break;
+        }
+      }
+    }
+    obj.driver_score_tags = driverBad.join(",");
+    // console.log(driverBad,obj.driver_score_tags)
+  })
+
+
+
+  var isAndroid, isInApp, isiOS;
+
+  isAndroid = function() {
+    return /Android/i.test(navigator.userAgent);
+  };
+
+  isiOS = function() {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  };
+
+  isInApp = function() {
+    return /jinhuobao/i.test(navigator.userAgent) || Boolean(window.Android) || (window.webkit && window.webkit.messageHandlers);
+  };
+  $(".subBtn").click(function(){
+    if(!$(this).hasClass("isOk")){
+      return;
+    }else if(ajaxFlag == false){
+      return;
+    }
+    ajaxFlag = false;
+    var orderCode = window.location.pathname.split("/")[2];
+    obj.sales_evaluate = $(".evaluate textarea").val();
+    obj.order_code = orderCode;
+    $(document).ajaxStart(function(){
+      $("body").append("<div class='zhezhao loading-box'><div class='loading'></div></div>")
+    })
+    $(document).ajaxStop(function(){
+      $(".loading-box").remove();
+    })
+    $.ajax({
+      type: "POST",
+      url:"/orders/order_score",
+      data: obj,
+      success: function(data){
+        ajaxFlag = true;
+        if(data.status == "ok"){
+          showDialog(
+            {
+              "msg":"感谢您的评价",
+              "isAlert":"ture",
+              "callback":function(){
+                if (isInApp()) {
+                  if (isAndroid()) {
+                    try{
+                      return Android.backToHome()
+                    }catch(err){}
+                     window.location.href = "/";
+                  } else if (isiOS()) {
+                    try{
+                      return window.webkit.messageHandlers.backToHome.postMessage({});
+                    }catch(err){}
+                     window.location.href = "/";
+                  }
+                }
+                window.location.href = "/";
+              }
+          })
+        }else{
+          showDialog(
+            {
+              "msg": data.content,
+              "isAlert":"ture",
+              "callback":function(){
+                if (isInApp()) {
+                  if (isAndroid()) {
+                    try{
+                      return Android.backToHome()
+                    }catch(err){}
+                     window.location.href = "/";
+                  } else if (isiOS()) {
+                    try{
+                      return window.webkit.messageHandlers.backToHome.postMessage({});
+                    }catch(err){}
+                     window.location.href = "/";
+                  }
+                }
+                window.location.href = "/";
+                // window.location.href = document.referrer;
+              }
+            }
+
+            )
+        }
+      },
+      error: function(e){
+        console.log(e);
+        ajaxFlag = true;
+      }
+    })
+  })
+  $("#back-home").click(function(){
+    if (isInApp()) {
+      if (isAndroid()) {
+        try{
+          return Android.backToHome()
+        }catch(err){}
+         window.location.href = "/";
+      } else if (isiOS()) {
+        try{
+          return window.webkit.messageHandlers.backToHome.postMessage({});
+        }catch(err){}
+         window.location.href = "/";
+      }
+    }
+    window.location.href = "/";
+  })
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,42 @@
+<% content_for :title do %>抽奖纪录<% end %>
+<%= stylesheet_link_tag 'events/golden_egg_history', media: 'all', 'data-turbolinks-track' => true %>
+<% content_for :header do %>
+<header class="no-search clearfix">
+  <div class="header-left">
+    <a href="/activity/golden_egg" id="back">
+    </a>
+  </div>
+  <div class="ordersHeader_title">抽奖纪录</div>
+</header>
+<% end %>
+<div class="history-tip">注：本次活动实物奖品将在您下次下单时随货物一同寄出</div>
+<div class="main">
+	<!-- 中奖状态 -->
+	<div class="history-detail">
+		<div class="detail-title">三等奖</div>
+		<div class="detail-content">
+			<div class="detail-pic">
+				<!-- 此处图片地址，根据中奖状态的下标确定图片地址 eg.如果返回数据是2 则地址为.../reward2.png 如果是3则为 .../reward3.png -->
+				<img src="/assets/mobile/events/golden_egg/reward1.png" alt="应该有图">
+			</div>
+			<p class="detail-reward">五元食品品类券</p>
+			<p class="detail-time">2016.09.15 13:03:12</p>
+		</div>
+	</div>
+	<!-- 未中奖状态 -->
+	<!-- 只是整体多了一个class名 -->
+	<div class="history-detail greyfilter">
+		<div class="detail-title">未中奖</div>
+		<div class="detail-content">
+			<div class="detail-pic">
+				<img src="/assets/mobile/events/golden_egg/no-reward.png" alt="应该有图">
+			</div>
+			<p class="detail-reward">很遗憾，没能砸中</p>
+			<p class="detail-time">2016.09.15 13:03:12</p>
+		</div>
+	</div>
+</div>
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'events/golden_egg', 'data-turbolinks-track' => true %>
+<% end %>

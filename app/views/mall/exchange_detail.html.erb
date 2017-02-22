@@ -1,0 +1,36 @@
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+<% end %>
+<header class="location clearfix">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back">
+      <!-- <%= image_tag "mobile/base/back.svg" %> -->
+    </a>
+  </div>
+  <!--  -->
+  <div class="ordersHeader_title">兑换详情</div>
+</header>
+<div class="points-products">
+    <div class="points-product row">
+      <div class="col s6 img">
+        <a href="/mall/<%= @point_order.PointProductID %>/product_detail"><%= image_tag @point_order.point_product.cover_url %></a>
+      </div>
+      <div class="col s6 info">
+        <div class="title"><%= @point_order.point_product.Name %></div>
+        <div class="market-price">单件 <%= @point_order.Point %>积分</div>
+        <div class="price">兑换数量 <%= @point_order.Number %></div>
+        <div class="exchange-date"><%= @point_order.CreateTime.strftime("%Y-%m-%d %H:%M") %> 兑换</div>
+      </div>
+  </div>
+</div>
+<% if @point_order.Address.present? %>
+  <div class="points-mall-address">
+    <div class="title">收货地址</div>
+    <div class="profile">
+       <%= @point_order.Consignee %> <%= @point_order.Mobile %></span>
+    </div>
+    <div class="addr"><%= @point_order.Address %></div>
+  </div>
+
+<% end %>
+<% content_for :footer do %>&nbsp;<% end %>

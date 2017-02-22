@@ -1,0 +1,66 @@
+<% content_for :title do %>周年庆砸金蛋<% end %>
+<%= stylesheet_link_tag 'events/golden_egg', media: 'all', 'data-turbolinks-track' => true %>
+<% content_for :header do %>
+<header class="no-search clearfix" id="header">
+  <div class="header-left">
+    <a href="/" id="back">
+    </a>
+  </div>
+  <div class="ordersHeader_title">周年庆砸金蛋</div>
+  <div class="header-right" >
+    <a href="/activity/golden_egg_history" style="color:#E62E46">获奖纪录
+    </a>
+  </div>
+</header>
+<% end %>
+<div class="main">
+  <div class="activity-time"><span>活动时间：</span>2016.10.15－<span>2016.10.20</span></div>
+  <% if $redis.get("#{current_user.ID}:anniversary_egg").to_i > 0 %>
+  <!-- 砸过金蛋 -->
+  <div class="egg-wrapper">
+    <div class="egg-broke lose"></div>
+    <div class="hammer"></div>
+    <div class="chance">今日剩余机会：<span>0</span>次</div>
+  </div>
+
+  <% else %>
+  <!-- 未砸金蛋 -->
+  <div class="egg-wrapper">
+    <div class="egg"></div>
+    <div class="egg-liehen"></div>
+    <div class="egg-broke"></div>
+    <div class="hammer shake"></div>
+    <div class="chance">今日剩余机会：<span>1</span>次</div>
+  </div>
+
+  <% end %>
+  <div class="lottery-info">
+    <div class="lottery-title">获奖动态</div>
+    <ul id="info_ul">
+    </ul>
+  </div>
+</div>
+<div class="prize-info prize-settings">
+  <div class="prize-wrapper">
+    <div class="prize-title">奖品设置</div>
+    <div class="prize-set"></div>
+  </div>
+</div>
+<div class="prize-info prize-intro">
+  <div class="prize-wrapper">
+    <div class="prize-title">活动介绍</div>
+    <div class="prize-set">
+      <p>1、周年庆期间每人每天可抽奖1次（0:00更新）;</p>
+      <p>2、中奖后，优惠券和大卫之咖啡会自动发放到账户中，其他奖品会在周年庆结束后安排发货;</p>
+      <p>3、周年庆砸金蛋活动时间截止2016年10月20日;</p>
+      <p>4、禁止任何不正当手段参与活动，一经发现，活动发起人有权取消用户的获奖资格;</p>
+      <p>5、本次活动最终解释权归进货宝所有。</p>
+    </div>
+  </div>
+</div>
+<div class="shadow">
+</div>
+<% content_for :footer do %><i></i><% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'events/golden_egg', 'data-turbolinks-track' => true %>
+<% end %>

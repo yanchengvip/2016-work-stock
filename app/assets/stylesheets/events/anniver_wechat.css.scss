@@ -1,0 +1,107 @@
+/*
+ *= require vendors/swiper-3.3.1.min
+ */
+
+html,
+body {
+    position: relative;
+    height: 100%;
+}
+
+body {
+    background: #eee;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #000;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+#swiper-container {
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #df1b52;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    position: relative;
+    img {
+        width: auto;
+        height: 100%;
+        overflow: hidden;
+    }
+    .pull{
+        width: 3.5rem;
+        height: 2.5rem;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        margin-left: -2.25rem;
+        img{
+            width: auto;
+            height: 100%;
+            overflow: hidden;
+        }
+    }
+}
+
+#p5{
+    position: relative;
+    .new-reg{
+        position: absolute;
+        top: 10rem;
+        left: 6.5rem;
+        width: 10rem;
+        height: 4rem;
+        -webkit-tap-highlight-color: rgba(255,255,255,0);
+    }
+    .btn{
+        width: 10.5rem;
+        height: 6rem;
+        position: absolute;
+        -webkit-tap-highlight-color: rgba(255,255,255,0);
+    }
+    .to8to{
+        top: 16.5rem;
+        left: 1rem;
+    }
+    .didi{
+        top: 16.5rem;
+        left: 12rem;
+    }
+    .daxia{
+        top: 23rem;
+        left: 1rem;
+    }
+    .ispa{
+        top: 23rem;
+        left: 12rem;
+    }
+}
+#back {
+    position: fixed;
+    z-index: 5000;
+    top: 1rem;
+    left: 1.5rem;
+    width: 2.2rem;
+    // display: none;
+    a {
+        display: block;
+        padding: .5rem;
+    }
+}

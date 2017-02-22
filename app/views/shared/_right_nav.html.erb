@@ -1,0 +1,318 @@
+<%= javascript_include_tag 'pc/handlebars'%>
+<div class="right-nav-box">
+  <div class="right-nav">
+    <ul class="right-nav-icon">
+      <li>
+        <span class="buy-num-show num-tip">0</span>
+        <a href="javascript:;" class="right-cart-icon icon"></a>
+      </li>
+      <li><a href="javascript:;" class="right-QRCode icon"><em></em></a></li>
+      <!-- <li><a href="#" class="right-feedback icon"><em></em></a></li> -->
+      <li><a href="javascript:;" class="right-server icon" id="sever-btton"><em></em></a></li>
+    </ul>
+    <ul class="right-bottom-nav">
+      <li class="to-top" id="back-to-top"></li>
+    </ul>
+    <div class="right-nav-cont">
+      <div class="right-cart">
+        <div class="right-cart-cont">
+          <h5>购物车(<span class="buy-num-show">0</span>)</h5>
+          <div class="rCart-cont">
+            <div class="yh-img"></div>
+            <div class="rCart-cont-all" id="cart-list">
+            </div>
+          </div>
+          <div class="rCart-bottom clearfix">
+            <div class="rCart-botton-left">
+              <p class="buy-num">共<span class="buy-num-show"></span>件商品</p>
+              <p class="buy-price">总价： ￥00.00</p>
+            </div>
+            <div class="rCart-bottom-right">
+              <a href="/carts">去购物车结算</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  美恰第三方客服 -->
+<script type="text/javascript">
+(function(m, ei, q, i, a, j, s) {
+        m[a] = m[a] || function() {
+            (m[a].a = m[a].a || []).push(arguments)
+        };
+        j = ei.createElement(q),
+            s = ei.getElementsByTagName(q)[0];
+        j.async = true;
+        j.charset = 'UTF-8';
+        j.src = i + '?v=' + new Date().getUTCDate();
+        s.parentNode.insertBefore(j, s);
+    })(window, document, 'script', '//static.meiqia.com/dist/meiqia.js', '_MEIQIA');
+    _MEIQIA('entId', '17793');
+
+    // 在这里开启手动模式（必须紧跟美洽的嵌入代码）
+      // _MEIQIA('manualInit');
+      // _MEIQIA('init');
+      _MEIQIA('withoutBtn');
+</script>
+<!-- handlebars 模板 -->
+
+        <script id="cart-dl" type="text/x-handlebars-template">
+        {{#if carts_group}}
+          {{#each carts_group}}
+            <dl class="rCart-item">
+              <dt>
+                <h6>{{this.group_title}}</h6>
+                <p class="yh-cont" _title="{{this.activities}}">
+                {{#this.activities}}{{this}};{{/this.activities}}
+                </p>
+              </dt>
+                {{#this.carts}}
+                <dd class="product">
+                  <a  href="javascript:;" class="deleItem" product-id="{{this.id}}" onClick="rightCartDelete('{{this.id}}',this)"></a>
+                  <div class="rc-item-left">
+                    <a href="/products/{{this.product_id}}"><img src="{{this.product_img}}"></a>
+                    <div class="item-left-text">
+                      <p class="name-title" _title="{{this.product_name}}">{{this.product_name}}</p>
+                      <p><span>￥<em>{{this.product_price}}</em></span>X<i class="item-buy-num">{{this.number}}</i></p>
+                    </div>
+                  </div>
+                </dd>
+                {{/this.carts}}
+                <dd>
+                  <div class="right item-price-box">
+                    <h6>已选{{this.carts.length}}件商品</h6>
+                    <p class="item-price">总价：￥00.00</p>
+                  </div>
+                </dd>
+            </dl>
+          {{/each}}
+        {{else}}
+          <div class="no-product">
+            <% if !sign_in? %>
+              <div class="to-login">还没有登录，登录后商品将被保存<a href="javascript:showLogin();">登录</a></div>
+            <% end %>
+            <p>购物车中还没有商品,<br>赶紧去选购吧！</p>
+          </div>
+        {{/if}}
+        </script>
+        <!-- handlebars 模板end -->
+<script type="text/javascript">
+  /* 回到页面顶部 */
+//当滚动条的位置处于距顶部100像素以下时，跳转链接出现，否则消失
+$(function () {
+    $(window).scroll(function(){
+      if($("body").scrollTop() > 500){
+         $(".right-bottom-nav").fadeIn();
+       }else{
+        $(".right-bottom-nav").fadeOut();
+      }
+    })
+    //当点击跳转链接后，回到页面顶部位置
+    $("#back-to-top").click(function(){
+        $('body,html').animate({scrollTop:0},600);
+        return false;
+    });
+});
+
+
+
+
+
+
+// 产品加入购物车
+  function Cart(EP_ID, node) {
+          <% if !sign_in? %>
+            IsVerify = false;
+            // Login();
+            showLogin();
+          <% else %>
+            var number = $(node).parent().find(".J_input").val()-0;
+            /*if (number > 60) {
+              alert('单件商品数量不能超过60');
+              return;
+            }*/
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: 'POST',
+                url: "/carts",
+                data: { "cart": { "ProductID": EP_ID, "Number": number }},
+                success: function (e) {
+                    if (e.status == 'ok') {
+                      /*alert('添加成功');*/
+                          var addcar = $(node);
+                          var img = addcar.parent().parent().find('img').attr('src');
+                          var flyer = $('<img class="u-flyer" src="'+img+'">');
+                          flyer.fly({
+                              start: getPosition(node),
+                              end:getPosition($(".right-cart-icon")[0]),
+                              speed: 1.5,
+                              onEnd: function(){
+                                  $("#msg").show().animate({width: '250px'}, 200).fadeOut(1000); //提示信息
+                                  addcar.css("cursor","default").removeClass('orange').unbind('click');
+                                  flyer.remove();
+                              }
+                          });
+                          showCart();
+                    } else if (e.error_code == 'IsNotVerified') {
+                      Login();
+                    } else if (e.message == "NoDefaultAddress") {
+                      notifyAddress();
+                    } else {
+                      alert(e.message);
+                    }
+                },
+                error: function (e, index) {
+                    alert(e);
+                }
+            });
+          <% end %>
+    }
+    // 用户登录
+    var IsVerify;
+
+// 右侧导航 及购物车
+// $(function(){
+    // 购物车信息显示
+  function showCart(){
+    $.ajax({
+          cache: false,
+          dataType: "json",
+          type: 'Get',
+          url: "/carts",
+          success: function (e) {
+              if (e.status == 'ok') {
+                  // CreateList(e.data);
+                  // console.log(e.data);
+                  //注册一个Handlebars模版，通过id找到某一个模版，获取模版的html框架
+                  console.log(e);
+                  var myTemplate = Handlebars.compile($("#cart-dl").html());
+                  //将json对象用刚刚注册的Handlebars模版封装，得到最终的html，插入到页面中。
+                  $("#cart-list").html(myTemplate(e.data));
+                  var buyNum = $('#cart-list .product').length;
+                  $(".buy-num-show").html(buyNum);
+                  calculationPrice();
+
+                  // 限制优惠信息字数
+                  $(".rCart-item dt p").each(function(){
+                    if($(this).html().length > 80){
+                      $(this).html(sliceHtml($(this).html(),80));
+                      $(this).mouseenter(function(){
+                        var $em = $("<em></em>")
+                        $em.html($(this).attr("_title"));
+                        $(this).css("position","relative").append($em);
+                      })
+                      $(this).mouseleave(function(){
+                        $(this).find("em").remove();
+                      })
+                    }
+                  })
+                  // 限制商品名称字数
+                  $(".item-left-text .name-title").each(function(){
+                    if($(this).html().length > 28){
+                      $(this).html(sliceHtml($(this).html(),25));
+                      $(this).mouseenter(function(){
+                        var $em = $("<em></em>")
+                        $em.html($(this).attr("_title"));
+                        $(this).css("position","relative").append($em);
+                      })
+                      $(this).mouseleave(function(){
+                        $(this).find("em").remove();
+                      })
+                    }
+                  })
+              }
+          },
+          error: function (e) {
+              console.log(e);
+          }
+      });
+   }
+   showCart();
+  //购物车价格计算
+  function calculationPrice(){
+    var allPrice = 0;
+    $(".rCart-item").each(function(){
+      var itemPrice = 0;
+      $(this).find(".product").each(function(){
+        itemPrice += ($(this).find("i").text() * $(this).find("em").text());
+      });
+      $(this).find(".item-price").html("总价:￥" + itemPrice.toFixed(2));
+      allPrice += itemPrice;
+    })
+    $(".rCart-botton-left .buy-price").html("总价:￥" + allPrice.toFixed(2));
+  }
+  calculationPrice();
+  // 删除购物车商品
+  function rightCartDelete(id, node) {
+      if (!confirm("您确定要删除商品？")) {
+          return false
+      }
+
+      $.ajax({
+          cache: false,
+          dataType: "json",
+          type: 'Delete',
+          url: "/carts/" + id,
+          success: function (e) {
+              if (e.status == 'ok') {
+                  $(node).parent().remove();
+                  showCart();
+              }
+          },
+          error: function (e) {
+              alert(e);
+          }
+      });
+  }
+  // 右侧导航条弹出效果
+    $(document).on("click",function(e){
+    if(e.target == document.getElementsByClassName("right-cart-icon")[0]){
+      if($(".right-nav").css("right") == "0px"){
+       $(".right-nav").css("right","340px");
+       showCart();
+      }else{
+        $(".right-nav").css("right","0px");
+      }
+    }else if($(e.target).parents().hasClass("right-nav-cont") == true){
+      return;
+    }else{
+      $(".right-nav").css("right","0px");
+    }
+  })
+  // 右侧导航位置
+  $(function(){
+    $(".right-nav-icon").css("marginTop",-$(".right-nav-icon").height()/2);
+  })
+// })
+
+// 启动第三方服务
+    $("#sever-btton,.server-talk").click(function(){
+        _MEIQIA('showPanel');
+      })
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

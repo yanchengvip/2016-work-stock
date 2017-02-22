@@ -1,0 +1,65 @@
+body{
+  background-color: #f4f4f4;
+}
+.history-tip {
+  padding: 0 2rem;
+  line-height: 3rem;
+  height: 3rem;
+  background-color: #f5a623;
+  color: #fff;
+}
+
+.main {
+  padding: 1rem;
+  background-color: #f4f4f4;
+  .history-detail {
+    background-color: #fff;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    color: #e62e46;
+    &.greyfilter {
+      filter: grayscale(100%);
+      color: #909090;
+      .detail-content {
+        background: #fcfcfc;
+      }
+    }
+    .detail-title {
+      height: 3.2rem;
+      line-height: 3.2rem;
+      text-align: center;
+      border-bottom: 1px solid #f4f4f4;
+    }
+    .detail-content {
+      height: 9rem;
+      padding-left: 13rem;
+      position: relative;
+      background: image-url("mobile/events/golden_egg/reward-bg.png") left bottom no-repeat;
+      background-size: 100% 140%;
+      .detail-pic {
+        position: absolute;
+        top: 0;
+        left: 2rem;
+        display: inline-block;
+        width: 9rem;
+        height: 9rem;
+      }
+      img {
+        display: inline-block;
+        width: 7rem;
+        height: auto;
+        margin: 1rem;
+        float: left;
+      }
+      p {
+        margin: 0;
+      }
+      .detail-reward {
+        line-height: 5rem;
+      }
+      .detail-time {
+        line-height: 3rem;
+      }
+    }
+  }
+}

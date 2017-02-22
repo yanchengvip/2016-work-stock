@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+      进货宝
+    </title>
+</head>
+
+<body>
+    <%= render 'shared/header_new' %>
+    <main class="new-pc">
+      <%= yield %>
+    </main>
+    <%= render 'shared/footer_new' %>
+    <div id="to-top">
+    </div>
+</body>
+<%= javascript_include_tag 'index_new', 'data-turbolinks-track' => true %>
+<script>
+  $(function(){
+    (function(m, ei, q, i, a, j, s) {
+      m[a] = m[a] || function() {
+          (m[a].a = m[a].a || []).push(arguments)
+      };
+      j = ei.createElement(q),
+          s = ei.getElementsByTagName(q)[0];
+      j.async = true;
+      j.charset = 'UTF-8';
+      j.src = i + '?v=' + new Date().getUTCDate();
+      s.parentNode.insertBefore(j, s);
+  })(window, document, 'script', '//static.meiqia.com/dist/meiqia.js', '_MEIQIA');
+  _MEIQIA('entId', '17793');
+
+  // 在这里开启手动模式（必须紧跟美洽的嵌入代码）
+    // _MEIQIA('manualInit');
+    // _MEIQIA('init');
+    _MEIQIA('withoutBtn');
+
+    // 启动第三方服务
+  $("#call-server").click(function(){
+      _MEIQIA('showPanel');
+    })
+  })
+</script>
+</html>

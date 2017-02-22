@@ -1,0 +1,591 @@
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/common'%>
+<%= javascript_include_tag 'pc/imgSlider'%>
+<%= javascript_include_tag 'pc/ciling'%>
+<%= javascript_include_tag 'pc/layer'%>
+<%= javascript_include_tag 'pc/com_show'%>
+
+<%= stylesheet_link_tag  'pc/product'%>
+<!-- PC端商品详情页 -->
+<script>document.title='进货宝 - <%= @product.Name%> -[批发 价格表 进货 多少钱]-进货宝'</script>
+<div class="main_nav">
+    <div class="main_nav_top">
+        <div class="w1080 clearfix nav_sub">
+            <%= render 'shared/navbar' %>
+            <!-- <%= render 'shared/buycart' %> -->
+        </div>
+    </div><!-- 导航 end -->
+</div>
+<div class="content_product w1080 clearfix">
+    <!-- <div class="vice-nav">
+      <a href="/" class="home">首页</a>
+      <ul>
+        <li><span>&gt;</span><a href="">首页</a></li>
+        <li><span>&gt;</span><a href="">首页</a></li>
+        <li><span>&gt;</span><a href="">首页</a></li>
+      </ul>
+    </div> -->
+    <div class="pro_bottom clearfix">
+        <div class="pro_img left" id="imgSlider">
+            <% imgs = @product.product_info.product_imgs %>
+            <div class="pro_img_small">
+                <ul class="pro_ul" id="imgSmall">
+                    <% imgs.each_with_index do |item,index| %>
+                        <% if index == 0 %>
+                            <li style="filter:alpha(opacity:100);opacity:1;">
+                                <a href="javascript:void(0);"><img width="152" height="152" src="<%= item.url('v400')%>" alt="商品" /></a>
+                            </li>
+                        <% else %>
+                            <li>
+                                <a href="javascript:void(0);"><img width="51" height="50" src="<%= item.url('v400')%>" alt="商品" /></a>
+                            </li>
+                        <% end %>
+                    <% end %>
+                </ul>
+            </div>
+            <ul class="pro_img_big" id="imgBig">
+                <% imgs.each_with_index do |item,index| %>
+                    <% if index == 0 %>
+                        <li style="z-index:1;filter: alpha(opacity=100); opacity: 1;">
+                            <a href="javascript:void(0);"><img width="398" height="398" src="<%= item.url('v400')%>" alt="商品" /></a>
+                            <% if current_user and @product.stock_for(cookies[:depot_id]).try(:Stock).to_i <= 0 %>
+                            <em class="buhuo"></em>
+                            <% end %>
+                            <!-- <span class="year_goods_big"></span> -->
+                        </li>
+                    <% else %>
+                        <li>
+                            <a href="javascript:void(0);"><img width="398" height="398" src="<%= item.url('v400')%>" alt="商品\" /></a>
+                            <!-- <span class="year_goods_big"></span> -->
+                        </li>
+                    <% end %>
+                <% end %>
+
+            </ul>
+
+            <!-- <div class="bto">
+                <a href="javascript:void(0);" id="Collect" style="padding-right:40px;"><span class="url"></span>收藏</a>
+            </div> -->
+        </div>
+
+
+        <div class="pro_details left">
+            <div class="mun_price clearfix">
+                <h4 style="font-weight:600;"><%= @product.Name%></h4>
+                <!--<span class="color_sp">满500元免运费享9.3折，满1000元享9折</span>-->
+            </div>
+            <div class="shop clearfix">
+                <div class="s-title scatter">进 货 宝 价</div>
+                <div class="s-cont">
+                  <span class=" red_color" style="font-weight:600;">&yen;<%= @product.ProductPrice%></span>
+                  <span class="" > /<%= @product.Unit%></span>
+                </div>
+                <!-- <span class="left" style="margin-left:10px;text-decoration:line-through;width:100px;">市场价:&yen;<%= @product.OriginalPrice%></span> -->
+            </div>
+            <div class="norms" style="border-bottom:none;">
+                <p class="clearfix">
+                    <span class="left">活&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;动：</span>
+                    <span class="left" style=""><%= Settings.order_money[@product.CompanyID] %>元免运费</span>
+                </p>
+            </div>
+            <div class="norms clearfix" style="border-bottom:none;">
+                <div class="s-title scatter">产 品 规 格</div>
+                 <% if @product.Type == 0 %>
+                  <div class="s-cont">
+                    <span class=""><%= @product.Specification%></span>
+                  </div>
+                  <% elsif @product.Type == 1 %>
+                  <div class="s-package">
+                  <!-- <p class="s-package"> -->
+                  <% @product.group_products.includes(:sub_product).each do |gp| %>
+                    <span class="temp-plus">+ </span><span><%= gp.SubProductName %>  <%= gp.Number%><%= gp.sub_product.Unit%></span>
+                  <% end %>
+                  <!-- </p> -->
+                  </div>
+                  <% end %>
+
+            </div>
+            <% if @product.Type == 0 %>
+            <!-- <div class="norms" style="border-bottom:none;">
+                <p class="clearfix">
+                    <div class="s-title scatter">产 品 规 格</div>
+                    <div class="s-cont">
+                      <span class=""><%= @product.Specification%></span>
+                    </div>
+                </p>
+            </div> -->
+            <% elsif @product.Type == 1 %>
+            <!-- <div class="norms together" style="border-bottom:none;">
+                <p class="clearfix">
+                    <span class="s-title">套餐包含:</span>
+                    <a href="javascript:;" style="color:#e61c44;">详情</a>
+                    <div class="left pro_goods">
+                      <% @product.group_products.includes(:sub_product).each do |gp| %>
+                        <span><%= gp.SubProductName %>  <%= gp.Number%><%= gp.sub_product.Unit%></span>
+                      <% end %>
+                    </div>
+                </p>
+            </div> -->
+            <% end %>
+            <div class="norms clearfix" style="border-bottom:none;">
+                <div class="s-title scatter">配 送</div>
+                <div class="s-cont">
+                  <span class=""><%= Settings.order_money[@product.CompanyID] %>元起送</span>
+                </div>
+            </div>
+            <div class="nums">
+                <p class="pro_num">
+                    <span class="s-title scatter">数 量</span>
+                    <label class="i_box">
+                        <input class="pro_less J_minus" type="button" value="-">
+                        <input name="Number" id="Number" class="pro_num J_input" type="text" value="1" maxlength="5"
+                        onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+                        <input class=" pro_add J_add" type="button" value="+">
+                        <input name="EP_ID" id="EP_ID" type="hidden" value="<%= @product.ID%>" />
+                        <br>
+                        <span class="small-text" style="margin-right:12px;">库存<em><%= @product.stock_for(cookies[:depot_id]).try(:Stock) %></em></span>
+                        <span class="small-text">限购<em><%= @product.MaxSaleAmount %></em></span>
+                    </label>
+                    <span style="padding-left:14px; color:#434343;"><%= @product.Unit%></span>
+                </p>
+            </div>
+            <div class="car_buy addcar">
+                    <a href="javascript:;" class="add_new join_car addcar"><!-- <i class="url"></i> -->加入购物车</a>
+            </div>
+            <!-- <div class="zhifu">
+                <p>
+                    <span>支付方式：</span>
+                    <a href="">支付宝</a>
+                    <span class="shu">|</span>
+                    <a href="">货到付款</a>
+                </p>
+            </div> -->
+        </div>
+    </div>
+    <!-- <div class="pro-abouts">
+      <h2 class="vice-title">相关单品</h2>
+      <div class="about-items clearfix">
+        <ul class=" animate-cart">
+          <li class="about-item cart-item">
+            <a href="" class="about-img cart-img">
+              <img src="" alt="">
+            </a>
+            <h5 class="about-title cart-title">百事可乐600ml</h5>
+            <div class="about-cont cart-cont">
+              <p><span class="about-price cart-price">52.00</span>/箱</p>
+            </div>
+            <div class="about-buy cart-buy">
+                <span class="open">进</span>
+                <a href="javascript:;" onclick="Cart('',this);" class="add_new  addcar"></a>
+                <label class="i_box about-buy-num cart-buy-num">
+                  <input class="pro_less J_minus" type="button" value="-">
+                  <input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"
+                  onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+                  <input class=" pro_add J_add" type="button" value="+">
+                </label>
+              </div>
+          </li>
+          <li class="about-item cart-item">
+            <a href="" class="about-img cart-img">
+              <img src="" alt="">
+            </a>
+            <h5 class="about-title cart-title">百事可乐600ml</h5>
+            <div class="about-cont cart-cont">
+              <p><span class="about-price cart-price">52.00</span>/箱</p>
+            </div>
+            <div class="about-buy cart-buy">
+                <span class="open">进</span>
+                <a href="javascript:;" onclick="Cart('',this);" class="add_new  addcar"></a>
+                <label class="i_box about-buy-num cart-buy-num">
+                  <input class="pro_less J_minus" type="button" value="-">
+                  <input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"
+                  onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+                  <input class=" pro_add J_add" type="button" value="+">
+                </label>
+              </div>
+          </li>
+          <li class="about-item cart-item">
+            <a href="" class="about-img cart-img">
+              <img src="" alt="">
+            </a>
+            <h5 class="about-title cart-title">百事可乐600ml</h5>
+            <div class="about-cont cart-cont">
+              <p><span class="about-price cart-price">52.00</span>/箱</p>
+            </div>
+            <div class="about-buy cart-buy">
+                <span class="open">进</span>
+                <a href="javascript:;" onclick="Cart('',this);" class="add_new  addcar"></a>
+                <label class="i_box about-buy-num cart-buy-num">
+                  <input class="pro_less J_minus" type="button" value="-">
+                  <input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"
+                  onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+                  <input class=" pro_add J_add" type="button" value="+">
+                </label>
+              </div>
+          </li>
+          <li class="about-item cart-item">
+            <a href="" class="about-img cart-img">
+              <img src="" alt="">
+            </a>
+            <h5 class="about-title cart-title">百事可乐600ml</h5>
+            <div class="about-cont cart-cont">
+              <p><span class="about-price cart-price">52.00</span>/箱</p>
+            </div>
+            <div class="about-buy cart-buy">
+                <span class="open">进</span>
+                <a href="javascript:;" onclick="Cart('',this);" class="add_new  addcar"></a>
+                <label class="i_box about-buy-num cart-buy-num">
+                  <input class="pro_less J_minus" type="button" value="-">
+                  <input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"
+                  onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+                  <input class=" pro_add J_add" type="button" value="+">
+                </label>
+              </div>
+          </li>
+          <li class="about-item cart-item">
+            <a href="" class="about-img cart-img">
+              <img src="" alt="">
+            </a>
+            <h5 class="about-title cart-title">百事可乐600ml</h5>
+            <div class="about-cont cart-cont">
+              <p><span class="about-price cart-price">52.00</span>/箱</p>
+            </div>
+            <div class="about-buy cart-buy">
+                <span class="open">进</span>
+                <a href="javascript:;" onclick="Cart('',this);" class="add_new  addcar"></a>
+                <label class="i_box about-buy-num cart-buy-num">
+                  <input class="pro_less J_minus" type="button" value="-">
+                  <input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"
+                  onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+                  <input class=" pro_add J_add" type="button" value="+">
+                </label>
+              </div>
+          </li>
+        </ul>
+      </div>
+    </div> -->
+    <div class="por_details_box w1080 clearfix">
+        <h2 class="vice-title">热品推荐</h2>
+        <div class="pro_history left">
+            <ul class="history_list animate-cart">
+                <% @recommends.each_with_index do |item,index| %>
+                    <li class="history-item cart-item">
+                      <a href="/products/<%= item.ID%>" class="history-img cart-img">
+                        <img src="<%= item.cover_url('v150') %>"  alt="图片"/>
+                      </a>
+                      <h5 class="history-title cart-title"><%= item.Name%></h5>
+                      <div class="history-cont cart-cont">
+                        <p><span class="history-price cart-price">¥<%= item.ProductPrice%></span>/<%= item.Unit %></p>
+                      </div>
+                      <!-- 暂时留着 -->
+                      <!-- <div class="history-buy cart-buy">
+                          <span class="open">进</span>
+                          <a href="javascript:;" onclick="Cart('<%= item.ID %>',this)" class="add_new addcar"></a>
+                          <label class="i_box history-buy-num cart-buy-num">
+                            <input class="pro_less J_minus" type="button" value="-">
+                            <input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"
+                            onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+                            <input class=" pro_add J_add" type="button" value="+">
+                          </label>
+                        </div> -->
+                    </li>
+                <% end %>
+            </ul>
+        </div>
+        <div class="pro_deta right">
+            <div class="pro_title tab_btn">
+                <a href="javascript:;">产品介绍</a>
+            </div>
+            <div class="tab_body">
+                <div class="tab" style="display:block; text-align:center">
+                    <%= @product.HtmlShow.to_s.html_safe %>
+                </div>
+                <% if @product.Type == 1 or @product.Type == 3%>
+                <div class="package">
+                    <% @product.group_products.includes(:sub_product).each do |gp| %>
+                      <table>
+                        <tr>
+                          <td class="package-title title-color">品牌</td>
+                          <td><%= gp.sub_product.ProductBrandName %></td>
+                          <td class="package-img"  rowspan="5">
+                            <img src="<%= gp.sub_product.cover_url('v150')%>" alt="">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="title-color">类型</td>
+                          <td><%= gp.sub_product.group.Name %></td>
+                        </tr>
+                        <tr>
+                          <td class="title-color">规格</td>
+                          <td><%= gp.sub_product.Specification %></td>
+                        </tr>
+                        <tr>
+                          <td class="title-color">数量</td>
+                          <td><%= gp.Number %>/<%= gp.sub_product.Unit %></td>
+                        </tr>
+                        <tr>
+                          <td class="title-color">原价</td>
+                          <td><%= gp.sub_product.ProductPrice %>/<%= gp.sub_product.Unit %></td>
+                        </tr>
+                      </table>
+                    <% end %>
+                </div>
+                <% end %>
+            </div>
+        </div>
+    </div><!-- 产品详细信息 end -->
+</div>
+
+<% if !sign_in? %>
+  <%= render 'shared/windowslogin'%>
+<% end %>
+
+<script type="text/javascript">
+
+
+$(function () {
+    $(".together a").hover(function(){
+      $(".pro_goods").css("display","block");
+      },function(){
+      $(".pro_goods").css("display","none");
+    });
+
+    $(".join_car").click(function (event) {
+      var number = $("#Number").val();
+      if (number < 1) {
+        return;
+      }
+
+      $.ajax({
+          cache: false,
+          dataType: "json",
+          type: 'POST',
+          url: "/carts",
+          data: { "cart": { "ProductID": $("#EP_ID").val(), "Number": number }},
+          success: function (e) {
+              if (e.status == 'ok') {
+                    var img = $(".pro_img_big>li:first img").attr("src");
+                    var flyer = $('<img class="u-flyer" src="'+img+'">');
+                    flyer.fly({
+                        start: getPosition(event.target),
+                        end:getPosition($(".right-cart-icon")[0]),
+                        speed:1.1,
+                        onEnd: function(){
+                            $("#msg").show().animate({width: '250px'}, 200).fadeOut(1000); //提示信息
+                            $('.addcar').css("cursor","default").removeClass('orange');
+                            flyer.remove();
+                        }
+                    });
+                    showCart();
+              } else if (e.error_code == 'IsNotVerified') {
+                Login();
+              } else if (e.message == "NoDefaultAddress") {
+                notifyAddress();
+              } else {
+                alert(e.message);
+              }
+          },
+          error: function (e, index) {
+              alert(e);
+          }
+      });
+    });
+
+    $("#Collect").click(function () {
+      $.ajax({
+          cache: false,
+          dataType: "json",
+          type: 'POST',
+          url: "/enshrines",
+          data: {"ids": ['<%= @product.ID%>']},
+          success: function (e) {
+            if (e.status == 'ok') {
+               alert('添加成功');
+            } else if (e.error_code == 'IsNotVerified') {
+              Login();
+            } else {
+              alert(e.message);
+            }
+          },
+          error: function (e) {
+              alert(e);
+          }
+      });
+
+      $.ajax({
+                cache: false,
+                dataType: "json",
+                type: 'Get',
+                url: "/enshrines",
+                success: function (e) {
+                    if (e.status == 'ok') {
+                        CreateListEnshrines(e.data);
+                    }
+                },
+                error: function (e) {
+                    alert(e);
+                }
+            });
+
+    });
+
+    // 购物车动画
+    // var targetWidth = $('.about-cont').width();
+    // var oldWidth = $('.about-buy').width();
+    var aboutTargetWidth = $('.about-cont').width();
+    var aboutOldWidth = $('.about-buy').width();
+    var historyTargetWidth = $('.history-cont').width();
+    var historyOldWidth = $('.history-buy').width();
+    $('.about-buy').mouseenter(function(){
+      var $buyNum = $(this).find('.cart-buy-num');
+      clearTimeout(this.timer);
+      $(this).stop();
+      var $tempThis = $(this);
+      this.timer = setTimeout(function(){
+        $tempThis.animate({width:aboutTargetWidth},function(){
+          $buyNum.show();
+        });
+      },200);
+    })
+    $('.about-buy').mouseleave(function(){
+      var $buyNum = $(this).find('.cart-buy-num');
+      clearTimeout(this.timer);
+      $(this).stop();
+      var $tempThis = $(this);
+      this.timer = setTimeout(function(){
+        $buyNum.hide();
+        $tempThis.animate({width:aboutOldWidth});
+      },20);
+    })
+    $('.history-buy').mouseenter(function(){
+      var $buyNum = $(this).find('.cart-buy-num');
+      clearTimeout(this.timer);
+      $(this).stop();
+      var $tempThis = $(this);
+      this.timer = setTimeout(function(){
+        $tempThis.animate({width:historyTargetWidth},function(){
+          $buyNum.show();
+        });
+      },200);
+    })
+    $('.history-buy').mouseleave(function(){
+      var $buyNum = $(this).find('.cart-buy-num');
+      clearTimeout(this.timer);
+      $(this).stop();
+      var $tempThis = $(this);
+      $buyNum.hide();
+      this.timer = setTimeout(function(){
+        // $buyNum.hide();
+        $tempThis.animate({width:historyOldWidth});
+      },20);
+
+    })
+
+
+
+
+
+})
+
+/*
+function buy(){
+      var number = $("#Number").val();
+      if (number < 1) {
+          return;
+      }
+
+      $(".bg_red").removeAttr("onclick");
+
+      var arr = new Array();
+      var json = {};
+      json["key"] = '<%= @product.ID %>';
+      json["number"] = number;
+      arr.push(json);
+
+
+      $.ajax({
+        cache: false,
+        dataType: "json",
+        contentType: "application/json",
+        type: 'POST',
+        url: "/orders",
+        data: JSON.stringify({ "list": arr }),
+        success: function (e) {
+          if (e.status == 'ok') {
+              window.location = "/order_info?id=" + e.order_id;
+          } else if (e.error_code == 'IsNotVerified') {
+            Login();
+            $(".bg_red").attr("onclick","return buy();");
+          }
+        },
+        error: function (e) {
+          alert("未知错误");
+          $(".bg_red").attr("onclick","return buy();");
+        }
+      });
+    }
+*/
+
+var IsVerify;
+
+function Login() {
+    if (!!IsVerify) {
+        $("#IsVerify").show();
+    } else {
+        $("#IsVerify").hide();
+    }
+
+    $(".box-mask").css({ "display": "block" });
+    $(".zhezhao").fadeIn(500);
+    center($(".layer"));
+    //载入弹出窗口上的按钮事件
+    checkEvent($(this).parent(), $(".btnSure"), $(".btnCancel"));
+};
+
+
+// 添加购物车
+    function Cart(EP_ID, node) {
+        var number = $(node).parent().find(".J_input").val()-0;
+        /*if (number > 60) {
+            alert('单件商品数量不能超过60');
+            return;
+        }*/
+        $.ajax({
+            cache: false,
+            dataType: "json",
+            type: 'POST',
+            url: "/carts",
+            data: { "cart": { "ProductID": EP_ID, "Number": number }},
+            success: function (e) {
+              if (e.status == 'ok') {
+                  var addcar = $(node);
+                  var img = addcar.parent().parent().find('img').attr('src');
+                  var flyer = $('<img class="u-flyer" src="'+img+'">');
+                  flyer.fly({
+                      start: getPosition(node),
+                      end:getPosition($("#end")[0]),
+                      onEnd: function(){
+                          $("#msg").show().animate({width: '250px'}, 200).fadeOut(1000); //提示信息
+                          addcar.css("cursor","default").removeClass('orange').unbind('click');
+                          flyer.remove();
+                      }
+                  });
+              } else if (e.error_code == 'IsNotVerified') {
+                Login();
+              } else if (e.message == "NoDefaultAddress") {
+                notifyAddress();
+              } else {
+                  alert(e.message);
+              }
+            },
+            error: function (e, index) {
+              console.log(e);
+                alert(e.message);
+            }
+        });
+
+    }
+    // + hide
+    $('.temp-plus').eq(0).hide();
+
+</script>

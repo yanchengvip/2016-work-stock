@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>进货宝</title>
+  <%= stylesheet_link_tag  'pc/index_new'%>
+</head>
+<body>
+<main>
+  <%= render 'shared/header_new' %>
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide swiper0">
+          <div class="big-img">
+            <%= image_tag 'newPC/home.png' %>
+          </div>
+          <div class="content">
+          <p>
+            <span class="what">什么是进货宝?</span><br>
+            <span class="this">快消品一站式采购平台</span>
+          </p>
+          </div>
+        </div>
+        <div class="swiper-slide swiper1">
+          <div class="content">
+            <h2>移动互联网时代快消行业领导者</h2>
+            <ul>
+              <li>
+                <div class="img-box">
+                  <%= image_tag 'newPC/2-1.png' + image_webp %>
+                </div>
+                <h3>省钱省心</h3>
+                <p>为亿万小店节省开支</p>
+              </li>
+              <li>
+                <div class="img-box">
+                  <%= image_tag 'newPC/2-2.png' + image_webp %>
+                </div>
+                <h3>一站采购</h3>
+                <p>告别电话订购,手机一键搞定</p>
+              </li>
+              <li>
+                <div class="img-box">
+                  <%= image_tag 'newPC/2-3.png' + image_webp %>
+                </div>
+                <h3>送货上门</h3>
+                <p>6小时极速送达,再无自取烦恼</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="swiper-slide swiper2">
+          <div class="content">
+            <h2>零售终端的最佳伙伴</h2>
+            <ul>
+              <li class="left-li slow">
+                <div class="img-box">
+                  <%= image_tag 'newPC/3-1.png' + image_webp%>
+                </div>
+                <h3>货品全</h3>
+                <p>万家品牌,种类齐全</p>
+              </li>
+              <li class="left-li">
+                <div class="img-box b">
+                  <%= image_tag 'newPC/3-2.png' + image_webp %>
+                </div>
+                <h3>优惠多</h3>
+                <p>多方优惠,低价销售</p>
+              </li>
+              <li class="right-li">
+                <div class="img-box">
+                  <%= image_tag 'newPC/3-3.png' + image_webp %>
+                </div>
+                <h3>物流快</h3>
+                <p>快速下单,极速物流</p>
+              </li>
+              <li class="right-li slow">
+                <div class="img-box">
+                  <%= image_tag 'newPC/3-4.png' + image_webp %>
+                </div>
+                <h3>有保障</h3>
+                <p>正品承诺,质量保证</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="swiper-slide swiper3">
+          <div class="content">
+            <h2>一机在手,进货无忧</h2>
+            <div class="animation-box">
+              <div class="car-box">
+                <%= image_tag 'newPC/weiqi.png' + image_webp ,class: "weiqi"%>
+                <%= image_tag 'newPC/car.png' + image_webp ,class: "car" %>
+              </div>
+              <div class="phone-box">
+                <%= image_tag 'newPC/left-hand.png' + image_webp ,class: "left-hand"%>
+                <%= image_tag 'newPC/right-hand.png' + image_webp ,class: "right-hand"%>
+              </div>
+              <div class="erweima">
+                <%= image_tag 'newPC/ma.png' + image_webp %>
+              </div>
+              <%= image_tag 'newPC/yun1.png' + image_webp,class: "yun yun1" %>
+              <%= image_tag 'newPC/yun2.png' + image_webp,class: "yun yun2" %>
+              <%= image_tag 'newPC/yun3.png' + image_webp,class: "yun yun3" %>
+              <%= image_tag 'newPC/yun4.png' + image_webp,class: "yun yun4" %>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide swiper4">
+          <div class="content">
+            <h2>携手5000家企业品牌,10万个门店的选择</h2>
+            <div class="more-img">
+              <div class="img">
+                <%= image_tag 'newPC/5-1.png' + image_webp %>
+              </div>
+              <div class="img">
+                <%= image_tag 'newPC/5-2.png' + image_webp %>
+              </div>
+              <div class="img">
+                <%= image_tag 'newPC/5-3.png' + image_webp %>
+              </div>
+              <div class="img">
+                <%= image_tag 'newPC/5-4.png' + image_webp %>
+              </div>
+              <div class="img">
+               <%= image_tag 'newPC/5-5.png' + image_webp %>
+              </div>
+              <div class="img">
+                <%= image_tag 'newPC/5-6.png' + image_webp %>
+              </div>
+              <div class="img">
+                <%= image_tag 'newPC/5-7.png' + image_webp %>
+              </div>
+              <div class="img">
+                <%= image_tag 'newPC/5-8.png' + image_webp %>
+              </div>
+            </div>
+          </div>
+          <%= render 'shared/footer_new' %>
+        </div>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+  </div>
+  <div id="next-page">
+    <a href="javascript:;" class="go-next move "></a>
+  </div>
+</main>
+<%= javascript_include_tag 'index_new', 'data-turbolinks-track' => true %>
+</body>
+<!--  美恰第三方客服 -->
+<script type="text/javascript">
+(function(m, ei, q, i, a, j, s) {
+        m[a] = m[a] || function() {
+            (m[a].a = m[a].a || []).push(arguments)
+        };
+        j = ei.createElement(q),
+            s = ei.getElementsByTagName(q)[0];
+        j.async = true;
+        j.charset = 'UTF-8';
+        j.src = i + '?v=' + new Date().getUTCDate();
+        s.parentNode.insertBefore(j, s);
+    })(window, document, 'script', '//static.meiqia.com/dist/meiqia.js', '_MEIQIA');
+    _MEIQIA('entId', '17793');
+
+    // 在这里开启手动模式（必须紧跟美洽的嵌入代码）
+      // _MEIQIA('manualInit');
+      // _MEIQIA('init');
+      _MEIQIA('withoutBtn');
+
+      // 启动第三方服务
+    $("#call-server").click(function(){
+        _MEIQIA('showPanel');
+      })
+</script>
+</html>
+

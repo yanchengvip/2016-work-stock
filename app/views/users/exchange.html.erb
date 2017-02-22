@@ -1,0 +1,25 @@
+
+<% content_for :header do %>
+<style>
+  body{
+    background-color: #f3f4f5;
+  }
+</style>
+<header class="no-search clearfix second-page-header">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">兑换</div>
+</header>
+<% end %>
+<% content_for :main do %>
+  <main class="coupon code-change">
+    <div class="code-box">
+      <input type="text" id="coupon-code" placeholder="请输入兑换码">
+      <a href="javascript:;" class="exchange-btn" onclick="submitExchange()">兑换</a>
+    </div>
+  </main>
+<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'coupons', 'data-turbolinks-track' => true %>
+<% end %>

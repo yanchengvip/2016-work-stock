@@ -1,0 +1,282 @@
+<!-- 提交订单页 -->
+<% content_for :header do %>
+<header class="no-search second-page-header clearfix">
+  <div class="header-left">
+    <a href="/carts" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">订单结算</div>
+</header>
+<% end %>
+
+<% content_for :main do %>
+<!-- container -->
+<main class="submit-order  jhb-grey second-page-new">
+  <!-- 收货地址 -->
+  <a href="/my/address?from_id=<%= params[:id]%>" class="jhb-grey address">
+    <% if (address = current_user.default_address) %>
+    <%  store_info = address.store_information
+      status = store_info.blank? ? "no" : (case store_info.Status when 0 then 'faild' when 1 then 'ing' when 2 then 'success' end)
+    %>
+    <div class="address-item bg-right-arrow" id=id-<%= address.ID%> data-county-id=<%= address.CountyID %>>
+      <div class="contact">
+        <span class="contact-name"><%= address.ShipName%></span><span class="contact-tel"><%= address.Mobile%></span><span class="certified certified-<%= status %>"></span>
+      </div>
+      <div class="address">
+        <span class="contact-address"><%= "#{address.Province} #{address.City} #{address.County}" %></span><span class="contact-address-detail"><%= address.Detailedaddress %></span>
+      </div>
+      <!--
+      <div class="address-detail">
+        北京市东城区旧鼓楼大街大卫咖啡馆
+      </div>
+    -->
+    </div>
+
+  <% else %>
+    <div class="border-box padding empty-address">
+      <div class="border-box padding bg-right-arrow">
+        您还有没有默认的收货地址，现在就添加吧！
+      </div>
+    </div>
+  <% end %>
+  </a>
+<div class="border-group">
+
+  <!--start  -->
+  <script>
+    var ordersObj ={};
+  </script>
+  <% @order_group.orders.each do |order| %>
+  <div class="order-item-box order<%= order.ID %>" key="<%= order.ID %>">
+    <% order_products = order.order_products.includes(:product => [:product_info]) %>
+    <div class="order-items-title">
+      <%= third_name(order.company) %>
+    </div>
+    <div class="order-items jhb-grey">
+      <div class="order-item clearfix">
+        <% order_products.each do |order_product| %>
+        <div class="row">
+          <div class="basic_item clearfix">
+            <div class="fl img_box">
+              <%= image_tag order_product.product.cover_url('v100') %>
+            </div>
+            <div class="col cont_box"><%= order_product.product.Name%></div>
+            <div class="fr spec_box">
+              <div class="order-item-price">
+                <div class="price-now right-align">
+                  ￥<%= order_product.Price%>/<%= order_product.product.Unit%>
+                </div>
+                <div class="order-item-count right-align">
+                 <span class="jhb-red"> X<%= order_product.Quantity %></span>
+               </div>
+             </div>
+           </div>
+         </div>
+         <% if order_product.product.is_group_product? %>
+         <div class="sub-products">
+          <div class="product-title">套餐详情</div>
+          <% order_product.product.group_products.includes(:sub_product).each_with_index do |g_product, index| %>
+          <% product = g_product.sub_product %>
+          <div class="price-title">
+            <span><%= product.Name%></span>
+            <span class="fr jhb-red">X<%= g_product.Number %></span>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+      </div>
+      <% end %>
+
+        <!-- <div class="goods-count-price right-align">
+          <div>
+            共<%= order.order_products.inject(0){|sum, op| sum+op.Quantity}%>件商品 &nbsp&nbsp&nbsp合计：<span class="jhb-red">¥ <%= order.Money.round(2)%></span>
+          </div>
+          <span class="jhb-yellow">已优惠：<em>¥ <%= order.giveaway_total.round(2)%></em></span>
+        </div> -->
+  <!--     <div class="process-order justify">
+        <button class="pure-button jhb-red">联系商家</button>
+        <button class="pure-button jhb-red">拨打电话</button>
+      </div> -->
+      <% if order.company.ThirdType == 0 %>
+        <div class="fz28_lh68 justify jhb-grey  integral-box">
+          <div class="left">
+            <span>余额</span>
+          </div>
+          <!--<-%-->
+            <!--need_max = order.Money.round(2) * 200-->
+            <!--need_max = 100 * 200 if need_max > 100 * 200-->
+            <!--# integral = current_user.Integral.to_i > need_max ? need_max : current_user.Integral.to_i-->
+            <!--# integral = current_user.Integral.to_i-->
+            <!--integral = current_user.CashVolume.to_i-->
+            <!--num = integral / 2000-->
+          <!--%>-->
+          <%
+             current_cash = current_user.CashVolume.present? ? current_user.CashVolume : 0
+             cash_volume = current_cash > order.Money.round(2) ? order.Money.round(2) : current_cash
+             # cash_volume = current_user.CashVolume
+          %>
+
+          <span class="integral-text">可用&yen;<strong><%= show_price(cash_volume) %></strong> 本次使用&yen;<em><%= show_price(cash_volume) %></em></span>
+          <a javascript:; class=""><i></i></a>
+
+        </div>
+        <% end %>
+        <div class="fz28_lh68 empty-coupon bg-right-arrow justify jhb-grey coupon" orderId="<%= order.ID %>"  >
+          <span class="coupon-title"><i>优惠券</i><em>0张可用</em></span>
+          <span class="hidden coupon-give-away"></span>
+        </div>
+        <!-- 自营且北京地区可以进行送达时间的选择 -->
+        <% if order.company.ThirdType == 0 and address.Province == "北京市" %>
+          <div class="fz28_lh68 bg-right-arrow justify jhb-grey delivery" orderId="<%= order.ID %>" data-server-time="<%= Time.now.strftime('%Y/%m/%d %H:%M:%S') %>" >
+            <span class="delivery-title"><i>送达时间</i></span>
+            <span class="delivery-choice">尽快送达</span>
+          </div>
+        <% end %>
+        <div class="pure-form">
+          <span class="left-text">备&nbsp;&nbsp;&nbsp;注:</span>
+          <input type="text" class="input" name="Message" placeholder="">
+        </div>
+        <% if order.company.ThirdType == 0 and (address.CompanyID == "22294f4c-dacc-48d6-aba8-d6c8fbe8cf7e") %>
+          <div class="pure-form">
+            <span class="left-text">业务码:</span>
+            <input type="number" class="input" name="InvitationCode" placeholder="为您服务的业务员编码，如不确定请填0000">
+          </div>
+        <% end %>
+      <table  class="discount_box fr">
+        <tr>
+          <td class="right">订单总金额:</td>
+          <td>¥ <%= order.GiveawayTotal.round(2) + order.Money.round(2) %></td>
+        </tr>
+        <tr style="display:none;">
+          <td>折扣优惠:</td>
+          <td class="jhb-yellow giveaway_text_">-¥<%= order.GiveawayTotal.round(2)%></td>
+        </tr>
+          <tr>
+            <td>满减优惠:</td>
+            <td class="jhb-yellow">-¥ <span class="discount-price"><%= order.GiveawayTotal.round(2)%></span></td>
+          </tr>
+          <tr>
+            <td>优惠券优惠:</td>
+            <td class="jhb-yellow coupon_text">-¥ 0</td>
+          </tr>
+          <tr class="integral-show">
+            <td>余额抵减:</td>
+            <td class="jhb-yellow integral-money">-¥ <span>0</span></td>
+          </tr>
+          <tr>
+            <td>实付金额:</td>
+            <td class="price-str">¥ <%= order.Money.round(2)%></td>
+          </tr>
+        </table>
+
+      </div>
+      <!-- 选择订单配送时间 自营且在北京地区的进行显示 -->
+      <% if order.company.ThirdType == 0 and address.Province == "北京市" %>
+        <div class="delivery-items">
+          <header class="no-search clearfix">
+            <div class="header-left">
+              <a href="javascript:;" class="delivery-back"></a>
+            </div>
+            <div class="ordersHeader_title">送达时间</div>
+          </header>
+          <div class="select-date clearfix">
+            <p class="select-title">选择配送日期：</p>
+            <div class="date-box">
+            </div>
+          </div>
+
+          <div class="select-time clearfix">
+            <p class="select-title">选择配送时间：</p>
+            <div>
+              <div class="delivery-item delivery-time" data-delivery-time="0">08:00 － 14:00</div>
+              <div class="delivery-item delivery-time" data-delivery-time="1">14:00 － 20:00</div>
+            </div>
+          </div>
+          <div class="delivery-tip clearfix">
+            请及时提提交订单，以确保我们在指定的时间送达(另：不可抗力因素可致延误)
+          </div>
+          <a id="popup-confirm" class="delivery-sure" href="javascript:;">确认</a>
+        </div>
+      <% end %>
+
+
+      <div id="" class="modal bottom-sheet" style=" max-height: 100%;height: 100%;">
+        <div class="modal-content" id="modal-content">
+          <!-- <div class="gap"></div> -->
+          <div id="" class="coupon-items"></div>
+          <div class="coupon-rule">
+            <h6>使用规则</h6>
+            <ul>
+              <li>1.基本券：每个订单限用1张；
+                <p>限定自营商品，受最高优惠金额限制。</p>
+              </li>
+              <li>2.代金券：每张订单限用1张；；
+                <p>限定自营商品，仅北京用户使用，受最高优惠金额限制。</p>
+              </li>
+              <li>3.营销券：每个订单限用1张；
+                <p>全场券：全场通用；</p>
+                <p>店铺券：限定指定店铺使用；</p>
+                <p>品类券：限定指定品类使用；</p>
+                <p>品牌券：限定指定品牌使用；</p>
+                <p>商品券：限定指定商品使用；</p>
+              </li>
+              <li>4.基本券、代金券和营销券可叠加使用。</li>
+            </ul>
+            <a href="javascript:;">我知道了</a>
+          </div>
+          </div>
+        </div>
+      <script>
+        ordersObj["temp<%= order.ID %>"] = {};
+        var tempObj = ordersObj["temp<%= order.ID %>"];
+        tempObj.isFirstOrder = <%= current_user.orders.where("AppDiscount > 0 and OrderStatus not in (-1,0,6)").count == 0 %>;
+        tempObj.couponId = null;
+        tempObj.orderCode = "<%= order.OrderCode%>";
+        tempObj.orderID = "<%= order.ID%>";
+        tempObj.priceCount = <%= order.Money.round(2) %>;
+        tempObj.giveAwayCount = <%= order.GiveawayTotal.round(2)%>;
+        tempObj.PTPrice = 0;
+        tempObj.ZKPrice = 0;
+        tempObj.DJPrice = 0;
+        <% if order.company.ThirdType == 0 and current_cash >= 100 and address.Province == "内蒙古自治区"%>
+        tempObj.integralCount = <%= cash_volume*200 %>;
+        tempObj.integralPrice = <%= cash_volume %>;
+        <% else %>
+        tempObj.integralCount = 0;
+        tempObj.integralPrice = 0;
+        <% end %>
+        tempObj.html = "";
+        var orderCode = "<%= @order_group.ID %>";
+      </script>
+
+    </div>
+
+
+  </div>
+
+  <% end %>
+</div>
+<!-- <div id="modal" class="modal bottom-sheet">
+    <div class="modal-content" id="modal-content">
+      <div class="gap"></div>
+      <div id="" class="padding coupon-items"></div>
+    </div>
+</div> -->
+<div class="pure_box">
+  <button class="pure-button pure-button-1">
+    提交订单
+  </button>
+  <div class="pure_text">
+    <span class="left_text">已优惠:<em class="jhb-yellow give-away-str">¥</em></span>
+    <span class="right_text price-str-add ">需付:<em class="jhb-red">¥</em></span>
+  </div>
+</div>
+</main>
+<% end %>
+
+<% content_for :footer do %>
+<div></div>
+<% end %>
+<% content_for :script do %>
+
+<%= javascript_include_tag 'orders', 'data-turbolinks-track' => true %>
+<% end %>

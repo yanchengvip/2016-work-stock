@@ -1,0 +1,1 @@
+$cache = Rails.cache

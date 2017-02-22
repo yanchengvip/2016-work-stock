@@ -1,0 +1,79 @@
+<!-- pc端二级页面 -->
+<%= stylesheet_link_tag  'pc/second_page'%>
+
+<%= javascript_include_tag 'pc/layer'%>
+<%= javascript_include_tag 'pc/common'%>
+
+
+<div class=" bg-div second-page <%= case @recommend.Template when 7 then "four" else "" end %>" style="<%= "background-color: #{@recommend.BackgroundColor};" if @recommend.BackgroundColor.present? %>">
+	<div class="w1080 " style="padding-bottom: 430px;">
+		<div class="second-topimg" style="min-width:1080px; max-height: 500px;">
+			<%= image_tag @recommend.banners.first.try(:pic_url) %>
+		</div>
+		<div class="second-page-title" >
+			<h2><span><%= @recommend.RecommendName %></span></h2>
+		</div>
+		<div class="cont-box">
+			<ul class="product-cont clearfix">
+	      <% @products.each do |product| %>
+        <li class="pro <%= "no-pro" if product.Stock == 0 %>">
+				  <a href="/products/<%= product.ID%>" class="second-img  cart-img right">
+            <%= image_tag(product.cover_url) %>
+				  </a>
+				  <div class="second-text cart-cont">
+				  	<i></i>
+				  	<h5 class="second-item-title cart-title"><%= product.Name%></h5>
+				  	<p class="second-speci"><%= product.Specification%></p>
+				    <p class="price-box">
+				    	<span class="second-price cart-price">¥<%= product.ProductPrice.to_f.round(2)%>/<%= product.Unit%></span>
+				    <!-- <span class="old-price">￥<%= product.OriginalPrice.to_f.round(2)%>/<%= product.Unit%></span> -->
+				    </p>
+				    <div>
+				    	<label class="i_box second-buy-num  cart-buy-num">
+					      <input class="pro_less J_minus" type="button" value="-">
+					      <input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"
+					      onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+					      <input class=" pro_add J_add" type="button" value="+">
+					    </label>
+				    </div>
+				   <a href="javascript:;" onclick="Cart('<%= product.ID %>',this)" class=" addcar"><span>加入购物车</span></a>
+				  </div>
+				  <div class="pro-mask"></div>
+				  <div class="mask-text">补货中</div>
+				</li>
+	      <% end %>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+	$(".second-item-title").each(function(){
+		$(this).html(sliceHtml($(this).html(),18));
+	})
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

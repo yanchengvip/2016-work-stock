@@ -1,0 +1,711 @@
+<%= stylesheet_link_tag  'pc/buy_car'%>
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/layer'%>
+<%= javascript_include_tag 'pc/screen'%>
+<%= javascript_include_tag 'pc/area'%>
+<%= javascript_include_tag 'pc/common'%>
+<style type="text/css">
+  .head-top-left{
+    display: none;
+  }
+</style>
+<% content_for :header do %>
+  <%= render 'shared/header' %>
+<% end %>
+
+<div class="content w990 clearfix">
+  <div class="buy_car clearfix">
+    <div class="progress right">
+      <ul class="clearfix">
+        <li class="red_left clearfix">
+        <i class="left"></i>
+        <div><span>1.查看购物车</span></div>
+        <i class="right"></i>
+        </li>
+        <li class="red_center clearfix">
+        <i class="left"></i>
+        <div><span>2.确认订单信息</span></div>
+        <i class="right"></i>
+        </li>
+        <!-- <li class="gray_center clearfix">
+        <i class="left"></i>
+        <div><span>3.在线支付</span></div>
+        <i class="right"></i>
+        </li> -->
+        <li class="gray_right clearfix">
+        <i class="left"></i>
+        <div><span>3.确认收货</span></div>
+        <i class="right"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="address">
+    <% flash.each do |type, message| %>
+      <% unless message.blank? %>
+        <div class="alert <%= twitterized_type(type) %> fade in text-center">
+          <%= message %>
+        </div>
+      <% end %>
+    <% end %>
+    <h4>收货信息</h4>
+    <div class="old_address clearfix">
+        <% current_user.addresses.each do |item| %>
+            <div class="add_son" id="<%= item.ID%>" data-county-id="<%= item.CountyID%>" data-city-name="<%= item.County %>">
+              <ul>
+                <li name="li_name" class="clearfix">
+                  <span class="left"><i class="contacts"></i>&nbsp;&nbsp;<em id="name"><%= item.ShipName%></em></span>
+                  <% if item.IsDefault %><span class="right">默认地址</span><% end %>
+                </li>
+                <li name="li_tel" class="clearfix">
+                  <span class="left"><i class="phone"></i>&nbsp;&nbsp;<em id="phone"><%= item.Mobile%></em></span>
+                </li>
+                <li name="li_address" class="clearfix last_address">
+                  <span><i class="position"></i>&nbsp;&nbsp;<em id="address_00"><%= item.Province %> <%= item.City %> <%= item.County %><%= item.Detailedaddress %></em></span>
+                </li>
+              </ul>
+              <div class="hover" class="clearfix">
+                <% if !item.IsDefault %><%= link_to '设为默认', defadd_user_address_path(id: item.ID), method: :put, class: "default" %><% end %>
+                <a href="/my/address?id=<%= item.ID %>" class="modify">修改</a>
+              </div>
+            </div>
+          <% if item.ID == @address.ID %>
+            <script type="text/javascript">
+              $(document).ready(function(){
+                var address = $("#<%= item.ID%>");
+                address.addClass('active').siblings().removeClass('active');
+                $("#recipient").html(address.find("#name").html());
+                $("#tel").html(address.find("#phone").html());
+                $("#address").html(address.find("#address_00").html());
+                $("#address_id").val('<%= item.ID%>');
+              });
+            </script>
+          <% end %>
+        <% end %>
+
+      <div class="add">
+        <a href="javascript:;" class="add_new">
+          <span>+</span>
+          增加收货地址
+        </a>
+        <div class="more_address">更多地址</div>
+        <!-- <a href="/my/address" target="_blank">管理收货地址</a> -->
+      </div>
+      <div class="zhezhao"></div><!-- 遮罩层 end -->
+      <div class="layer">
+        <a href="javascript:;" class="btnCancel">X</a>
+        <h4>添加收货地址</h4>
+        <div class="layer_con">
+          <ul>
+            <li class="clearfix">
+            <span><i>*</i>选择所在地区：</span>
+            <select style="width:90px;" id="Province"></select>
+            <select style="width:90px;" id="City"></select>
+            <select style="width:90px;" id="County"></select>
+            </li>
+            <%= form_tag '/addresses', method: 'post', id: 'form', name: 'thooi', id: 'thooi' do %>
+              <li class="clearfix">
+                <span><i>*</i>详细地址：</span>
+                <input type="text" name="user_address[Detailedaddress]" id="Detailedaddress" class="txt" placeholder="建议您如实填写详细收获地址，例如街道名称，门牌号码，楼层和房间号等信息"/>
+                <input name="user_address[Province]" id="_Province" type="hidden" />
+                <input name="user_address[City]" id="_City" type="hidden" />
+                <input name="user_address[County]" id="_County" type="hidden" />
+                <input name="user_address[CountyID]" id="_CountyID" type="hidden" />
+              </li>
+              <li class="clearfix">
+                <span><i>*</i>收件人：</span>
+                <input type="text" name="user_address[ShipName]" id="ShipName" class="txt" />
+              </li>
+              <li class="clearfix">
+                <span><i>*</i>手机号码：</span>
+                <input type="text" name="user_address[Mobile]" id="Mobile" class="txt" placeholder="电话号码、手机号码必须填一项"/>
+                <input type="hidden" name="user_address[IsDefault]" value="true"/>
+              </li>
+              <li class="pad65 btn clearfix">
+                <span id="ErrMessage" style="color:red;width:200px;text-align:left;"></span><br />
+                <input onclick="return Save();" type="button" value="保存" />
+                <input type="button" value="取消" class="btnSure" />
+                <input id="Orderid" name="Orderid" type="hidden" value="" />
+              </li>
+          <% end %>
+          </ul>
+        </div>
+      </div><!-- 弹出层 end -->
+      <div class="switch_layer">
+        <div class="region">
+          <!-- <h3></h3> -->
+          <p>收货地址发生变化，商品库存可能发生变化</p>
+          <div class="button">
+            <!-- <a href="javascript:;" class="no">暂不</a> -->
+            <a href="javascript:;" class="yes">确定</a>
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript">
+        $(function () {
+          Ajax("/addresses/provinces", "", "Province");
+
+          $("#Province").change(function () {
+            var val = $("#Province").find('option:selected').attr('data-id');
+            if (val != '') {
+              Ajax("/addresses/cities", "provinceID=" + val, "City");
+            }
+          });
+
+          $("#City").change(function () {
+            var val = $("#City").find('option:selected').attr('data-id');
+            if (val != '') {
+              Ajax("/addresses/counties", "cityID=" + val, "County");
+            }
+          });
+        });
+
+        function Ajax(url, json, node) {
+          $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            data: json,
+            success: function (mmsg) {
+
+              var msg = mmsg.data;
+              var Arr = new Array();
+              Arr.push("<option value=''></option>");
+              for (var i = 0; i < msg.length; i++) {
+                Arr.push("<option value='" + msg[i].name + "' data-id='" + msg[i].id + "'>" + msg[i].name + "</option>");
+              }
+              $("#" + node).html(Arr.join(""));
+            }
+          });
+        }
+
+        function Save() {
+          if ($("#Province").val() == '') {
+            $("#ErrMessage").html('省市区不能为空');
+            $("#Province").focus();
+            return false;
+          } else {
+            $("#_Province").val($("#Province").find("option:selected").text());
+          }
+
+          if ($("#City").val() == '') {
+            $("#ErrMessage").html('省市区不能为空');
+            $("#City").focus();
+            return false;
+          } else {
+            $("#_City").val($("#City").find("option:selected").text());
+          }
+
+          if ($("#County").val() == '') {
+            $("#ErrMessage").html('省市区不能为空');
+            $("#County").focus();
+            return false;
+          } else {
+            $("#_County").val($("#County").find("option:selected").text());
+            $("#_CountyID").val($("#County").find("option:selected").attr("data-id"));
+          }
+
+          if ($("#Detailedaddress").val() == '') {
+            $("#ErrMessage").html('详细地址不能为空');
+            $("#Detailedaddress").focus();
+            return false;
+          }
+          if ($("#ShipName").val() == '') {
+            $("#ErrMessage").html('收件人不能为空');
+            $("#ShipName").focus();
+            return false;
+          }
+          if ($("#Mobile").val() == '') {
+            $("#ErrMessage").html('手机号码不能为空');
+            $("#Mobile").focus();
+            return false;
+          }
+
+          if ((/[1]([358][0-9]{1})[0-9]{8}/g).test($("#Mobile").val()) == false) {
+            $("#ErrMessage").html('手机号码格式错误');
+            return false;
+          }
+
+          $("#thooi").submit();
+        };
+      </script>
+    </div>
+  </div>
+  <% orders = @order_group.orders %>
+  <div class="car_list" id="car-list" data-order-id="<%= @order_group.ID %>">
+    <h4 style="height:15px;">
+      <font style="float: left; padding-left:20px;">订单详情</font>
+      <font style="float: right;"><a href="/carts">返回购物车</a></font>
+    </h4>
+    <div class="car_list_top confirm clearfix">
+      <span class="p1">宝贝：</span>
+      <span class="p2">产品信息：</span>
+      <span class="p3">单价：</span>
+      <span class="p4">数量：</span>
+      <span class="p5">小计：</span>
+    </div>
+
+    <script>
+    var ordersObj = {};
+    </script>
+
+    <% orders.each do |order| %>
+    <% order_products = order.order_products.includes(:product => [:product_info]) %>
+
+     <div class="order-item order<%= order.CompanyID %>" key="<%= order.CompanyID %>">
+       <div class="message">
+          <div class="seller-cont">
+              <p><%= image_tag 'buycar/logo.png' %><span class="seller-name"><%= third_name(order.company) %></span><span class="deliver-price">满<%= Settings.order_money[order.CompanyID] %>元起送</span></p>
+          </div>
+
+          <table>
+           <% order_products.each_with_index do |item| %>
+
+            <tr class="tr_1">
+                <td class="td_1 clearfix">
+                  <div class="td_1_left clearfix">
+                    <p class="p_l">
+                    <%= image_tag item.product.cover_url('v150'), width: "105", height: "105"%>
+                    </p>
+                  </div>
+                  <div class="td_1_right">
+                    <p><%= item.product.Name%></p>
+                  </div>
+                </td>
+                <td width="130">
+                  <%= item.product.Specification%>
+                </td>
+                <td width="150">&yen;<%= item.Price%></td>
+                <td width="114" class="td_3 clearfix">
+                  <%= item.Quantity %><br/>
+
+                </td>
+                <td width="128">
+                  <i>&yen;&nbsp;
+                    <font class="proprice">
+                      <%= item.Quantity * item.Price%>
+                    </font>
+                  </i>
+                </td>
+            </tr>
+            <% if item.product.is_group_product? %>
+              <tr class="tr_2">
+                <td class="td_zh" colspan="12">
+                    <div class="lunbo">
+                        <ul class="lunbo-box clearfix">
+                          <% item.product.group_products.includes(:sub_product).each do |g_product| %>
+                            <% sub_product = g_product.sub_product %>
+                            <li class="clearfix">
+                                <p class="left">
+                                  <a href="" title="" >
+                                    <%= image_tag sub_product.cover_url('v150') , width: "105", height: "105", alt:sub_product.Name%>
+                                    <!-- <img src="images/buycar/kl.jpg" alt="" width="105" height="105"> -->
+                                  </a>
+                                </p>
+                                <div class="left text">
+                                  <span class="sp1"><%= sub_product.Name %></span>
+                                  <span><%= sub_product.Specification %></span>
+                                  <span>￥<%= sub_product.ProductPrice %>/<%= sub_product.Unit %></span>
+                                  <span>数量：<%= g_product.Number %></span>
+                                </div>
+                            </li>
+                          <% end %>
+                        </ul>
+                        <a href="javascript:;" class="lft-btn"></a>
+                        <a href="javascript:;" class="rgt-btn"></a>
+                    </div>
+                    <div class="sanj"></div>
+                </td>
+              </tr>
+
+          <% end %>
+
+          <% end %>
+          </table>
+        </div>
+
+        <div class="coupon" >
+          <h4 style="padding:12px 0 12px 20px;">
+            <font>优惠券</font>
+          </h4>
+          <div class="line"></div>
+
+          <div class="coupon-and-price clearfix">
+            <div class="coupon-left clearfix">
+              <% if order.company.ThirdType == 0 %>
+              <p class="clearfix">
+                <span class="left">请选择优惠券</span>
+                <select id="" class="left SCoupons" key="<%= order.CompanyID %>">
+                    <option value="" data-price=0>不使用</option>
+                     <% current_user.usable_coupons(order.CostItem).each_with_index do |item,index| %>
+                        <% if index ==0 %>
+                          <option value="<%=item.ID%>" data-price=<%=item.Price%> selected>金额: <%=item.Price%><%= "　满#{item.UseMoney}可使用" if item.UseMoney.to_f > 0 %>　有效期至: <%=item.EndDate.strftime("%Y-%m-%d")%></option>
+                        <% else %>
+                            <option value="<%=item.ID%>" data-price=<%=item.Price%>>金额: <%=item.Price%><%= "　满#{item.UseMoney}可使用" if item.UseMoney.to_f > 0 %>　有效期至: <%=item.EndDate.strftime("%Y-%m-%d")%></option>
+                        <% end %>
+                     <% end %>
+                </select>
+              </p>
+
+              <% else %>
+              <p class="clearfix"><span class="left">暂不支持优惠券</span></p>
+              <p class="clearfix" style="display:none;">
+                <span class="left">请选择优惠券</span>
+                <select id="" class="left SCoupons" key="<%= order.CompanyID %>">
+                    <option value="" data-price=0>不使用</option>
+                     <% current_user.usable_coupons(order.CostItem).each_with_index do |item,index| %>
+                        <% if index ==0 %>
+                          <option value="<%=item.ID%>" data-price=<%=item.Price%> selected>金额: <%=item.Price%><%= "　满#{item.UseMoney}可使用" if item.UseMoney.to_f > 0 %>　有效期至: <%=item.EndDate.strftime("%Y-%m-%d")%></option>
+                        <% else %>
+                            <option value="<%=item.ID%>" data-price=<%=item.Price%>>金额: <%=item.Price%><%= "　满#{item.UseMoney}可使用" if item.UseMoney.to_f > 0 %>　有效期至: <%=item.EndDate.strftime("%Y-%m-%d")%></option>
+                        <% end %>
+                     <% end %>
+                </select>
+              </p>
+              <% end %>
+              <div class="illustrate" style="margin: 18px 0 14px 0">
+                  <span>买家留言：</span>
+                  <textarea class="message_buy" id="Message"></textarea>
+              </div>
+            </div>
+            <div class="order-item-price coupon-right">
+              <ul>
+                <li>订单总额: ¥ <span class="item-allprice"><%= order.CostItem.to_f %></span></li>
+                <li>已优惠 : ¥ <span class="item-yh"><%= order.giveaway_total.round(2)%></span></li>
+                <li>合计 : &yen;<span class="item-total" _price="<%= order.Money %>"> <%= number_to_currency(order.Money, unit: "")  %></span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+
+        <script>
+        ordersObj["temp<%= order.CompanyID %>"] = {};
+        var tempObj = ordersObj["temp<%= order.CompanyID %>"];
+        tempObj.isFirstOrder = <%= current_user.orders.where("AppDiscount > 0 and OrderStatus not in (-1,0,6)").count == 0 %>;
+        tempObj.couponId = null;
+        tempObj.orderCode = "<%= order.OrderCode%>";
+        tempObj.orderID = "<%= order.ID%>";
+        tempObj.priceCount = <%= order.Money.round(2) %>;
+        tempObj.giveAwayCount = <%= order.GiveawayTotal.round(2)%>;
+        tempObj.integralCount = <%= current_user.Integral.to_i.fdiv(100) %>;
+        <% if order.company.ThirdType == 0%>
+        tempObj.coupons = <%= current_user.usable_coupons(order.CostItem).select("ID", "Price", "UseMoney", "EndDate", "StartDate").order("Price DESC").to_json.html_safe %>;
+        <% end %>
+        var orderCode = "<%= @order_group.ID %>";
+      </script>
+     </div>
+      <% end %>
+
+
+  <div class="payment">
+      <h4 style="padding:12px 0 12px 20px;">
+        <font>支付方式</font>
+      </h4>
+      <div class="line"></div>
+      <div class="zf_message clearfix">
+        <div class="to_pay left">
+          <p class="clearfix">
+            <span class="left sp_1"><em class="radiu show"></em>货到付款</span>
+            <span class="left sp_2">送货上门后再付款。</span>
+          </p>
+          <div class="clearfix bottom">
+            <span class="left sp_3">付款方式：</span>
+            <div class="left">
+              <span><i class="pay_fx radiu_01" data-id="21"></i>现金支付</span>
+              <span><i class="pay_fx" data-id="22"></i>现场刷卡</span>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="line_pay left" style="margin-left:130px;">
+          <p class="clearfix">
+            <span><em class="show"></em>支持绝大多数银行卡、微信、支付宝等。</span>
+          </p>
+        </div> -->
+      </div>
+  </div>
+
+  <div class="received_amount clearfix">
+    <div class="received_message left">
+      <div class="top">
+        <p class="clearfix">
+          <span class="left" style="display:block;">收货信息：</span>
+          <span class="left" style="display:block;">
+            <font id="recipient"></font>
+            <font id="tel"></font>
+            <font id="address" style="display:block;"></font>
+            <input type="hidden" id="address_id" value=""/>
+          </span>
+        </p>
+        <p class="clearfix">
+          <span class="left">支付方式：</span>
+          <span id='payment_method' class="left">货到付款(现金支付)</span>
+        </p>
+      </div>
+      <div class="bottom clearfix">
+        <!-- <div class="illustrate" style="margin: 18px 0 14px 0">
+            <p>买家留言：</p>
+            <textarea class="message_buy" id="Message"></textarea>
+        </div> -->
+        <% order = @order_group.orders.first %>
+        <p style="margin-bottom:20px;"><span class="nm">发票抬头：</span><%= order.InvoiceTitle == "" ? "无": order.InvoiceTitle %></p>
+      </div>
+    </div>
+    <div class="received_money right">
+      <div class="clearfix">
+         <p>订单总额：<span id="all-price">¥ <%=  %></span></p>
+         <p>
+
+          </p>
+         <p class="clearfix"><span class="left">已优惠：</span><span class="left" id="price-yh-all">¥ <%= %></span></p>
+         <p class="clearfix"><span class="left">合计：</span><span class="left"><font style="color:red;font-size:18px;" id="totalallprice"></font></span></p>
+      </div>
+      <% if @status %>
+            <!-- <form id="pay" action="/PaymentProcess/Pay" method="post">
+                <input id="Orderid" name="ID" type="hidden" value="@Model.Orderid" />
+                <input id="GiveawayTotal" name="GiveawayTotal" type="hidden" value="<%= @discount %>" />
+            </form -->
+            <input onclick="GoPay();" type="button" value="结算" />
+
+        <% end %>
+    <div class="line_sj"></div>
+  </div>
+  </div>
+  <script type="text/javascript">
+
+        MoreAddress();
+        $(".add_new").click(function () {
+            $(".box-mask").css({ "display": "block" });
+            $(".zhezhao").fadeIn(500);
+            center($(".layer"));
+            checkEvent($(this).parent(), $(".btnSure"), $(".btnCancel"));
+        });
+
+        $('.add_son').hover(function(){
+          $(this).find('.hover').css('display','block')
+          },function(){
+          $(this).find('.hover').css('display','none');
+        });
+
+        $('.add_son').slice(2).hide();
+        $('.more_address').click(function(){
+           if($('.add_son').slice(2).toggle().is(':visible')){
+            $(this).html('收起');
+           }else{
+            $(this).html('更多地址');
+           }
+        });
+
+        function GoPay() {
+            var json = {};
+            // json['order[Message]'] = $("#Message").val();
+            json['order[Address]'] = $("#address").html();
+            json['order[ShipName]'] = $("#recipient").html();
+            json['order[ShipTel]'] = $("#tel").html();
+            json['AddressID'] = $("#address_id").val();
+            json['order[IsHaveInvoice]'] = $('#IsHaveInvoice').is(':checked');
+            json['order[InvoiceTitle]'] = $("#InvoiceTitle").val();
+            // if ($(".order0 .SCoupons").val() != "")
+            //   json['order[CouponCode]'] = $(".order0 .SCoupons").val();
+            json['order[payment_method]'] = $("#payment_method").html();
+            json['order[PayType]'] = $(".radiu_01").data("id");
+
+
+            if (json['order[Address]'] == '') {
+                alert('请选择地址');
+                return;
+            }
+            if (json['order[IsHaveInvoice]'] == true && json['order[InvoiceTitle]'] == '') {
+                alert('请选填写票头');
+                return;
+            }
+            if (json['order[payment_method]'] == '') {
+                alert('支付方式');
+                return;
+            }
+            // 把优惠券和备注信息放到一个对象中
+            json['orders'] = {};
+            $(".order-item").each(function(){
+              var key = $(this).attr("key");
+              className = ".order" + key + " ";
+              var keyObj = json['orders['+ key +']'] = {};
+              keyObj.Message =  $(className + ".message_buy").val();
+              if($(className + ".SCoupons").val() != ""){
+                keyObj.CouponCode = $(className + ".SCoupons").val();
+              }
+            });
+
+            var flag = false;
+            delay(function(){
+                $.ajax({
+                  cache: false,
+                  dataType: "json",
+                  type: 'POST',
+                  url: "/orders/<%= @order_group.ID %>/confirm",
+                  data: json,
+                  success: function (e) {
+
+                      if (e.status == "ok") {
+                          window.location.href="/orders/submit_success?id=<%= @order_group.ID %>"
+                          // window.location.href="/orders/<%= @order_group.ID%>/paysuccess"
+                          // /orders/submit_success?id=#{orderCode}
+                      }
+                      else {
+                          flag = true;
+                          alert(e.message);
+                      }
+                  },
+                  error: function (e) {
+                      alert(e);
+                  }
+               });
+            });
+
+          if (flag) {
+            return;
+          }
+          //
+
+        };
+
+        $(".SCoupons").each(function(){
+          if($(this).find("option").length > 1){
+            $(this).get(0).selectedIndex=1;
+            $("#CouponCode").val($(this).val());
+          }
+        })
+
+
+        $(".SCoupons").change(function () {
+                // $("#CouponCode").val($("#SCoupons").val());
+                // $(this).val()
+                // updatePrice();
+                // console.log(this);
+                newUpdatePrice($(this).attr("key"));
+            });
+
+        $('.pay_fx').bind("click", function () {
+            var tex = $(this).parent().text();
+            $(this).parent().parent().find('.radiu_01').removeClass('radiu_01');
+            $(this).addClass('radiu_01');
+            $('#payment_method').html('货到付款'+'('+tex+')');
+
+        });
+
+        $('.show').bind("click", function () {
+            $(this).parent().parent().parent().parent().find('.radiu').removeClass('radiu');
+            $(this).addClass('radiu');
+        });
+
+        // function updatePrice(){
+        //     var price = window.priceCount - ($("#SCoupons option:selected").data("price") -0);
+        //     var price_yh = window.discount + ($("#SCoupons option:selected").data("price") -0);
+        //     price = Math.max(price,0);
+        //     price_yh = Math.max(price_yh,0);
+        //     $('#totalprice').html(price.toFixed(2));
+        //     $('#price_yh').html(price_yh.toFixed(2));
+        //     console.log(2)
+        // }
+        // updatePrice();
+
+        function newUpdatePrice(key){
+            if(key != undefined){
+              var tempkey = "temp" + key;
+              var className = ".order" + key + " ";
+              var price = ordersObj[tempkey].priceCount - ($(className+".SCoupons option:selected").data("price") - 0);
+              var priceYh = ordersObj[tempkey].giveAwayCount + ($(className+".SCoupons option:selected").data("price") - 0);
+              price = Math.max(price,0);
+              priceYh = Math.max(priceYh,0);
+              $(className+".item-total").html(price.toFixed(2));
+              $(className+".item-total").attr("_price",price.toFixed(2));
+              $(className+".item-yh").html(priceYh.toFixed(2));
+            }
+            // console.log(ordersObj[tempkey]);
+            var totalAllPrice = 0,
+                allPrice = 0,
+                allYhPrice = 0;
+            $(".item-total").each(function(i){
+                totalAllPrice = totalAllPrice + ($(this).attr("_price") - 0);
+                allPrice = allPrice + ($(".item-allprice").eq(i).text() - 0);
+                allYhPrice = allYhPrice + ($(".item-yh").eq(i).text() - 0);
+            })
+            // console.log(allPrice);
+            $('#totalallprice').html(totalAllPrice.toFixed(2));
+            $('#price-yh-all').html(allYhPrice.toFixed(2));
+            $('#all-price').html(allPrice.toFixed(2));
+        }
+        $
+
+        $(".order-item").each(function(){
+          newUpdatePrice($(this).attr("key"));
+        })
+        function MoreAddress(){
+           if ($(".add_son").length > 2) {
+            $(".more_address").css('display', 'block');
+          } else {
+            $(".more_address").css('display', 'none');
+          }
+        }
+      $(function(){
+
+        //判断是否切换区域
+
+        var county_id = $('.add_son.active').data('countyId');
+        if(county_id != $.cookie('county_id')){
+          if($(".add_son").length == 0){
+            alert("您还没有收货地址，请添加。");
+            $(".add_new").click();
+            return;
+          }
+           $(".zhezhao").show();
+           center($(".switch_layer"));
+           /*checkEvent($('.add_son.active'), $(".no"));*/
+           $('.region span').text($.cookie('county'));
+           $('.region em').text($('.add_son.active').data('cityName'));
+        }
+
+
+        $(".no").click(function () {
+            $(".zhezhao").fadeOut(500);
+            $(".switch_layer").hide();
+        });
+
+        $(".yes").click(function(){
+          var id = $('.add_son.active').attr('id');
+          delay((function(_this){
+            return function() {
+              if(_this.promise && _this.promise.state() === "pending"){
+                return;
+              }
+              return _this.promise = $.ajax({
+                  cache: false,
+                  dataType: "json",
+                  type: 'GET',
+                  url: '/addresses/'+id+'/depot_msg.json',
+
+                  success: function (e) {
+                    // console.log(e.data.company_id,e.data.depot_id,e.data.county,e.data.city);
+                      if (e.status == "ok") {
+                          $.cookie('company_id', e.data.company_id, { expires: 365 });
+                          $.cookie('county_id', e.data.county_id, { expires: 365 });
+                          $.cookie('city_id', e.data.city_id, { expires: 365 });
+                          $.cookie('county', e.data.county, { expires: 365 });
+                          $.cookie('cityname', e.data.city, { expires: 365 });
+                          // window.location.reload();
+                          $(".zhezhao").hide();
+                          $(".switch_layer").hide();
+                      }
+                  },
+                  error: function (e) {
+                        // alert(e);
+                  }
+
+               });
+            };
+          })(this));
+        });
+      });
+    </script>
+</div>
+
+

@@ -1,0 +1,28 @@
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+<% end %>
+<header class="location">
+    <div class="header-left">
+        <a href="javascript:goBack()" id="back">
+          <!-- <%= image_tag 'mobile/base/back.svg' %> -->
+        </a>
+    </div>
+    <!-- 兑换记录 -->
+    <div class="ordersHeader_title">兑换记录</div>
+</header>
+<div class="points-products">
+  <% @point_orders.each do |po| %>
+    <a href="javascript:;" data-href="/mall/<%= po.ID %>/exchange_detail" class="points-product row">
+      <div class="col s6 img">
+        <%= image_tag po.point_product.cover_url %>
+      </div>
+      <div class="col s6 info">
+        <div class="title"><%= po.point_product.Name %></div>
+        <div class="market-price">单件 <%= po.Point %>积分</div>
+        <div class="price">兑换数量 <%= po.Number %></div>
+        <div class="exchange-date"><%= po.CreateTime.strftime("%Y-%m-%d %H:%M") %> 兑换</div>
+      </div>
+    </a>
+  <% end %>
+</div>
+<% content_for :footer do %>&nbsp;<% end %>

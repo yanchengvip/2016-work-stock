@@ -1,0 +1,412 @@
+h1,
+h2,
+h3,
+ul,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: #f5f5f5;
+    font-family:"微软雅黑","Microsoft Yahei","Hiragino Sans GB","tohoma","arial","宋体";
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+.hidden{
+  display: none;
+}
+.clearfix {
+    *zoom: 1;
+}
+
+.clearfix::after {
+    display: table;
+    content: "";
+    clear: both;
+    height: 0;
+    overflow: hidden;
+}
+
+.w1200 {
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.w960 {
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+//顶部导航
+.top-nav {
+    position: relative;
+    nav {
+        height: 80px;
+    }
+    height: 80px;
+    line-height: 80px;
+    width: 100%;
+    min-width: 1080px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgb(255, 255, 255);
+    z-index: 9;
+    border-bottom: 2px solid rgba(254,43,90, .1);
+    .logo {
+        // padding-left: 10%;
+        height: 80px;
+    }
+    h1 {
+        a {
+            display: block;
+            height: 100%;
+            width: 240px;
+            text-indent: -9999px;
+            background: image-url('newPC/logo.png') left center no-repeat;
+            background-size: auto 80%;
+        }
+    }
+    .right-nav {
+        height: 80px;
+        // padding-right: 10%;
+        .app a {
+            padding-left: 50px;
+            padding-right: 25px;
+            display: inline-block;
+            height: 30px;
+            line-height: 30px;
+            // margin-top: 25px;
+        }
+        .code-box {
+            color: #2a2a2a;
+            background: image-url('newPC/phone.png') 15px center no-repeat;
+            background-size: 16px auto;
+            position: relative;
+            margin-right: 10px;
+            overflow: hidden;
+            vertical-align: middle;
+            i {
+                position: absolute;
+                width: 200px;
+                height: 200px;
+                left: -40px;
+                top: 40px;
+                background: image-url('newPC/baoye.png') center center no-repeat;
+                background-size: 100%;
+                opacity: 0;
+                transition: .5s;
+            }
+            &:hover {
+                overflow: visible;
+                i {
+                    opacity: 1;
+                }
+            }
+        }
+        .web {
+            border: 1px solid #fe2051;
+            color: #fe2051;
+            border-radius: 30px;
+            background: image-url('newPC/pc.png') 15px center no-repeat;
+            background-size: 16px auto;
+            vertical-align: middle;
+            &:hover {
+                background-color: #fe2051;
+                color: #fff;
+                background-image: image-url('newPC/pc_while.png');
+            }
+        }
+    }
+}
+
+.nav-list {
+    height: 80px;
+    line-height: 80px;
+    float: left;
+    li {
+        float: left;
+        text-align: center;
+        // padding: 0 40px;
+        width: 168px;
+        height: 82px;
+        &:hover {
+            .second {
+                display: block;
+            }
+        }
+    }
+    a {
+        display: inline-block;
+        color: #333;
+        font-size: 16px;
+        height: 78px;
+        line-height: 78px;
+        position: relative;
+        // border-bottom: 4px solid transparent;
+        &:hover {
+            color: #fe2b5a;
+            // border-color: #fe2b5a;
+        }
+
+    }
+    .active {
+        color: #fe2b5a;
+    }
+}
+.nav-list > li > a{
+  &::after{
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: #fe2b5a;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    margin-left: -5px;
+    bottom: 5px;
+    transition: .3s;
+    opacity: 0;
+  }
+  &:hover{
+   &::after{
+      opacity: 1;
+    }
+  }
+}
+.second {
+    height: 54px;
+    line-height: 54px;
+    position: absolute;
+    left: 0;
+    top: 82px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, .8);
+    display: none;
+    li{
+      text-align: left;
+    }
+    a {
+        height: 54px;
+        line-height: 54px;
+        border: none;
+        &:hover {
+            border: none;
+        }
+    }
+}
+
+.app {
+    float: right;
+}
+
+// 内容
+main {
+    padding-top: 82px;
+    min-height: 100%;
+    box-sizing: border-box;
+    // padding-bottom: 180px;
+}
+
+// 底部
+.footer {
+    height: 160px;
+    font-size: 12px;
+    width: 100%;
+    min-width: 1200px;
+    background-color: #3e4147;
+    box-sizing: border-box;
+    footer {
+        height: 100%;
+        display: flex;
+        flex-flow: column;
+    }
+    .top {
+        flex: 4.5;
+        display: flex;
+        border-bottom: 2px solid #707070;
+        box-sizing: border-box;
+        color: #fff;
+        // padding: 50px 0;
+    }
+    .bottom {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #939393;
+        font-size: 12px;
+    }
+    .us,
+    .login,
+    .server {
+        display: flex;
+        flex-flow: column;
+        i {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: image-url('newPC/kefu.png') center center no-repeat;
+            background-size: auto 100%;
+            margin-right: 5px;
+        }
+    }
+    #call-server {
+        display: inline-block;
+        padding: 5px 16px;
+        border: 1px solid #fff;
+        border-radius: 6px;
+    }
+    .us {
+        flex: 2;
+        // justify-content: center;
+        flex-flow: row;
+        flex-wrap: wrap;
+        a {
+            width: 50%;
+        }
+    }
+    .us a,
+    .login a,
+    .server a {
+        display: flex;
+        align-items: center;
+        color: #fff;
+        text-decoration: none;
+    }
+    .login {
+        flex: 1;
+        padding: 20px 0;
+        position: relative;
+        a {
+            flex: 1;
+            justify-content: center;
+        }
+        &::before,
+        &::after{
+          content: "";
+          display: block;
+          width: 2px;
+          height: 50%;
+          background-color: #707070;
+          position: absolute;
+          top: 25%;
+        }
+        &::before{
+          left: 0;
+        }
+        &::after{
+          right: 0;
+        }
+    }
+    .server {
+        flex: 2;
+        padding-left: 5%;
+        position: relative;
+        p {
+            flex: 1;
+            display: flex;
+            // justify-content: center;
+            align-items: center;
+        }
+        &::before{
+          content: "";
+          display: block;
+          width: 2px;
+          height: 80%;
+          position: absolute;
+          left: -5%;
+          top: 10%;
+          background-color: #707070;
+        }
+    }
+
+    .address,
+    .tel {
+
+        background-size: auto 20px;
+        background-position: 1px center;
+        background-repeat: no-repeat;
+        padding-left: 25px;
+        height: 20px;
+        line-height: 20px;
+    }
+    .address{
+      background-image: image-url('newPC/address.png');
+    }
+    .tel{
+      background-image: image-url('newPC/tel.png');
+    }
+    // .mail{
+    //     background-image: image-url('newPC/mail.png');
+    //     padding-left: 40px !important;
+    // }
+    .weixin {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+        flex: 2;
+        a {
+            background-image: image-url('newPC/weixin.png');
+            background-position: 1px center;
+            background-repeat: no-repeat;
+            padding-left: 25px;
+            color: #fff;
+        }
+        .img-box {
+            width: 90px;
+            // height: 150px;
+            margin-bottom: 5px;
+            img {
+                width: 100%
+            }
+        }
+    }
+}
+
+// 回到顶部
+#to-top {
+    width: 44px;
+    height: 44px;
+    background: image-url("newPC/to-top.png") center center no-repeat;
+    background-size: 100% 100%;
+    position: fixed;
+    right: 50px;
+    bottom: 20%;
+    transition: 0.5s;
+    opacity: 0;
+    &:hover{
+      background-image: image-url("newPC/to-top-red.png")
+    }
+}
+
+.show-top {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}

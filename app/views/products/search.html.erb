@@ -1,0 +1,49 @@
+<% content_for :head do %>
+    <style type="text/css">html{background-color: #fbfbfb;}</style>
+<% end %>
+
+<% content_for :header do %>
+<header class="search">
+  <div class="search-back">
+    <a href="javascript:goBack()">
+      <%= image_tag 'mobile/base/back.svg'%>
+    </a>
+  </div>
+  <div class="search-btn">
+    <a href="javascript:;" class="btn-submit">
+      <!-- <%= image_tag 'mobile/base/search_btn.png'%> -->
+      搜索
+    </a>
+  </div>
+  <form action="/products" class="search-input">
+    <input type="search" name="q" placeholder="搜索进货宝商品" autofocus growing-track='true'>
+    <input type="submit" class="hidden">
+  </form>
+</header>
+<% end %>
+
+<% content_for :main do %>
+<main class="search">
+  <div class="search-title">
+    <div>热门搜索</div>
+    <div class="search-box">
+      <% @keywords.KeyWordName.to_s.split(/[,，]/).each do |text| %>
+        <a href="javascript:;" class="keyword-item"><%= text %></a>
+      <% end %>
+    </div>
+  </div>
+  <div class="search-title">
+    <div>历史搜索</div>
+    <div id="history-search">
+    </div>
+  </div>
+
+
+  <a href="javascript:;" class="clean-history">清空历史搜索</a>
+
+</main>
+<% end %>
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'search', 'data-turbolinks-track' => true %>
+<% end %>

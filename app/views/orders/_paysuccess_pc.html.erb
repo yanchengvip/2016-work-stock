@@ -1,0 +1,63 @@
+<%= stylesheet_link_tag  'pc/buy_car'%>
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/layer'%>
+    <div class="content w990 clearfix">
+        <div class="buy_car clearfix">
+            <div class="progress right">
+                <ul class="clearfix">
+                    <li class="red_left clearfix">
+                        <i class="left"></i>
+                        <div><span>1.查看购物车</span></div>
+                        <i class="right"></i>
+                    </li>
+                    <li class="red_center clearfix">
+                        <i class="left"></i>
+                        <div><span>2.确认订单信息</span></div>
+                        <i class="right"></i>
+                    </li>
+                    <!-- <li class="red_center clearfix">
+                        <i class="left"></i>
+                        <div><span>3.在线支付</span></div>
+                        <i class="right"></i>
+                    </li> -->
+                    <li class="gray_right clearfix">
+                        <i class="left"></i>
+                        <div><span>3.确认收货</span></div>
+                        <i class="right"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pay_success clearfix">
+            <h4>订单处理</h4>
+            <div class="success_meg">
+                <div class="success_meg_t clearfix">
+                    <%= image_tag 'buycar/yes.png'%>
+                    <div class="meg_r left">
+
+                        <p class="p1"> 
+                        <% if @order.PayStatus == 1 %>
+                            订单已确认：
+                        <% elsif %>
+                            支付失败:
+                        <% end %>
+                         &nbsp; 
+                         <span>&yen;&nbsp; <%= @order.Money%> 元</span></p>
+                        <p class="p2">订单编号：<%= @order.OrderCode%></p>
+                        <% if @order.PayDatetime != nil %>
+                            <p class="p2">成交时间：<%= @order.PayDatetime.strftime("%Y-%m-%d %H:%M:%S")%></p>
+                        <% end %>
+                        <p>
+                            <a href="/">返回首页</a>
+                            <a href="/my/orders">我的订单</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="success_meg_b">
+                    <p>感谢您在进货宝电子商务网站（www.Jinhuobao.com.cn）购物！</p>
+                    <p>为了便于我们第一时间将货送到您的手中，请尽量保持电话处于可接通状态。</p>
+                    <p>如有疑问可联系贵宾服务中心(4000-688-6888)</p>
+                </div>
+            </div>
+        </div>
+    </div>

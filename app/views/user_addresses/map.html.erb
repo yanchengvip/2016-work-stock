@@ -1,0 +1,32 @@
+<% content_for :head do %>
+    <style type="text/css">html{background-color: #fbfbfb;}</style>
+<% end %>
+
+<% content_for :header do %>
+<header class="search">
+  <div class="search-back">
+    <a href="javascript:closeSelf()">
+      <%= image_tag 'mobile/base/back.svg'%>
+    </a>
+  </div>
+  <div class="search-input">
+    <input type="search"  id="q" name="q" placeholder="小区/学校/街道/店铺名等">
+  </div>
+  <div class="search-btn">
+    <a href="javascript:closeSelf()" class="btn-submit main-red">取消</a>
+  </div>
+</header>
+<% end %>
+<% content_for :main do %>
+<main class="map">
+  <div id="suggest-list">
+  </div>
+  <div id="map"></div>
+  <div id="poi-items"></div>
+</main>
+<% end %>
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=I4ES6vHxqwV4TpIFSmGzfbGW"></script>
+  <%= javascript_include_tag 'map', 'data-turbolinks-track' => true %>
+<% end %>

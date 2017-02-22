@@ -1,0 +1,53 @@
+<% content_for :head do %>
+    <% content_for :title do %>
+    我的店铺
+    <% end %>
+    <%= stylesheet_link_tag 'events/my_store', media: 'all', 'data-turbolinks-track' => true %>
+    <meta name="description" content="我的店铺" />
+    <div id='wx_pic' style='margin:0 auto;display:none;'>
+        <%= image_tag "mobile/300.png" %>
+    </div>
+<% end %>
+<main class="normal">
+ <div id="fullpage">
+    <% base_url = '//7xp6er.com1.z0.glb.clouddn.com/' %>
+    <div class="section" id="p1">
+        <% for index in 1..4 %>
+            <%= image_tag base_url+"events/my_store/1/a/#{index}.jpg"+image_webp, class: 'opt', data: {q: 1, v: @tags[0][index-1]} %>
+        <% end %>
+    </div>
+    <div class="section" id="p2">
+        <%= image_tag base_url+"events/my_store/2/a/1.jpg"+image_webp %>
+        <div class="part">
+            <%= image_tag base_url+"events/my_store/2/a/2.jpg"+image_webp, style: 'width: 48.75%', class: 'opt', data: {q: 2, v: @tags[1][0]} %>
+            <%= image_tag base_url+"events/my_store/2/a/3.jpg"+image_webp, style: 'width: 51.25%', class: 'opt', data: {q: 2, v: @tags[1][1]} %>
+        </div>
+        <div class="part">
+            <%= image_tag base_url+"events/my_store/2/a/4.jpg"+image_webp, style: 'width: 48.75%', class: 'opt', data: {q: 2, v: @tags[1][2]} %>
+            <%= image_tag base_url+"events/my_store/2/a/5.jpg"+image_webp, style: 'width: 51.25%', class: 'opt', data: {q: 2, v: @tags[1][3]} %>
+        </div>
+        <%= image_tag base_url+"events/my_store/2/a/6.jpg"+image_webp %>
+    </div>
+    <div class="section" id="p3">
+        <%= image_tag base_url+"events/my_store/3/a/1.jpg"+image_webp %>
+        <%= image_tag base_url+"events/my_store/3/a/2.jpg"+image_webp %>
+        <div class="part">
+            <%= image_tag base_url+"events/my_store/3/a/3.jpg"+image_webp, style: 'width: 62.65625%', class: 'opt', data: {q: 3, v: @tags[2][0]} %>
+            <%= image_tag base_url+"events/my_store/3/a/4.jpg"+image_webp, style: 'width: 37.34375%', class: 'opt', data: {q: 3, v: @tags[2][1]} %>
+        </div>
+        <%= image_tag base_url+"events/my_store/3/a/5.jpg"+image_webp %>
+        <div class="part">
+            <%= image_tag base_url+"events/my_store/3/a/6.jpg"+image_webp, style: 'width: 32.34375%', class: 'opt', data: {q: 4, v: @tags[3][0]} %>
+            <%= image_tag base_url+"events/my_store/3/a/7.jpg"+image_webp, style: 'width: 67.65625%', class: 'opt', data: {q: 4, v: @tags[3][1]} %>
+        </div>
+        <%= image_tag base_url+"events/my_store/3/a/8.jpg"+image_webp, id: "submit" %>
+    </div>
+</div>
+</main>
+<% ua = (request.env["HTTP_USER_AGENT"] or "").downcase %>
+<% isInApp = ua.include?('jinhuobao') %>
+<% if isInApp %>
+    <div id="back"><a href="/"><%= image_tag "mobile/base/back.png" %></a></div>
+<% end %>
+
+<%= javascript_include_tag 'events/my_store', 'data-turbolinks-track' => true %>

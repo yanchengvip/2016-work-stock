@@ -1,0 +1,117 @@
+<!-- 扫码支付页面 -->
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'pay_by_code'%>
+  <style>
+    body{
+      background-color: #f5f5f5;
+    }
+    header{
+      position: fixed;
+    }
+  </style>
+<% end %>
+
+<% content_for :header do %>
+<header class="no-search clearfix second-page-header">
+  <div class="header-left">
+    <a href="javascript:goBack();" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">订单支付</div>
+</header>
+<% end %>
+<% content_for :main do %>
+<main class="pay second-page" style="padding-top: 0;">
+  <% if @order.UserID == current_user.ID %>
+  <div class="order-info">
+    <table>
+      <tr>
+        <td class="tab-title">订单号码:</td><td class="tab-cont"><span class="order-code"><%= @order.OrderCode %></span></td>
+      </tr>
+      <tr>
+        <td>下单时间:</td><td><%= @order.PayDatetime.strftime("%Y-%m-%d %H:%M:%S") %></td>
+      </tr>
+      <tr>
+        <td>收货人姓名:</td><td><%= @order.ShipName %></td>
+      </tr>
+      <tr>
+        <td>收货人电话:</td><td><%= @order.ShipTel %></td>
+      </tr>
+      <tr>
+        <td>待支付金额:</td><td>&yen;<span class="order-price"><%= @order.Money %></span></td>
+      </tr>
+      </tr>
+    </table>
+  </div>
+
+  <div class="order-item-box order" key="">
+    <div class="pay-items-title">
+      订单列表
+    </div>
+    <div class="order-items jhb-grey">
+      <% @order.order_products.each do |order_product| %>
+      <div class="order-item clearfix">
+        <div class="row">
+          <div class="basic_item clearfix">
+            <div class="fl img_box">
+              <%= image_tag order_product.product.cover_url %>
+            </div>
+            <div class="col cont_box"><%= order_product.product.Name%></div>
+            <div class="fr spec_box">
+              <div class="order-item-price">
+                <div class="price-now right-align">
+                  ￥<%= order_product.Price%>/<%= order_product.product.Unit%>
+                </div>
+                <div class="order-item-count right-align">
+                 <span class="jhb-red"> X <%= order_product.Quantity %></span><%= order_product.product.Unit%>
+               </div>
+             </div>
+           </div>
+          </div>
+          <% if order_product.product.is_group_product? %>
+          <div class="sub-products">
+          <div class="product_title">［套餐详情］</div>
+          <% order_product.product.group_products.includes(:sub_product).each_with_index do |g_product, index| %>
+            <% product = g_product.sub_product %>
+            <div class="price-title">
+              <span><%= product.Name%></span>
+              <span>X <%= g_product.Number %> </span>
+            </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="pay-box">
+    实付金额: &yen;
+    <input type="number" value="<%= @order.Money %>" max="<%= @order.Money %>" min="0.00" required>
+    <a href="javascript:;" class="go-pay">去支付</a>
+  </div>
+  <div class="pay-mode-box">
+    <div class="shadow"></div>
+    <div class="pay-mode">
+      <h4>选择支付方式</h4>
+      <ul class="mode-list">
+        <!-- <li class="weixin-pay"><em class="weixin"></em>微信支付</li> -->
+        <li class="fenqi-pay"><em class="fenqi"></em>分期乐<span class="cost" price="0">需付手续费</span></li>
+        <li class="zhaoshang-pay"><em class="zhaoshang"></em>招商银行<span class="discount" price="0"></span></li>
+      </ul>
+      <a href="javascript:;" class="pay-btn" userId="<%= @order.UserID %>">确认支付&yen;<span class="pay-ok">869.65</span></a>
+    </div>
+  </div>
+  <% end %>
+</main>
+<script>
+  var is_paied = <%= @order.PayStatus.in?([1,2]) %>
+</script>
+<% end %>
+
+
+
+<% content_for :footer do %>
+&nbsp;
+<% end %>
+<% content_for :script do %>
+    <%= javascript_include_tag 'pay_by_code', 'data-turbolinks-track' => true %>
+<% end %>

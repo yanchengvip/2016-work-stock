@@ -1,0 +1,59 @@
+<!-- 可用优惠和不可用券列表 -->
+<header class="no-search clearfix second-page-header">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">使用优惠券</div>
+</header>
+<div class="coupons-status-box coupon-list-box">
+  <ul class="list-title clearfix">
+    <li class="active">可用优惠券<span class="can-num"><%= @usable_coupons.size %></span></li>
+    <li>不可用优惠券<span class="no-num"><%= @unusable_coupons.size %></span></li>
+  </ul>
+  <div class="list-cont">
+    <ul class="can-coupon coupon-list" style="display: block;">
+      <% if @usable_coupons.present? %>
+        <% @usable_coupons.each do |coupon| %>
+          <li couponId="<%= coupon.ID %>">
+            <strong><%= coupon.type_name %></strong>
+            <h4><%= coupon.title %></h4>
+            <div class="clearfix">
+              <div class="coupon-price"><%= coupon.Price %></div>
+              <p>
+                <span class="cont"><%= coupon.sub_title %></span><br>
+                <span class="time"><%= (coupon.StartDate || Date.today).strftime("%Y.%m.%d") %>-<%= (coupon.EndDate - 1.day).strftime("%Y.%m.%d") %></span>
+              </p>
+            </div>
+          </li>
+        <% end %>
+      <% else %>
+        <li class="no-have">
+          暂无优惠券可用
+        </li>
+      <% end %>
+    </ul>
+    <ul class="no-coupon coupon-list">
+      <% @unusable_coupons.each do |coupon| %>
+      <li>
+        <strong><%= coupon.type_name %></strong>
+        <h4><%= coupon.title %></h4>
+        <div class="clearfix">
+            <div class="coupon-price"><%= coupon.Price %></div>
+            <p>
+              <span class="cont"><%= coupon.sub_title %></span><br>
+              <span class="time"><%= (coupon.StartDate || Date.today).strftime("%Y.%m.%d") %>-<%= (coupon.EndDate - 1.day).strftime("%Y.%m.%d") %></span>
+            </p>
+        </div>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<script type="text/javascript">
+  $(function() {
+    $(".coupon-list-box .list-title li").click(function(){
+      $(this).addClass("active").siblings().removeClass("active");
+      $(".coupon-list-box .list-cont ul").eq($(this).index()).show().siblings().hide();
+    })
+  })
+</script>

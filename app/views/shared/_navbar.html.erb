@@ -1,0 +1,35 @@
+<div class="nav_category" style="width: 100%">
+    <ul class="clearfix nav_title left">
+      <li class="<%= 'back_g' if request.path == '/' %>"><a href="/">首页</a></li>
+      <% first_groups = ProductGroup.first_groups(cookies[:city_id]).includes(:second_groups) %>
+      <% first_groups.each_with_index do |f_group, index| %>
+        <li class="first">
+          <a href="/products?fid=<%=f_group.ID%>" class="a1"><%= f_group.Name %></a>
+          <div class="goods_box">
+              <ul>
+                <% second_groups = f_group.second_groups %>
+                <% second_groups.each_with_index do |s_group, index| %>
+                  <% if index % 2 == 0 %>
+                    <li class="clearfix">
+                      <a href="/products?sid=<%=s_group.ID%>" class="left"><%= s_group.Name %></a>
+                  <% else %>
+                      <a href="/products?sid=<%=s_group.ID%>" class="right"><%= s_group.Name %></a>
+                    </li>
+                  <% end %>
+                <% end %>
+                <% if second_groups.size % 2 == 1 %>
+                  </li>
+                <% end %>
+              </ul>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+    <div class="search-cont-second right">
+      <div class="search_cont  clearfix">
+          <button id="searcch-button-second" type="button" onclick="window.location = '/products?q=' + encodeURI($('#search-second').val());" class="magnifier left"></button>
+          <input name="search" id="search-second" type="text" class="combobox_input left" value="金泸州" onfocus="if (this.value == '金泸州') this.value = '';" onblur="  if (this.value == '') this.value = '金泸州';" onkeydown = "if(event.keyCode == 13){$('#searcch-button-second').click();}" >
+          <a href="javascript:;" onclick="window.location = '/products?q=' + encodeURI($('#search-second').val());">搜索</a>
+      </div>
+    </div>
+</div>

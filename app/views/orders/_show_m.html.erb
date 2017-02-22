@@ -1,0 +1,198 @@
+          <!-- 等待收货页 -->
+<% content_for :main do %>
+<main class="slivery-package">
+<header class="no-search clearfix">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">订单详情</div>
+ <!--  <%if @order.order_score.nil? && @order.OrderStatus.to_i == 8 && is_score_valid_time(@order) %>
+      <a href="javascript:void(0);" class="reviews-link">去评价</a>
+  <%end%> -->
+
+</header>
+<% if @order.OrderStatus == 1 %>
+<div class="order-detail-header to-pay">
+  <div class="fl">
+    <div class="big-text"><%= @order.status_show %></div>
+    <div class="middle-text">付款后48小时内为您送达</div>
+  </div>
+  <a class="pure-button fr" href="/orders/<%= @order.OrderCode %>/logistics">查看物流</a>
+</div>
+<% elsif @order.OrderStatus > 1 and @order.OrderStatus <= 3 %>
+<div class="order-detail-header paid">
+  <div class="fl">
+    <div class="big-text"><%= @order.status_show %></div>
+    <div class="middle-text">请保持您的电话畅通！</div>
+  </div>
+  <a class="pure-button fr" href="/orders/<%= @order.OrderCode %>/logistics">查看物流</a>
+</div>
+<% elsif @order.OrderStatus >= 4 and @order.OrderStatus <= 5 %>
+<div class="order-detail-header complete">
+  <div class="fl">
+    <div class="big-text">已完成</div>
+    <div class="middle-text">感谢您选择进货宝</div>
+  </div>
+  <a class="pure-button fr" href="/orders/<%= @order.OrderCode %>/logistics">查看物流</a>
+</div>
+<% end %>
+<div class="border_color"></div>
+<div class="address-item jhb-grey">
+  <div class="contact">
+    <span><%= @order.ShipName%></span><span><%= @order.ShipTel%></span>
+  </div>
+  <div class="address">
+    <span><%= @order.Address%></span>
+  </div>
+  <!--
+  <div class="address-detail">
+    北京市东城区旧鼓楼大街大卫咖啡馆
+  </div>
+-->
+</div>
+<div class="border_color"></div>
+<div class="order-items jhb-grey">
+  <div class="order-items-title"><%= @order.company.show_name %><span style="float: right;padding-right: 1.2rem;"><%= @order.RandNum %></span></div>
+  <!-- <div class="order_code">订单号：<%= @order.OrderCode%><span style="float: right"><%= @order.RandNum %></span></div> -->
+  <div class="order-item clearfix">
+    <% @order.order_products.each do |order_product| %>
+    <div class="row">
+      <div class="basic_item clearfix">
+        <div class="fl img_box">
+          <%= image_tag order_product.product.cover_url %>
+        </div>
+        <div class="col cont_box"><%= order_product.product.Name%></div>
+        <div class="fr spec_box">
+          <div class="order-item-price">
+            <div class="price-now right-align">
+              ￥<%= order_product.Price%>/<%= order_product.product.Unit%>
+            </div>
+            <div class="order-item-count right-align">
+              <span class="jhb-red">X<%= order_product.Quantity %></span><%= order_product.product.Unit%>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% if order_product.product.is_group_product? %>
+      <div class="sub-products">
+        <div class="product_title">套餐详情</div>
+        <% order_product.product.group_products.includes(:sub_product).each_with_index do |g_product, index| %>
+        <% product = g_product.sub_product %>
+        <div class="price-title">
+          <span><%= product.Name%></span>
+          <span>X<%= g_product.Number %></span>
+        </div>
+        <% end %>
+      </div>
+      <% end %>
+    </div>
+    <% end %>
+
+    <div class="goods-count-price right-align">
+      <!-- div>
+
+        共<%= @order.order_products.inject(0){|sum, op| sum+op.Quantity}%>件商品 &nbsp&nbsp&nbsp合计：<span class="jhb-red">¥ <%= @order.Money.round(2) %></span>
+      </div>
+      <span class="jhb-yellow">已优惠：<em>¥ <%= @order.giveaway_total.round(2)%></em></span> -->
+      <table  class="discount_box fr">
+        <tr>
+          <td class="right">订单总金额:</td>
+          <td>¥ <%= @order.CostItem.round(2) %></td>
+        </tr>
+          <tr>
+            <td>满减优惠:</td>
+            <td class="jhb-yellow">-¥ <span class="discount-price"><%= @order.GiveawayTotal.round(2)%></span></td>
+          </tr>
+          <tr>
+            <td>优惠券优惠:</td>
+            <td class="jhb-yellow coupon_text">-¥ <%= @order.CouponPrice.to_f.round(2) %></td>
+          </tr>
+          <tr>
+            <td>实付金额:</td>
+            <td class="price-str">¥ <%= @order.Money.round(2)%></td>
+          </tr>
+        </table>
+    </div>
+<!--     <div class="process-order justify">
+      <button class="pure-button jhb-red">联系商家</button>
+      <button class="pure-button jhb-red">拨打电话</button>
+    </div> -->
+  </div>
+</div>
+
+<div class="order_time jhb-grey">
+  <div class="middle-text  jhb-grey">
+    <!-- <p>备注: <%= @order.Message %></p>
+    <p>配送方式: 货到付款</p> -->
+    <p>订单号: <%= @order.OrderCode%></p>
+    <p>下单时间: <%= @order.CreateTime.strftime("%Y-%m-%d %H:%M:%S") %></p>
+  </div>
+  <% if @order.OrderStatus > 1 and @order.OrderStatus <= 3%>
+  <div class="middle-text">
+    付款时间: <%= @order.PayDatetime.strftime("%Y-%m-%d %H:%M:%S") if @order.PayDatetime.present? %>
+  </div>
+  <% elsif @order.OrderStatus >= 4 and @order.OrderStatus <= 5 %>
+    <!--
+    <div class="middle-text">
+      成交时间：<%= @order.UpdateTime.strftime("%Y-%m-%d %H:%M:%S") if @order.CreateTime.present? %>
+    </div>
+  -->
+  <% end %>
+</div>
+<!-- 买家备注 -->
+<!--
+<% if @order.Message.present? %>
+  <div class="padding">
+    <span class="jhb-grey">买家备注：</span> <%= @order.Message %>
+  </div>
+  <div class="border-gap"></div>
+<% end %>
+-->
+<% if @order.OrderStatus == 4 or @order.OrderStatus == 8 %>
+  <div class="clearfix padding center">
+  <!-- <a class="pure-button" href="/orders/<%= @order.OrderCode %>/logistics">物流详情</a> -->
+    <a class="pure-button" href="/orders/<%= @order.OrderCode %>/buy_again" data-method="post">再次购买</a>
+  </div>
+<% end %>
+<!-- <div class="line"></div> -->
+
+<% if false %>
+<% if @order.OrderStatus == 0 %>
+<div class="process-order clearfix padding">
+  <button class="pure-button button-error right">付款</button>
+  <button class="pure-button right">取消订单</button>
+</div>
+<% elsif @order.OrderStatus >= 1 and @order.OrderStatus <= 3 %>
+<!-- <button class="pure-button button-error right">确认收货</button> -->
+<!-- <button class="pure-button right">查看详情</button> -->
+<% elsif @order.OrderStatus >= 4 and @order.OrderStatus <= 5 %>
+<div class="process-order clearfix padding">
+  <button class="pure-button button-error right">再次购买</button>
+  <button class="pure-button right">删除订单</button>
+</div>
+<% end %>
+<% end %>
+
+
+
+
+<% content_for :script do %>
+<%= javascript_include_tag 'detail', 'data-turbolinks-track' => true %>
+<script>
+  setBackUrl("/my/orders");
+  $(".reviews-link").click(function () {
+    window.location.href = window.location.href + "/reviews"
+  })
+</script>
+<% end %>
+</main>
+<% end %>
+<%if @order.order_score.nil? && @order.OrderStatus.to_i == 8 && is_score_valid_time(@order) %>
+  <% content_for :footer do %>
+      <div class="review-div"><a href="javascript:void(0);" class="reviews-link">去评价</a></div>
+  <% end %>
+<% elsif %>
+  <% content_for :footer do %>
+    <i></i>
+  <% end %>
+<% end %>

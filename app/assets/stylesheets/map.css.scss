@@ -1,0 +1,85 @@
+@import "variable";
+// 百度地图下拉列表
+.tangram-suggestion-main {
+    z-index: 11;
+}
+
+.map-box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    display: none;
+    // pointer-events:none;
+}
+
+.map {
+    img {
+        max-height: initial;
+    }
+}
+
+#map {
+    width: 100%;
+    height: 24rem;
+    position: relative;
+}
+#map::before{
+  content: "";
+  width: 1.8rem;
+  height: 2.4rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -0.9rem;
+  margin-top: -2.4rem;
+  background: image-url('mobile/base/position-icon.png') center center no-repeat;
+  background-size: 100% 100%;
+  z-index: 99;
+}
+#poi-items {
+    padding-left: 1.6rem;
+    background-color: #fff;
+}
+
+.poi-item {
+    border-bottom: 1px solid #e0e0e0;
+    .address {
+        margin-top: .9rem;
+        font-size: 1.3rem;
+        line-height: 1.3rem;
+        color: #404040;
+    }
+    .title {
+        font-size: 1rem;
+        line-height: 1rem;
+        color: #606060;
+        margin-top: .4rem;
+        margin-bottom: .85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+#suggest-list {
+    @extend #poi-items;
+    position: absolute;
+    z-index: 300;
+    top: 4.4rem;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.suggest-item {
+    @extend .poi-item;
+    .title,
+    .address {
+        color: #fff;
+    }
+}
+

@@ -1,0 +1,249 @@
+<!-- 二级菜单页楼层 -->
+<% content_for :header do %>
+<header class="no-search clearfix second-page-header">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">新品上市</div>
+</header>
+<% end %>
+<% content_for :main do %>
+<!-- container -->
+<main class="second-page-new second-page" style="background-color:" >
+  <div class="top-img">
+
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div class="botttom-cont" style="">
+    <div class="m-nav-wrap">
+      <article class="m-nav-stickytabs">
+        <div class="nav-box">
+          <!-- 导航栏：遍历所有楼层并将其指向对应楼层锚点 -->
+          <% @activity_floors.each do |activity_floor| %>
+              <span class="tab">
+                <a href="#<%= activity_floor.ShowName %>" > <%= activity_floor.ShowName %>  </a>
+              </span>
+          <% end %>
+        </div>
+        <span class="select-btn show-btn"><i></i></span>
+      </article>
+    </div>
+    <div class="item-box">
+      <!--外层循环，每次循环为一个楼层-->
+      <% @activity_floors.each do |activity_floor| %>
+          <div class="item two-cont">
+            <!--给每个楼层添加上锚点-->
+            <div class="floor-img" id="<%= activity_floor.ShowName %>" >
+              <%= link_to image_tag(activity_floor.PictureQiNiu,class: 'lazy'), activity_path(activity_floor_id: activity_floor.ProductRecommendID) %>
+            </div>
+            <ul class="item-cont clearfix">
+              <!--内层循环，取出每个楼层的商品-->
+              <% activity_floor.products.each do |product| %>
+                  <li>
+                    <div class="cont-item">
+                      <div class="item-img">
+                        <%= image_tag(product.cover_url('v220'),class: 'lazy') %>
+                        <span class="mask-text">补货中</span>
+                        <i class="img-tip">特价</i>
+                      </div>
+                      <div class="item-text">
+                        <div class="text-top">
+                          <h3 class="text-title"><%= product.Name %></h3>
+                        </div>
+                        <div class="text-bottom-one">
+                          <p class="price">
+                            <strong class="red-text">
+                              <%= product.ProductPrice.round(2) %>
+                              <i>元/<%= product.Unit%></i>
+                            </strong>
+                            <% if product.MinBuyCount.to_i > 1 %>
+                                <span class="min-buy"><%= product.MinBuyCount %><%= product.Unit%>起订</span>
+                            <% end %>
+                          </p>
+                          <div class="item-console show-console">
+                            <a href="javascript:;" onclick="setAmount.add('')" class="add-item">＋</a>
+                            <div class="item-num" data-min-buycount="1">
+                              <input id="" class="number" data-id="" type="num" value="1" num="1" disabled>
+                            </div>
+                            <a href="javascript:;" onclick="setAmount.reduce('')" class="remove-item">－</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+
+              <% end %>
+
+
+              <!--second loop-->
+              <li>
+                <div class="cont-item">
+                  <div class="item-img">
+                    <img src="" class="lazy" data-original="https://ss1.baidu.com/70cFfyinKgQFm2e88IuM_a/forum/pic/item/20a2b33533fa828b5baaa7dffa1f4134960a5a99.jpg">
+                    <span class="mask-text">补货中</span>
+                    <i class="img-tip">特价</i>
+                  </div>
+                  <div class="item-text">
+                    <div class="text-top">
+                      <h3 class="text-title">产品标题</h3>
+                    </div>
+                    <div class="text-bottom-one">
+                      <p class="price">
+                        <strong class="red-text">
+                          200
+                          <i>元/箱</i>
+                        </strong>
+                        <span class="min-buy">5箱起订</span>
+                      </p>
+                      <div class="item-console show-console">
+                        <a href="javascript:;" onclick="setAmount.add('')" class="add-item">＋</a>
+                        <div class="item-num" data-min-buycount="1">
+                          <input id="" class="number" data-id="" type="num" value="1" num="1" disabled>
+                        </div>
+                        <a href="javascript:;" onclick="setAmount.reduce('')" class="remove-item">－</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+            </ul>
+          </div>
+      <% end %>
+
+
+    </div>
+  </div>
+  <div class="shadow-nav hidden">
+    <div class="tit">
+      切换楼层
+      <span class="select-btn hidden-btn"><i></i></span>
+    </div>
+    <ul class="floors clearfix">
+      <li class="active">清仓推荐</li>
+      <li>洗发护发</li>
+      <li>买二送一</li>
+      <li>优选精品</li>
+      <li>特卖套餐</li>
+    </ul>
+  </div>
+  <% content_for :footer do %>
+    &nbsp;
+  <% end %>
+  <script type="text/javascript">
+    // 限制标题字数
+    $(".one-cont .text-title").each(function(){
+      var htmlStr = $(this).html();
+      if(htmlStr.length > 48){
+        $(this).html(htmlStr.slice(0,46) + "...")
+      }
+    })
+    $(".two-cont .text-title,.one-cont-big .text-title").each(function(){
+      var htmlStr = $(this).html();
+      if(htmlStr.length > 26){
+        $(this).html(htmlStr.slice(0,24) + "...")
+      }
+    })
+    // 吸顶
+    $navBar = $('.m-nav-wrap')[0];
+    headerTop = parseInt($('header').css("height"));
+    navBarTop = $navBar.offsetTop
+    flag = true
+    $(window).scroll(function(){
+      scrollTop = $(document.body).scrollTop();
+      if(navBarTop - headerTop <= scrollTop){
+        $(".m-nav-stickytabs").css({"position":"fixed","top":"4.4rem"})
+      }else{
+        $(".m-nav-stickytabs").css({"position":"relative","top":"0"})
+      }
+    })
+    // 菜单显示隐藏
+    var mo=function(e){e.preventDefault();};
+    $(".select-btn").click(function(){
+      $(".shadow-nav").toggleClass("hidden");
+    })
+    $(".show-btn").click(function(){
+      $("html,body").css({"overflow":"hidden"})
+      $(document).on("touchmove",mo)
+      if( $(".m-nav-stickytabs").css("position") == "relative" ){
+        $("html,body").animate({"scrollTop":navBarTop - headerTop},300);
+      }
+    })
+
+    $(".hidden-btn").click(function(){
+      $("html,body").css({"overflow":"auto"})
+      $(document).unbind("touchmove",mo)
+    })
+
+    // 选项自动滚动
+    function auto(){
+      $(".nav-box").scrollLeft(0);
+      var left = $(".nav-box .active").offset().left - $(document.body).width()/2;
+      $(".nav-box").scrollLeft(left);
+    }
+    var $item = $(".item")
+    var navHeight = $(".nav-box").height() * 2;
+    var timer = 0;
+    $(window).scroll(function(){
+      var scrollTop = $(document.body).scrollTop();
+      $(".nav-box .tab").each(function(){
+        var index = $(this).index()
+        if( scrollTop + navHeight + 10 >= $item.eq(index).offset().top){
+          $(this).addClass("active").siblings().removeClass("active");
+          $(".floors li").eq(index).addClass("active").siblings().removeClass("active");
+        }
+      })
+      clearTimeout(timer);
+      timer = setTimeout(function(){
+        auto();
+      },300)
+    })
+    // 切换
+    var height = $(document.body).height()
+    $(".nav-box .tab").click(function(){
+      $(this).addClass("active").siblings().removeClass("active");
+      var index = $(this).index();
+      $(".floors li").eq(index).addClass("active").siblings().removeClass("active");
+      var targetTop = $(".item").eq(index).offset().top - navHeight;
+      $(document.body).scrollTop(targetTop)
+    })
+    $(".floors li").click(function(){
+      $(this).addClass("active").siblings().removeClass("active");
+      var index = $(this).index();
+      $(".nav-box .tab").eq(index).addClass("active").siblings().removeClass("active");
+      var targetTop = $(".item").eq(index).offset().top - navHeight;
+      $(document.body).scrollTop(targetTop)
+      $(".shadow-nav").addClass("hidden");
+      $(document).unbind("touchmove",mo);
+      auto();
+    })
+
+
+
+    // 图片懒加载
+    $(function() {
+      $("img.lazy").lazyload({
+        placeholder : "images/grey.gif",
+        threshold : 200,
+        effect : "fadeIn"
+      });
+    });
+
+
+        // if  navBarTop > 200 && flag == true
+        //     $navBar.animate({top:0},200)
+        //     flag = false
+        // else if parseInt($navBar.css("top")) == 0 && scrollTop < navBarTop  && flag == false
+        //     $navBar.animate({top:categoryTop},200)
+        //     flag = true
+  </script>
+</main>
+<% end %>

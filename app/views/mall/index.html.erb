@@ -1,0 +1,69 @@
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+<% end %>
+<header class="location">
+    <div class="header-left">
+        <a href="javascript:goBack()" id="back"></a>
+    </div>
+    <!-- 我的积分 -->
+    <div class="ordersHeader_title">我的余额</div>
+  <!-- <div class="header-right">
+    <a href="/mall/my_exchange" class="header-small-text">兑换记录</a>
+  </div> -->
+</header>
+<div class="points-num">
+  <div class="points-num-wrapper row">
+    <div class="name  col s6">
+      可用余额
+    </div>
+    <a class="num col s6" _href="/mall/my_point"><%= current_user.CashVolume.to_f %></a>
+  </div>
+</div>
+
+<!-- <div id="lottery-link">
+  <a href="/mall/lottery">积分抽奖</a>
+</div> -->
+
+<div class="points-title-through ">
+  <span class="points-title-through-wrapper">
+    积分转余额说明
+  </span>
+  <div class="line"></div>
+</div>
+<div class="points-explain">
+  <p>尊敬的用户，为方便您积分的使用，现将积分转为余额。</p>
+  <p>余额可在订单提交页选择使用。</p>
+  <br>
+  <p>根据积分获取类型分为两种比例转换方式: <br> 1.补发的积分(退换货、商品兑换)按200分:1元转化为余额。 <br> 2.其他活动获得的积分按1000分:1元转化为余额。</p>
+</div>
+
+<div class="points-products hide">
+  <% @point_products.each do |pp| %>
+  <a _href="/mall/<%= pp.ID %>/product_detail" class="points-product row">
+    <div class="col s6 img">
+      <%= image_tag pp.cover_url %>
+    </div>
+    <div class="col s6 info">
+      <div class="title"><%= pp.Name %></div>
+      <!-- <div class="market-price">市场参考价 ¥ pp.OriginalPrice</div> -->
+      <div class="price"><span><%= pp.Point %></span> 积分</div>
+      <div class="exchange-now">立即兑换</div>
+    </div>
+  </a>
+  <% end %>
+  <script>
+  var isOK = false;
+  window.getCerificationStatus(2,function(){
+    isOK = true;
+  })
+  $(".points-product").click(function(){
+    window.location.href = $(this).attr("_href")
+    // if(!isOK){
+    //   window.isCerificationTip("认证才能使用积分兑换！");
+    // }else{
+    //   window.location.href = $(this).attr("_href")
+    // }
+  })
+  </script>
+</div>
+<% content_for :footer do %>&nbsp;<% end %>

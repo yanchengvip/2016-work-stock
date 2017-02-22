@@ -1,0 +1,31 @@
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/common'%>
+<%= javascript_include_tag 'pc/ciling'%>
+<%= javascript_include_tag 'pc/layer'%>
+<%= javascript_include_tag 'pc/com_show'%>
+
+<%= stylesheet_link_tag  'pc/product'%>
+<%= stylesheet_link_tag  'pc/account'%>
+
+<div class="my_account w990">
+  <div class="trade_t">
+    <h3>我的账户</h3>
+  </div>
+  <div class="trade_b clearfix">
+    <%= render 'subnav' %>
+    <div class="user_mes left">
+      <div class="title" style="height:57px;">
+        <h3><span>我的进货宝</span>&nbsp;>收货地址管理</h3>
+      </div>
+      <% flash.each do |type, message| %>
+        <% unless message.blank? %>
+          <div class="alert <%= twitterized_type(type) %> fade in text-center">
+            <%= message %>
+          </div>
+        <% end %>
+      <% end %>
+      <%= render 'address_manager_pc' %>
+    </div>
+
+  </div>
+</div>

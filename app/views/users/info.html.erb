@@ -1,0 +1,169 @@
+<%= javascript_include_tag 'pc/index'%>
+<%= stylesheet_link_tag  'pc/account'%>
+<script language="javascript">
+    function chkSubmit() {
+        if ($("#Name").val() == "")
+        {
+            alert("名字不能为空！");
+            return false;
+        }
+        $("#thooi").submit();
+    }
+
+    (function($){
+        $.extend({
+            ms_DatePicker: function (options) {
+                var defaults = {
+                    YearSelector: "#sel_year",
+                    MonthSelector: "#sel_month",
+                    DaySelector: "#sel_day",
+                    FirstText: "--",
+                    FirstValue: 0
+                };
+                var opts = $.extend({}, defaults, options);
+                var $YearSelector = $(opts.YearSelector);
+                var $MonthSelector = $(opts.MonthSelector);
+                var $DaySelector = $(opts.DaySelector);
+                var FirstText = opts.FirstText;
+                var FirstValue = opts.FirstValue;
+                var uby=parseInt("<%=current_user[:BirthYear]%>");
+                var ubm=parseInt("<%=current_user[:BirthMonth]%>");
+                var ubd=parseInt("<%=current_user[:BirthDay]%>");
+                // 初始化
+                var str = "<option value=\"" + FirstValue + "\">"+FirstText+"</option>";
+                $YearSelector.html(str);
+                $MonthSelector.html(str);
+                $DaySelector.html(str);
+                // 年份列表
+                var yearNow = new Date().getFullYear();
+                var yearSel = $YearSelector.attr("rel");
+                for (var i = yearNow; i >= 1900; i--) {
+                    if(isNaN(uby))
+                        sed = yearSel==i?"selected":"";
+                    else
+                        sed = uby==i?"selected":"";
+
+                    var yearStr = "<option value=\"" + i + "\" " + sed+">"+i+"</option>";
+                    $YearSelector.append(yearStr);
+                }
+                // 月份列表
+                var monthSel = $MonthSelector.attr("rel");
+                for (var i = 1; i <= 12; i++) {
+                    if(isNaN(ubm))
+                        sed = monthSel==i?"selected":"";
+                    else
+                        sed = ubm==i?"selected":"";
+                    var monthStr = "<option value=\"" + i + "\" "+sed+">"+i+"</option>";
+                    $MonthSelector.append(monthStr);
+                }
+                // 日列表(仅当选择了年月)
+                function BuildDay() {
+                    if ($YearSelector.val() == 0 || $MonthSelector.val() == 0) {
+                        // 未选择年份或者月份
+                        $DaySelector.html(str);
+                    } else {
+                        $DaySelector.html(str);
+                        var year = parseInt($YearSelector.val());
+                        var month = parseInt($MonthSelector.val());
+                        var dayCount = 0;
+                        switch (month) {
+                            case 1:
+                            case 3:
+                            case 5:
+                            case 7:
+                            case 8:
+                            case 10:
+                            case 12:
+                                dayCount = 31;
+                                break;
+                            case 4:
+                            case 6:
+                            case 9:
+                            case 11:
+                                dayCount = 30;
+                                break;
+                            case 2:
+                                dayCount = 28;
+                                if ((year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0)) {
+                                    dayCount = 29;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        var daySel = $DaySelector.attr("rel");
+                        for (var i = 1; i <= dayCount; i++) {
+                            if(isNaN(ubd))
+                                sed = daySel==i?"selected":"";
+                            else
+                                sed = ubd==i?"selected":"";
+                            var dayStr = "<option value=\"" + i + "\" "+sed+">" + i + "</option>";
+                            $DaySelector.append(dayStr);
+                        }
+                    }
+                }
+                $MonthSelector.change(function () {
+                    BuildDay();
+                });
+                $YearSelector.change(function () {
+                    BuildDay();
+                });
+                if($DaySelector.attr("rel")!=""){
+                    BuildDay();
+                }
+            } // End ms_DatePicker
+        });
+    })(jQuery);
+
+    $(function () {
+        $.ms_DatePicker({
+            YearSelector: ".sel_year",
+            MonthSelector: ".sel_month",
+            DaySelector: ".sel_day"
+        });
+    });
+</script>
+
+    <div class="my_account w990">
+        <div class="trade_t">
+            <h3>我的账户</h3>
+        </div>
+        <div class="trade_b clearfix">
+          <%= render 'shared/users_subnav' %>
+          <%= form_tag '/my/update_info', method: 'put', id: 'thooi' do %>
+              <div class="user_mes left">
+                <div class="title" style="height:57px;">
+                    <h3><span>我的进货宝</span>&nbsp;>我的资料</h3>
+                </div>
+                <% flash.each do |type, message| %>
+                        <% unless message.blank? %>
+                          <div class="alert <%= twitterized_type(type) %> fade in text-center">
+                            <%= message %>
+                          </div>
+                        <% end %>
+                      <% end %>
+                    <!-- <h3>我的资料</h3> -->
+                    <div class="user_mescon clearfix">
+                        <ul>
+                            <li class="clearfix">
+                                <span><i>*</i>昵称：</span>
+                              <input type="text" class="txt" name="Name" id="Name" value="<%=current_user[:Name]%>"/>
+
+                            </li>
+                            <li class="clearfix">
+                                <span>电子邮箱：</span>
+                              <input type="text" class="txt" name="Mail" id="Mail" value="<%=current_user[:Mail]%>"/>
+                            </li>
+                            <li class="clearfix">
+                                <span>出生日期：</span>
+                              <select class="sel_year" rel="1980" name="BirthYear" id="BirthYear"> </select> 年
+                              <select class="sel_month" rel="2" name="BirthMonth" id="BirthMonth"> </select> 月
+                              <select class="sel_day" rel="14" name="BirthDay" id="BirthDay"> </select> 日
+                            </li>
+                            <li class="btn"><input id="Save" type="button" value="保存" onclick="return chkSubmit()"/></li>
+                        </ul>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>

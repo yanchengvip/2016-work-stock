@@ -1,0 +1,134 @@
+<% content_for :header do %>
+<header class="no-search clearfix">
+  <div class="header-left">
+    <a href="javascript:goBack();"  id="back">
+      <!-- <%= image_tag "mobile/base/back.svg" %> -->
+    </a>
+  </div>
+  <!--  -->
+  <div class="ordersHeader_title"></div>
+</header>
+<% end %>
+<% content_for :main do %>
+  <main class="detail">
+    <section class="detail-show-img" id="p-<%= @product.ID%>" data-image-url="<%= @product.cover_url%>" data-name="<%= @product.Name %>">
+      <div class="detail-title">
+        <%= @product.Name %>
+      </div>
+      <div id='slider' class='swipe'>
+        <div class='swipe-wrap'>
+          <% @product.product_imgs.each_with_index do |pic, index| %>
+            <a href="javascript:;"><%= image_tag pic.url('v400'), class: "responsive-img" %></a>
+          <% end %>
+        </div>
+        <ul class="indicators">
+          <% @product.product_imgs.each_with_index do |pic, index| %>
+            <li class="indicator-item <%= 'active' if index == 0 %>" data-index=<%= index %> ></li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div class="price clearfix">
+        <div class="price-now red-text left">
+          进货宝价：¥<%= @product.ProductPrice%>/<%= @product.Unit%>
+        </div>
+        <% if @product.Type != 0 and @product.OriginalPrice %>
+          <div class="price-market right">
+            原价：¥<%= @product.OriginalPrice%>/<%= @product.Unit%>
+          </div>
+        <% end %>
+      </div>
+    </section>
+    <div class="border-gap">&nbsp;</div>
+
+    <section class="sales">
+<!--       <div class="msg-item">促销信息:</div><div class="special">满500元享95折，满1000元享9折</div> -->
+      <div class="msg-item">配&emsp;&emsp;送：满<%= Settings.order_money[@product.CompanyID] %>元免邮费</div>
+      <!--<div class="msg-item">
+        活&emsp;&emsp;动：满500元9.3折，满1000元9折
+      </div>-->
+    </section>
+    <div class="border-gap">&nbsp;</div>
+    <section class="specifiction">
+
+      <div class="cover clearfix">
+        <% if @product.Specification %>
+          <!-- <span class="name left">包装规格：</span>
+          <span class="span-box left"></span> -->
+        <% end %>
+        <% if @product.Slogan %>
+          <p class="left slogan-text" style="display:flex;"><%= @product.Slogan.html_safe %></p>
+        <% end %>
+        <% if @product.MinBuyCount.to_i > 1%>
+          <span style="float:right;font-size:1.2rem;color:#F5A623;"><%= @product.MinBuyCount %><%= @product.Unit%>起订</span>
+        <% end %>
+        <a class="pure-button right add-to-carts button-error">加入购物车</a>
+      </div>
+      <div class="amount clearfix">
+        <div class="amount-title">数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量：</div>
+        <div class="num-box row left" data-min-buycount="<%= @product.MinBuyCount || 1 %>">
+          <a href="javascript:;" onclick="setAmount.reduce('<%= @product.ID %>')" class="btn-reduce col s3">-</a>
+          <div class="item-num" data-min-buycount="<%= @product.MinBuyCount || 1 %>">
+            <input type="tel" class="col s6" value="<%= @product.cart_for(current_user) %>" num="<%= @product.cart_for(current_user) %>" id="<%= @product.ID %>">
+          </div>
+          <a href="javascript:;" onclick="setAmount.add('<%= @product.ID %>')" class="btn-add col s3">+</a>
+        </div>
+        <!-- <button class="pure-button right button-error buy-now">&ensp;立即购买&ensp;</button> -->
+      </div>
+    </section>
+    <div class="border-gap">&nbsp;</div>
+    <!--
+    <section class="recommend">
+      <div class="detail-section-header valign-wrapper row">
+        <div class="section-title col s6 red-text">为您推荐类似产品</div>
+        <div class="col s6 right-align"><a href="javascript:;" class="section-title">查看零食类目&gt;</a></div>
+      </div>
+      <div class="imgs row">
+        <div class="col s4">
+          <%= image_tag "mobile/ad_pic01.jpg", class: "responsive-img" %>
+            <div class="desc">
+              <div class="title">
+                xxx
+              </div>
+              <div class="price">
+                ￥ xxx
+              </div>
+            </div>
+        </div>
+        <div class="col s4">
+          <%= image_tag "mobile/ad_pic01.jpg", class: "responsive-img" %>
+            <div class="desc">
+              <div class="title">
+                xxx
+              </div>
+              <div class="price">
+                ￥ xxx
+              </div>
+            </div>
+        </div>
+        <div class="col s4">
+          <%= image_tag "mobile/ad_pic01.jpg", class: "responsive-img" %>
+            <div class="desc">
+              <div class="title">
+                xxx
+              </div>
+              <div class="price">
+                ￥ xxx
+              </div>
+            </div>
+        </div>
+      </div>
+    </section>
+    -->
+  </main>
+<% end %>
+<% content_for :footer do %>
+  <%= render 'shared_mobile/nav_footer' %>
+<% end %>
+<% content_for :script do %>
+  <script type="text/javascript">
+    var productId = "<%= @product.ID %>";
+    var productPrice = "<%= @product.ProductPrice%>";
+  </script>
+  <%= javascript_include_tag 'detail', 'data-turbolinks-track' => true %>
+<% end %>

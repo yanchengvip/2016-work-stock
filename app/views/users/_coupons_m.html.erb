@@ -1,0 +1,50 @@
+<% content_for :header do %>
+  <!-- <header class="wallet">
+      <a href="javascript:goBack()" id="back" class="header-link">
+        <%= image_tag "mobile/back.png" %> <span>我的钱包</span>
+      </a>
+      <a href="/my/coupons_rule" class="header-link rule"><span><i></i>使用规则</span></a>
+  </header> -->
+<header class="no-search clearfix second-page-header">
+  <div class="header-left">
+    <a href="javascript:window.location.search.indexOf('refresh=true') == -1 ? goBack() : window.location.href = window.location.hash.slice(1) || '/'" id="back" data-no-turbolink></a>
+  </div>
+  <div class="ordersHeader_title">我的卡券<a href="/my/exchange" class="ticket-exchange right"> <%= image_tag 'mobile/wallet/ticket_exchange.jpg' %></a></div>
+</header>
+<% end %>
+<% content_for :main do %>
+  <main class="coupon second-page">
+  <script>
+    var fromID = "<%= params[:from_id]%>";
+  </script>
+  <!-- <div class="head valign-wrapper row">
+    <div class="coupons_title col s6">
+      <a href="javascript:;" class="big-text">当前积分: <%= current_user.Integral.to_i %></a>
+    </div>
+    <div class="col s6 center">
+      <a href="/my/exchange" class="ticket-exchange"> <%= image_tag 'mobile/wallet/ticket_exchange.jpg' %></a>
+    </div>
+  </div> -->
+  <a href="/coupons/sales" class="buyCoupons-link" data-no-turbolink>
+    <%= image_tag "mobile/coupon/buyCoupons-link.jpg" %>
+  </a>
+  <div class="s12 row_tab_top">
+    <ul class="tabs ul_title list-title">
+      <li class="tab col s4" _onClick="window.location = '/my/coupons?type=0'"><a href="javascript:;" >可使用</a></li>
+      <li class="tab col s4" _onClick="window.location = '/my/coupons?type=1'"><a href="javascript:;" >已使用</a></li>
+      <li class="tab col s4" _onClick="window.location = '/my/coupons?type=2'"><a href="javascript:;" >已失效</a></li>
+    </ul>
+  </div>
+  <div class="row row_tab all-coupons clearfix">
+
+    <ul id="coupons-box" class="coupon-list" style="display: block;">
+
+    </ul>
+  </div>
+<% end %>
+<% content_for :footer do %>
+  <%= render 'shared_mobile/footer' %>
+<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'coupons', 'data-turbolinks-track' => true %>
+<% end %>

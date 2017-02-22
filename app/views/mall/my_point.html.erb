@@ -1,0 +1,30 @@
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+<% end %>
+<header class="location clearfix">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back">
+      <!-- <%= image_tag "mobile/base/back.svg" %> -->
+    </a>
+  </div>
+  <!--  -->
+  <div class="ordersHeader_title">我的积分</div>
+</header>
+<% if @point_histories.present? %>
+<div class="my-points">
+  <% @point_histories.each do |ph| %>
+  <div class="my-points-exchange clearfix">
+    <div class="left">
+      <h3><%= ph.type_tos%></h3>
+      <div class="my-points-date">
+        <%= ph.CreateTime.strftime("%Y-%m-%d %H:%M")%>
+      </div>
+    </div>
+    <div class="right <%= 'gules' if ph.DeltaPoint > 0 %>">
+      <%= '+' if ph.DeltaPoint > 0 %><%= ph.DeltaPoint %>
+    </div>
+  </div>
+  <% end %>
+</div>
+<% end %>
+<% content_for :footer do %>&nbsp;<% end %>

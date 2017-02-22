@@ -1,0 +1,168 @@
+<%= stylesheet_link_tag  'pc/login'%>
+<script language="javascript">
+
+$(document).ready(function () {
+    $("#Mobile").change(function () {
+        $("#validMobile").hide();
+        $("#validMobile").removeClass("wrong");
+    })
+
+    $("#validMobile").removeClass("wrong");
+})
+function chkSubmit() {
+
+    if ($("#Mobile").val() == "")
+    {
+        alert("请输入手机号！");
+        $("#Mobile").focus();
+        return false;
+    }
+
+    if ($("#validMobile").hasClass("wrong"))
+    {
+        alert($("#validMobile").text());
+        $("#Mobile").focus();
+        return false;
+    }
+
+    if ($("#MobileCode").val() == "") {
+        alert("请输入验证码");
+        $("#MobileCode").focus();
+        return false;
+    }
+
+    if ($("#Password").val() == "")
+    {
+        alert("请输入密码！");
+        $("#Password").focus();
+        return false;
+    }
+
+    if ($("#ConfirmPassword").val() != $("#Password").val())
+    {
+        alert("两次密码不一致！");
+        $("#ConfirmPassword").focus();
+        return false;
+    }
+    
+    $("#request").submit();
+}
+
+function checkMobile() {
+    if ($("#Mobile").val() == "")
+        return;
+    if ((/[1]([3578][0-9]{1})[0-9]{8}/g).test($("#Mobile").val()) == false) {
+        $("#validMobile").show();
+        $("#validMobile").removeClass("right").addClass("wrong");
+        $("#validMobile").text("手机号码错误!");
+        return;
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "/passwords/check_mobile",
+        dataType: "json",
+        data: { "mobile":$("#Mobile").val()},
+        success: function (result) {
+            $("#validMobile").show();
+            if (result.status != "ok") {
+                $("#validMobile").removeClass("right").addClass("wrong");
+                $("#validMobile").text(result.message);
+            }
+            else {
+                $("#validMobile").removeClass("wrong").toggleClass("right");
+                $("#validMobile").text("");
+
+            }
+        }
+    });
+    
+}
+
+function getmobilecode() {
+    var mobile = $("#Mobile").val();
+    if (mobile == "") {
+        alert("请输入手机号码！");
+        return false;
+    } else if ($("#validMobile").hasClass("wrong")) {
+      alert($("#validMobile").text());
+    } else {
+      sendcode();
+    }
+    
+}
+
+function sendcode() {
+    $.ajax({
+        cache: false,
+        dataType: "json",
+        data: { 'tel' : $("#Mobile").val() } ,
+        type: 'POST',
+        url: "/send_check_code",
+        success: function (e) {
+            if(e.status == "ok"){
+                alert("验证码已发送！");
+
+                var date = 120;
+                var timer1 = setInterval(function () {
+                    $("#getcode").attr({ "disabled": "disabled" });
+                    $("#getcode").val(date + "秒重新获取！");
+                    date--;
+                    if (date == 0) {
+                        $("#getcode").removeAttr("disabled");
+                        $("#getcode").val("获取验证码");
+                        clearInterval(timer1);
+                    }
+                }, 1000);
+            }
+            else
+            {
+                alert("发送失败！");
+
+            }
+        },
+        error: function (e) {
+            alert(e);
+        }
+    });
+}  
+</script>
+<div class="content w990">
+    <%= form_tag '/passwords', method: 'post', id: 'request' do %>
+      <div class="register_message">
+        <% flash.each do |type, message| %>
+          <% unless message.blank? %>
+            <div class="alert <%= twitterized_type(type) %> fade in text-center">
+              <%= message %>
+            </div>
+          <% end %>
+        <% end %>
+        <div class="register_input">
+	        <ul class="register_top" style="margin-top: 60px;">
+	            <li class="clearfix">
+	                <span class="txt"><i>*</i>手机号码</span>
+	                <input type="text" id="Mobile" name="user[Phone]" size="33" onblur="checkMobile();"/>
+	                <em class="wrong" id="validMobile" style="display:none">该手机号码未注册！</em>
+	            </li>
+	            <li class="input_3 clearfix">
+	                <span class="txt"><i>*</i>验证码</span>
+	                <input type="text" id="MobileCode" name="user[check_code]" size="33" style="width:60px;"/>
+	                <input type="button" value="获取验证码" id="getcode" style="width:116px;height:32px;border:1px solid #d2d2d2" onclick="getmobilecode();" />
+	            </li>
+	            <li class="clearfix">
+	                <span class="txt"><i>*</i>设置新密码</span>
+	                <input type="password" id="Password" name="user[Password]" size="33"/>
+	            </li>
+
+	            <li class="clearfix">
+	                <span class="txt"><i>*</i>确认密码</span>
+	                <input type="password" id="ConfirmPassword" name="user[password_confirmation]" size="33"/>
+	            </li>
+	        </ul>
+	        <ul class="register_bot" style="padding-top:0">
+	            <li class="button"><input type="button" value="确定" onclick="return chkSubmit();" /></li>
+	        </ul>
+        </div>
+      </div>
+    <% end %>
+</div>

@@ -1,0 +1,16 @@
+<footer class="nav-footer">
+  <div class="row">
+    <% [['/',"首页"], ['/products/list',"商品列表"], ['/carts',"购物车"], ['/mine',"我的"]].each_with_index do | value, index |  %>
+      <% url = value[0] %>
+      <% index = (index+1).to_s %>
+      <% is_active = request.path == url%>
+      <div class="col center-align s3 <%= 'active' if is_active %>">
+        <a href="<%= url %>"><%= image_tag is_active ? "mobile/base/#{index}active.svg" : "mobile/base/#{index}.svg" %><br><%= value[1] %></a>
+        <% if value[0] == '/carts' %>
+          <!--<span class="num cart-num"><%#= sign_in? ? current_user.cart_num.to_i : 0 %></span>-->
+            <span class="num cart-num"><%= sign_in? ? current_user.cart_for_nav(session[:depot_ids], session[:company_id]).first : 0 %></span>
+      <% end %>
+      </div>
+    <% end %>
+  </div>
+</footer>

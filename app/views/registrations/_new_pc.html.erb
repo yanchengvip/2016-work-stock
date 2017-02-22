@@ -1,0 +1,382 @@
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/layer'%>
+<%= stylesheet_link_tag  'pc/login'%>
+<%= stylesheet_link_tag  'pc/product'%>
+
+
+<script language="javascript">
+
+$(document).ready(function () {
+    $("#Mobile").change(function () {
+        $("#validMobile").hide();
+        $("#validMobile").removeClass("wrong");
+    })
+
+    $("#validMobile").removeClass("wrong");
+})
+function chkSubmit() {
+
+    if ($("#Mobile").val() == "")
+    {
+        alert("请输入手机号！");
+        $("#Mobile").focus();
+        return false;
+    }
+
+    if ($("#validMobile").hasClass("wrong"))
+    {
+        alert($("#validMobile").text());
+        $("#Mobile").focus();
+        return false;
+    }
+
+    if ($("#Password").val() == "")
+    {
+        alert("请输入密码！");
+        $("#Password").focus();
+        return false;
+    }
+
+    if ($("#ConfirmPassword").val() != $("#Password").val())
+    {
+        alert("两次密码不一致！");
+        $("#ConfirmPassword").focus();
+        return false;
+    }
+
+    if ($("#MobileCode").val() == "") {
+        alert("请输入验证码");
+        $("#MobileCode").focus();
+        return false;
+    }
+    // if ($("#ShipName").val() == '') {
+    //   alert('收件人不能为空');
+    //   $("#ShipName").focus();
+    //   return false;
+    // }
+
+    // if ($("#Province").val() == '') {
+    //   alert('省不能为空');
+    //   $("#Province").focus();
+    //   return false;
+    // }
+
+    // if ($("#City").val() == '') {
+    //   alert('市不能为空');
+    //   $("#City").focus();
+    //   return false;
+    // }
+
+    // if ($("#County").val() == '') {
+    //   alert('区不能为空');
+    //   $("#County").focus();
+    //   return false;
+    // }
+
+    // if ($("#Detailedaddress").val() == '') {
+    //   alert('详细地址不能为空');
+    //   $("#Detailedaddress").focus();
+    //   return false;
+    // }
+
+    if(!$('#chkXY').is(':checked')) {
+        alert("请先阅读并勾选注册协议！");
+        return false;
+    }
+
+    /*
+    if ($("#CaptchaValue").val() == "")
+    {
+        alert("验证码不能为空！");
+        return false;
+    }
+    */
+    else{
+
+        $.ajax({
+            cache: false,
+            dataType: "json",
+            type: 'POST',
+            url: "/sign_up",
+            data: $('form').serialize(),
+            success: function(message){
+                if(message.status == "ok"){
+                   location.href = message.return_to;
+                }else{
+                    alert(message.message);
+                }
+            }
+
+        });
+
+    }
+    /*$("#thooi").submit();*/
+}
+
+function checkMobile() {
+    if ($("#Mobile").val() == "")
+        return;
+    if ((/[1]([3578][0-9]{1})[0-9]{8}/g).test($("#Mobile").val()) == false) {
+        $("#validMobile").show();
+        $("#validMobile").removeClass("right").addClass("wrong");
+        $("#validMobile").text("手机号码错误!");
+        return;
+    }
+
+    $.ajax({
+        type: "Get",
+        url: "/check_mobile",
+        dataType: "json",
+        data: { "mobile":$("#Mobile").val()},
+        success: function (result) {
+            $("#validMobile").show();
+            if (result.status != "ok") {
+                $("#validMobile").removeClass("right").addClass("wrong");
+                $("#validMobile").text(result.message);
+            }
+            else {
+                $("#validMobile").removeClass("wrong").toggleClass("right");
+                $("#validMobile").text("");
+
+            }
+        }
+    });
+
+}
+</script>
+
+<style>
+.zhezhao {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.2;
+    filter: alpha(opacity=80);
+    z-index: 99;
+    display: none;
+}
+.login_input {
+    position: absolute;
+    width: 803px;
+    height: 603px;
+    background: #fff;
+    color: #434343;
+    z-index: 100;
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.3);
+    display: none;
+}
+</style>
+<div class="content w990">
+    <%= form_tag '/sign_up', method: 'post', id: 'thooi' do %>
+        <input type="hidden" name="code" value="<%= params[:code] %>">
+        <div class="register_message">
+            <% flash.each do |type, message| %>
+              <% unless message.blank? %>
+                <div class="alert <%= twitterized_type(type) %> fade in text-center">
+                  <%= message %>
+                </div>
+              <% end %>
+            <% end %>
+            <div class="register_input">
+                <ul class="register_top">
+                    <li class="clearfix">
+                        <span class="txt"><i>*</i>用户类型</span>
+                        <input class="left" style=" width:10px;" type="radio" name="user[Type]" value="0" />
+                        <i style=" display:block; margin-right:10px;" class="left">个人</i>
+                        <input class="left" style=" width:10px;" checked="checked" type="radio" name="user[Type]" value="1" />
+                        <i style=" display: block; margin-right: 10px;" class="left">零售商</i>
+                        <input class="left" style=" width:10px;" type="radio" name="user[Type]" value="2" />
+                        <i style=" display:block;" class="left">企业用户</i>
+                    </li>
+                    <li class="clearfix">
+                        <span class="txt"><i>*</i>手机号码</span>
+                        <input type="text" id="Mobile" name="user[Phone]" size="33" onblur="checkMobile();"/>
+                        <em class="wrong" id="validMobile" style="display:none">该手机号码已被注册！</em>
+                    </li>
+                    <li class="clearfix">
+                        <span class="txt"><i>*</i>登录密码</span>
+                        <input type="password" id="Password" name="user[Password]" size="33"/>
+                    </li>
+
+                    <li class="clearfix">
+                        <span class="txt"><i>*</i>确认密码</span>
+                        <input type="password" id="ConfirmPassword" name="user[password_confirmation]" size="33"/>
+                    </li>
+                    <li class="input_3 clearfix">
+                        <span class="txt"><i>*</i>验证码</span>
+                        <input type="text" id="MobileCode" name="user[check_code]" size="33" style="width:60px;"/>
+                        <input type="button" value="获取验证码" id="getcode" style="width:116px;height:32px;border:1px solid #d2d2d2" onclick="getmobilecode();" />
+                    </li>
+                    <!-- <li class="clearfix">
+                        <span class="txt"><i>*</i>收货人姓名</span>
+                        <input type="text" id="ShipName" placeholder="" name="user[address[ShipName]]"/>
+                    </li>
+                    <li class="clearfix">
+                        <span class="txt"><i>*</i>收货人地址</span>
+                        <input id="CountyID" type="hidden" name="user[address[CountyID]]">
+                        <select class="select_box" id="Province" name="user[address[Province]]"></select>
+                        <select class="select_box" id="City" name="user[address[City]]"></select>
+                        <select class="select_box" id="County" name="user[address[County]]"></select>
+                    </li>
+                    <li class="clearfix">
+                        <span class="txt"><i>*</i>详细地址</span>
+                        <textarea id="Detailedaddress" placeholder="" name="user[address[Detailedaddress]]"></textarea>
+                    </li> -->
+                    <li class="clearfix" style="margin:54px 0 0 0;">
+                        <span class="txt">推荐码</span>
+                        <input type="text" placeholder="" name="user[SalesmanInviteCode]"/>
+                    </li>
+                </ul>
+                <ul class="register_bot1">
+                    <li class="sel clearfix">
+                        <label class="left clearfix"><input type="checkbox" id="chkXY"/></label>
+                        <a class="left add_new" onclick="showxy();" style="cursor:pointer;">我已阅读并同意《进货宝用户注册协议》</a>
+                    </li>
+                </ul>
+                <ul class="register_bot" style="padding-top:0">
+                    <li class="button"><input type="button" value="确定" onclick="return chkSubmit();" /></li>
+                </ul>
+                <ul class="register_bot2">
+                    <li>我已经注册，现在就&nbsp;<i><a href="/sign_in">登录></a></i>&nbsp;</li>
+                </ul>
+            </div>
+        </div>
+    <% end %>
+</div>
+<div class="zhezhao"></div><!-- 遮罩层 end -->
+<div class="login_input layer" style="display:none;">
+    <a href="javascript:;" class="btnCancel" style="padding-right:14px; width:30px;height:30px; font-size:14px;">关闭</a>
+    <iframe src="/common/registerxy" height="600" width="800">
+
+    </iframe>
+</div>
+<script language="javascript">
+$(document).ready(function () {
+    $(".add_new").click(function () {
+        $(".box-mask").css({ "display": "block" });
+        $(".zhezhao").fadeIn(500);
+        center($(".layer"));
+            //载入弹出窗口上的按钮事件
+            checkEvent($(this).parent(), $(".btnSure"), $(".btnCancel"));
+        })
+})
+
+function showxy() {
+    $(".box-mask").css({ "display": "block" });
+    $(".zhezhao").fadeIn(500);
+    center($(".layer"));
+        //载入弹出窗口上的按钮事件
+        checkEvent($(this).parent(), $(".btnSure"), $(".btnCancel"));
+    }
+
+    function getmobilecode() {
+        var mobile = $("#Mobile").val();
+        if (mobile == "") {
+            alert("请输入手机号码！");
+            return false;
+        } else if ($("#validMobile").hasClass("wrong")) {
+          alert($("#validMobile").text());
+        } else {
+          sendcode();
+        }
+        /*
+        if ($("#CaptchaValue").val() == "") {
+            alert("请输入图形验证码！");
+            return false;
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/User/checkCaptcha",
+                data: "captchavalue=" + $("#CaptchaValue").val(),
+                success: function (msg) {
+                    if (msg.msg != "") {
+                        alert(msg.msg);
+                    } else {
+                        sendcode();
+                    }
+                }
+            });
+        }
+        */
+    }
+
+function sendcode() {
+        $.ajax({
+            cache: false,
+            dataType: "json",
+            data: { 'tel' : $("#Mobile").val() } ,
+            type: 'POST',
+            url: "/send_check_code",
+            success: function (e) {
+                if(e.status == "ok"){
+                    alert("验证码已发送！");
+
+                    var date = 120;
+                    var timer1 = setInterval(function () {
+                        $("#getcode").attr({ "disabled": "disabled" });
+                        $("#getcode").val(date + "秒重新获取！");
+                        date--;
+                        if (date == 0) {
+                            $("#getcode").removeAttr("disabled");
+                            $("#getcode").val("获取验证码");
+                            clearInterval(timer1);
+                        }
+                    }, 1000);
+                }
+                else
+                {
+                    alert("发送失败！");
+
+                }
+            },
+            error: function (e) {
+                alert(e);
+            }
+        });
+}
+
+$(function () {
+    Ajax("/addresses/provinces", "", "Province");
+
+    $("#Province").change(function () {
+        var val = $("#Province").find('option:selected').attr('data-id');
+        if (val != '') {
+          Ajax("/addresses/cities", "provinceID=" + val, "City");
+        }
+    });
+
+    $("#City").change(function () {
+        var val = $("#City").find('option:selected').attr('data-id');
+        if (val != '') {
+          Ajax("/addresses/counties", "cityID=" + val, "County");
+        }
+    });
+    $("#County").change(function () {
+        var val = $("#County").find('option:selected').attr('data-id');
+        $("#CountyID").val(val);
+    });
+});
+
+function Ajax(url, json, node) {
+   $.ajax({
+      type: "GET",
+      url: url,
+      dataType: "json",
+      data: json,
+        success: function (mmsg) {
+          var msg = mmsg.data;
+          var Arr = new Array();
+          Arr.push("<option value=''></option>");
+          for (var i = 0; i < msg.length; i++) {
+            Arr.push("<option value='" + msg[i].name + "' data-id='" + msg[i].id + "'>" + msg[i].name + "</option>");
+          }
+          $("#" + node).html(Arr.join(""));
+        }
+    });
+}
+
+
+</script>

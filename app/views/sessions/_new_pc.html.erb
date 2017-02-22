@@ -1,0 +1,60 @@
+<%= javascript_include_tag 'pc/index'%>
+<%= stylesheet_link_tag  'pc/login'%>
+<script type="text/javascript">
+    //全登陆不允许iframe嵌入
+    if (window.top !== window.self) { window.top.location = window.location; }
+</script>
+
+<div class="login_box clearfix">
+    <div class="phone left">
+        <% if @advertise_pics.count > 0 %>
+            <img width="380" height="300" src="<%= @advertise_pics.first.url %>" alt="图片">
+        <% end %>
+    </div>
+    <div class="right">
+        <%= form_tag '/sign_in', method: 'post', id: 'form' do %>
+            <div class="login_input_2">
+                <ul>
+                    <li class="text">手机号码：</li>
+                    <li class="input clearfix">
+                        <input name="session[tel]" type="text" placeholder="手机号码" value="<%= flash["tel"]%>">
+                    </li>
+                    <li class="text clearfix">
+                        <span class="left">登录密码：</span>
+                    </li>
+                    <li class="input clearfix">
+                        <input name="session[password]" type="password">
+                    </li>
+                    <li class="wrong"><%= flash[:error]%></li>
+                    <li class="btn">
+                        <input onclick="return verification();" type="submit" value="登&nbsp;录">
+                    </li>
+                    <li class="text txt_2 clearfix">
+                        <a href="/passwords/new" style="padding:6px 0 26px 0;" class="left">忘记密码？</a>
+                        <a href="/sign_up" style="padding:6px 0 26px 0;" class="right">免费注册</a>
+                    </li>
+                </ul>
+            </div>
+        <% end %>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function verification() {
+        var arr = $(".login_input_2 input:visible").serializeArray();
+        var json = {};
+        for (var i = 0; i < arr.length; i++) {
+            json[arr[i].name] = arr[i].value;
+        }
+        if (!json["session[tel]"]) {
+            $(".wrong").html("请输入手机号码").focus();
+            return false;
+        }
+        if (!json["session[password]"]) {
+            $(".wrong").html("请输入密码").focus();
+            return false;
+        }
+
+        $("form").submit();
+    }
+</script>

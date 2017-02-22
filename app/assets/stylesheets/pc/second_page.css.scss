@@ -1,0 +1,283 @@
+// 产品二级页面
+.bg-div {
+    background-color: #d6d7dc;
+    min-width: 1080px;
+}
+
+.second-topimg {
+    img {
+        border: none;
+        width: 100%;
+    }
+}
+
+.second-page {
+    .second-page-title {
+        text-align: center;
+        color: #F8E71C;
+        padding: 40px 0;
+        h2 {
+            font-size: 46px;
+        }
+        span {
+            position: relative;
+            &:before,
+            &:after {
+                content: "";
+                position: absolute;
+                top: 0;
+                width: 56px;
+                height: 56px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: auto 90%;
+            }
+            &:before {
+                left: -56px;
+                background-image: image-url('index/quan01.png');
+            }
+            &:after {
+                right: -56px;
+                background-image: image-url('index/quan02.png');
+            }
+        }
+    }
+    img {
+        width: 100%;
+        height: 100%;
+    }
+    .second-img {
+        width: 238px;
+        height: 238px;
+        padding: 10px;
+    }
+    .product-cont {
+        margin-right: -20px;
+        li {
+            float: left;
+            width: 530px;
+            height: 260px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            margin-right: 20px;
+            position: relative;
+        }
+        .pro-mask{
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #404040;
+            opacity: 0.2;
+            filter: alpha(opacity=20);
+            // background-color: rgba(40,40,40,0.2);
+        }
+        .mask-text{
+            display: none;
+        }
+        .no-pro{
+            .second-text{
+                z-index: 3;
+            }
+            .second-price,
+            .second-speci{
+                color: #909090;
+            }
+
+            input,
+            label{
+                color: #909090;
+                border-color: #909090;
+                pointer-events:none;
+            }
+            .addcar{
+                background-color: #909090;
+                pointer-events:none;
+                cursor:default ；
+            }
+            .pro-mask{
+                display: block;
+            }
+            .mask-text{
+                display: block;
+                width: 130px;
+                height: 130px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 130px;
+                font-size: 24px;
+                color: #fff;
+                font-weight: bold;
+                background-color: rgba(40,40,40,0.4);
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                margin-left: -65px;
+                margin-top: -65px;
+                z-index: 4;
+            }
+        }
+    }
+    .second-text {
+        padding: 30px 0 0 30px;
+        width: 204px;
+        height: 230px;
+        position: relative;
+        background-color: #FFF7CA;
+        i {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            border-color: #FFF7CA transparent transparent;
+            border-style: solid dashed dashed;
+            border-width: 260px 100px 0 0;
+            right: -100px;
+            top: 0;
+        }
+    }
+    p {
+        line-height: 28px;
+    }
+    .second-item-title {
+        font-size: 20px;
+        color: #5E5E5E;
+        height: 66px;
+    }
+    .second-speci {
+        height: 28px;
+        line-height: 28px;
+        font-size: 14px;
+        color: #8E8E8E;
+    }
+    .second-price {
+        font-size: 18px;
+        color: #E62E46;
+    }
+    .old-price {
+        font-size: 14px;
+        color: #909090;
+        text-decoration: line-through;
+    }
+    label {
+        display: inline-block;
+        overflow: hidden;
+        font-size: 0;
+        height: 32px;
+        width: 158px;
+        border: 1px solid #E62E46;
+        border-radius: 4px;
+        line-height: 28px;
+        margin-bottom: 12px;
+        input {
+            font-size: 20px;
+            height: 30px;
+            border: none;
+        }
+        .pro_less,
+        .pro_add {
+            width: 42px;
+            background-color: #fff;
+            height: 100%;
+        }
+        .pro_less {
+            border-right: 1px solid #E62E46;
+        }
+        .pro_add {
+            border-left: 1px solid #E62E46;
+        }
+        .pro_num {
+            width: 74px;
+            text-align: center;
+            color: #E62E46
+        }
+    }
+    .addcar {
+        display: inline-block;
+        width: 154px;
+        height: 44px;
+        line-height: 44px;
+        background-color: #E62E46;
+        font-size: 18px;
+        color: #fff;
+        span {
+            padding-left: 50px;
+            background: image-url('index/big-cart.png') 16px center no-repeat;
+            background-size: 21px 21px;
+        }
+        &:hover {
+            color: #fff;
+        }
+    }
+}
+
+.four {
+    .product-cont li {
+        width: 258px;
+        padding-top: 16px;
+        height: 350px;
+        margin-right: 16px;
+    }
+    .second-img {
+        display: block;
+        margin: 0 auto;
+        float: none;
+        padding: 0;
+        width: 190px;
+        height: 190px;
+    }
+    .second-text {
+        padding: 0 16px 16px;
+        // width: 100%;
+        width: 226px;
+        height: 144px;
+        background-color: #fff;
+        i {
+            display: none;
+        }
+    }
+    .second-item-title {
+        font-size: 18px;
+        height: 50px;
+    }
+    label {
+        width: 108px;
+        height: 36px;
+        line-height: 36px;
+        .pro_less,
+        .pro_add {
+            width: 30px;
+            background-color: #fff;
+            height: 100%;
+        }
+        .pro_num {
+            width: 44px;
+        }
+    }
+    .second-price {
+        font-size: 16px;
+    }
+    .addcar {
+        width: 108px;
+        height: 36px;
+        line-height: 36px;
+        float: right;
+        font-size: 16px;
+        text-align: center;
+        margin-top: -54px;
+        span {
+            padding: 0;
+            background: none;
+        }
+    }
+    .mask-text{
+        top: 30px !important;
+        margin-top: 0 !important;
+    }
+}
+
+.warp {
+    background-color: #fff;
+}

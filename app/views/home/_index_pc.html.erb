@@ -1,0 +1,290 @@
+<%= stylesheet_link_tag  'pc/index'%>
+
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/com_show'%>
+<%= javascript_include_tag 'pc/layer'%>
+<%= javascript_include_tag 'pc/common'%>
+
+    <style type="text/css">
+        .nav_category_section{ display: none;}
+    </style>
+   <div class="main_nav">
+      <div class="main_nav_top">
+          <div class="w1080 clearfix nav_sub">
+            <%= render 'shared/navbar' %>
+          </div>
+      </div>
+    </div>
+    <!-- 导航 end -->
+    <div class="content w1080">
+
+      <% @floors.each do |floor| %>
+        <% if floor.LayoutType == 6 %>
+          <div id="<%= floor.ID %>" class="w1080 clearfix">
+            <div class="content_top clearfix">
+              <div class="banner">
+                <div class="banner_box">
+                  <ul class="banner_img">
+                    <% floor.floor_items.each_with_index do |item,index| %>
+                      <li style=" display:none; background-image:url(<%= item.cover_url%>);"><a href="<%= item.recommend_link || item.LinkUrl %>" target="_blank" style="display:block;width:100%;height:100%;"></a></li>
+                    <% end %>
+                  </ul>
+                  <ul class="banner_bt" style="margin-left: -8px;">
+                    <% floor.floor_items.each do |item| %>
+                      <li><a href="javascript:;">●</a></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div><!-- 顶部轮播 end -->
+            </div>
+          </div>
+        <% elsif floor.LayoutType == 8 %>
+          <!-- 图片导航 -->
+          <div id="<%= floor.ID %>" class="img-href clearfix" data-count="<%= floor.Squareworkshop %>">
+            <div class="img-box">
+              <% floor.floor_items.each do |item| %>
+                <a href="<%= item.recommend_link || item.LinkUrl %>"><img src="<%= item.cover_url %>"></a>
+              <% end %>
+            </div>
+          </div>
+          <!-- 图片导航end -->
+        <% elsif floor.LayoutType == 7 %>
+          <!-- 每日爆品 秒杀 -->
+
+          <% item = floor.floor_item %>
+          <% if item %>
+            <div id="<%= floor.ID %>" class="pc-seckill">
+              <% product = floor.floor_item.products(@depot_ids).where("ActivityBeginTime > ?", Time.now).order("ActivityBeginTime").first %>
+              <h2>
+                每日爆品<strong>每日4场 限时秒杀</strong>
+                <% if product %>
+                <span class="seckill-time" data-time="<%= product.ActivityBeginTime.strftime('%Y-%m-%d %H:%M:%S') %>">距下场开始还剩<i class="seckill-hour">00</i>:<i class="seckill-minute">00</i>:<i class="second">00</i></span>
+                <% end %>
+              </h2>
+              <div class="seckill-cont">
+                <div class="seckill-posi-box">
+                  <a href="javascript:;" class="prev"></a>
+                  <a href="javascript:;" class="next"></a>
+                  <ul class="seckill-cart animate-cart clearfix">
+                    <% floor.floor_item.products(@depot_ids).where("ActivityBeginTime > ?", Date.today).order("ActivityBeginTime").each do |product| %>
+                      <% buy_status = product.ActivityBeginTime > Time.now ? "reday-buy" : (product.CurrentActivityAmount.to_i < product.MaxActivityAmount.to_i && product.ActivityEndTime > Time.now ? "now-buy" : "no-buy") %>
+                      <li class="seckill-item cart-item <%= buy_status %>">
+                      <span class="seckill-tip"><%= '明日' if product.ActivityBeginTime > Date.tomorrow %><%= buy_status == "now-buy" ? "正在疯抢" : "#{product.ActivityBeginTime.hour}点开抢" %><i></i></span>
+                        <a class="seckill-img cart-img">
+                          <img src="<%= product.cover_url('v220') %>">
+                        </a>
+                        <div class="seckill-cont cart-cont">
+                          <h3 class="seckill-title cart-title"><%= product.Name %></h3>
+                          <p><span class="seckill-price cart-price">¥<%= product.ProductPrice %></span>/<%= product.Unit %></p>
+                        </div>
+                        <div class="seckill-buy cart-buy ">
+                          <% if product.ActivityBeginTime > Time.now %>
+                            <a href="javascript:rushBuy('<%= product.ID %>');" class="seckill-num"><i>准备开</i><em>抢</em></a>
+                          <% elsif product.CurrentActivityAmount.to_i < product.MaxActivityAmount.to_i and product.ActivityEndTime > Time.now %>
+                            <% percent = ((product.MaxActivityAmount.to_i - product.CurrentActivityAmount.to_i).fdiv(product.MaxActivityAmount.to_i)*100).round(0) %>
+                            <a href="javascript:rushBuy('<%= product.ID %>');" class="seckill-num"><i>抢</i><em><%= percent %>%</em></a>
+                          <% else %>
+                            <a href="javascript:rushBuy('<%= product.ID %>');" class="seckill-num"><i>抢</i><em>完了</em></a>
+                          <% end %>
+                        </div>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+              <div class="seckill-time-icon time01">
+              </div>
+            </div>
+          <% end %>
+          <!-- 爆品秒杀 end -->
+        <% elsif floor.LayoutType == 9 %>
+          <!-- 热销版块 -->
+          <% item = floor.floor_item %>
+          <% if item %>
+          <div id="<%= floor.ID %>" class="hot-sell theme-color" data-color="<%= item.ThemeColor %>">
+            <div class="sell-title clearfix">
+              <% if floor.IsShowName %>
+              <h2><%= floor.ShowName %></h2>
+              <% end %>
+              <div>
+                <% item.product_brands.first(4).each do |brand| %>
+                  <a href="/products?q=<%= URI.encode brand.BrandName %>"><%= brand.BrandName %></a>
+                <% end %>
+              </div>
+            </div>
+            <div class="sell-cont">
+              <dl class="animate-cart clearfix">
+                <dt>
+                  <a href="<%= item.recommend_link || item.LinkUrl %>"><img src="<%= item.cover_url %>"></a>
+                  <div class="cont-nav">
+                    <div class="nav-box">
+                      <% item.product_groups.first(8).each do |group| %>
+                        <a href="/products?sid=<%= group.ID %>"><%= group.Name.gsub('/',' ') %></a>
+                      <% end %>
+                    </div>
+                  </div>
+                </dt>
+                <% item.products(@depot_ids).first(7).each do |product| %>
+                <dd class="sell-item cart-item">
+                  <a href="/products/<%= product.ID %>" class="sell-img cart-img">
+                    <img src="<%= product.cover_url('v220')%>"  alt="图片"/>
+                  </a>
+                  <div class="sell-text cart-cont">
+                  <h5 class="sell-item-title cart-title"><%= product.Name %></h5>
+                    <p><span class="sell-price cart-price">¥<%= product.ProductPrice %></span>/<%= product.Unit %></p>
+                  </div>
+                  <div class="sell-buy cart-buy">
+                    <span class="open">进</span>
+                    <a href="javascript:;" onclick="Cart('<%= product.id %>',this)" class="add_new addcar"></a>
+                    <label class="i_box sell-buy-num  cart-buy-num">
+                      <input class="pro_less J_minus" type="button" value="-">
+                      <input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"
+                      onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+                      <input class=" pro_add J_add" type="button" value="+">
+                    </label>
+                  </div>
+                </dd>
+                <% end %>
+              </dl>
+            </div>
+          </div>
+          <% end %>
+          <!-- 热销end -->
+        <% elsif floor.LayoutType == 12 %>
+          <!-- 猜你喜欢 -->
+          <div id="<%= floor.ID %>" class="hot-sell theme-color">
+            <% if floor.IsShowName %>
+            <div class="sell-title clearfix">
+              <h2><%= floor.ShowName %></h2>
+            </div>
+            <% end %>
+            <div class="sell-cont">
+              <dl class="animate-cart clearfix">
+                <% item_products = (floor.floor_item and floor.floor_item.products(@depot_ids).first(10)) %>
+                <% item_products.each do |product| %>
+                <dd class="sell-item cart-item">
+                  <a href="/products/<%= product.ID %>" class="sell-img cart-img">
+                    <img src="<%= product.cover_url('v220')%>" alt="图片"/>
+                  </a>
+                  <div class="sell-text cart-cont">
+                    <h5 class="sell-item-title cart-title"><%= product.Name %></h5>
+                    <p><span class="sell-price cart-price">¥<%= product.ProductPrice %></span>/<%= product.Unit %></p>
+                  </div>
+                  <div class="sell-buy cart-buy">
+                    <span class="open">进</span>
+                    <a href="javascript:;" onclick="Cart('<%= product.id %>',this)" class="add_new addcar"></a>
+                    <label class="i_box sell-buy-num  cart-buy-num">
+                      <input class="pro_less J_minus" type="button" value="-">
+                      <input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"
+                      onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+                      <input class=" pro_add J_add" type="button" value="+">
+                    </label>
+                  </div>
+                </dd>
+                <% end if item_products %>
+              </dl>
+            </div>
+          </div>
+          <!-- 猜你喜欢end -->
+
+        <% elsif floor.LayoutType == 11 %>
+          <!-- 广告start -->
+          <div id="<%= floor.ID %>" class="ad-box">
+            <% floor.floor_items.each do |item| %>
+              <a href="<%= item.recommend_link || item.LinkUrl %>"><img src="<%= item.cover_url %>"></a>
+            <% end %>
+          </div>
+          <!-- 广告end -->
+        <% elsif floor.LayoutType == 10 %>
+          <!-- 品牌专区 -->
+          <div id="<%= floor.ID %>" class="hot-sell brand theme-color">
+            <% if floor.IsShowName %>
+            <div class="sell-title clearfix">
+              <h2><%= floor.ShowName %></h2>
+            </div>
+            <% end %>
+            <div class="brand-box">
+              <ul id= "brand-list" class="clearfix">
+                <% product_brands = (floor.floor_item and floor.floor_item.product_brands) %>
+                <% product_brands.each do |brand| %>
+                  <li><a href="/products?q=<%= URI.encode brand.BrandName %>"><img src="<%= brand.cover_url %>"></a></li>
+                <% end if product_brands %>
+              </ul>
+            </div>
+          </div>
+          <!-- 品牌专区end -->
+        <% end %>
+      <% end %>
+
+      <!-- 左侧楼层导航 -->
+      <div class="floor-nav side-nav">
+        <% @floors.each do |floor| %>
+          <% if floor.NeedNav %>
+            <a href="javascript:;" _id="#<%= floor.ID %>"><img src="<%= floor.cover_url %>"><span><%= floor.ShowName %></span></a>
+          <% end %>
+        <% end %>
+      </div>
+      <!-- 楼层导航end -->
+      <!-- 首次打开弹窗 -->
+<!--       <div class="first-show">
+        <div class="zhezhao">
+        </div>
+        <div class="show-content">
+          <div class="content-img">
+          </div>
+          <ul class="codeImg-box">
+            <li class="app-code">下载APP享更多优惠</li>
+            <li class="gongzhonghao-code">扫一扫关注公众号</li>
+          </ul>
+          <span class="closed"></span>
+        </div>
+      </div> -->
+      <!-- 弹窗end -->
+
+<script type="text/javascript">
+
+    $(function() {
+        $(".btnCancel,.zhezhaoyy,#close").click(function() {
+            $(".zhezhaoyy").fadeOut(500);
+            $(".layeryy").fadeOut(500);
+        });
+    });
+
+    $(function(){
+        $(".today_lowest li").hover(function(){
+          $(this).find('.bot_box').show();
+          },function(){
+          $(this).find('.bot_box').hide();
+          }
+        )
+    })
+
+    // location页选择地址
+    var showHeight = $('.show').height();
+    $('.show_2').css({"height":showHeight,"margin-top":-showHeight});
+
+
+
+    // PC端秒杀
+    function rushBuy (product_id){
+          <% if !sign_in? %>
+            IsVerify = false;
+            Login();
+          <% else %>
+          console.log("秒杀函数");
+          if (window.rushPromise && window.rushPromise.state() == "pending") return;
+          window.rushPromise = $.post( "/activity/rush_product" , {product_id: product_id},
+                                      function(o){
+                                          if(o.status == "ok"){
+                                              alert("恭喜抢购成功，请到购物车查看");
+                                          }else{
+                                              alert(o.message);
+                                          }
+                                      }
+
+                                )
+          <% end %>
+    }
+
+
+</script>

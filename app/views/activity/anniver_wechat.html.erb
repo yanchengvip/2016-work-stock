@@ -1,0 +1,36 @@
+<% content_for :head do %>
+    <% content_for :title do %>
+    进货宝周年庆，千万豪礼大放送！千家品牌齐狂欢，万家门店一起嗨！
+    <% end %>
+    <%= stylesheet_link_tag 'events/anniver_wechat', media: 'all', 'data-turbolinks-track' => true %>
+    <meta name="description" content="进货宝周年庆，千万豪礼大放送！千家品牌齐狂欢，万家门店一起嗨！" />
+    <div id='wx_pic' style='margin:0 auto;display:none;'>
+        <%= image_tag "mobile/events/anniver_wechat/300.jpg" %>
+    </div>
+<% end %>
+
+<div id="swiper-container">
+    <div class="swiper-wrapper">
+        <% for i in (1..4) %>
+            <div class="swiper-slide">
+                <%= image_tag "mobile/events/anniver_wechat/#{i}.png" %>
+                <div class="pull"><%= image_tag "mobile/events/anniver_wechat/arrow.gif" %></div>
+            </div>
+        <% end %>
+        <div class="swiper-slide" id="p5">
+            <%= image_tag "mobile/events/anniver_wechat/5.png" %>
+            <a href="https://m.jinhuobao.com.cn/sign_up" class="new-reg"></a>
+            <a href="http://m.to8to.com/yezhu/zxbjcs-2016072100?to8to_from=5_14_1" class="btn to8to"></a>
+            <a href="https://gsactivity.diditaxi.com.cn/gulfstream/activity/v2/giftpackage/index?g_channel=4ec4e4701ffccffe07bdb9d27c75c9fd" class="btn didi"></a>
+            <a href="https://h5.daxia520.com/activity/SAK4Z99KAYUG743C" class="btn daxia"></a>
+            <a href="http://t.cn/Rcpx1TH" class="btn ispa"></a>
+        </div>
+    </div>
+</div>
+<% ua = (request.env["HTTP_USER_AGENT"] or "").downcase %>
+<% isInApp = ua.include?('jinhuobao') %>
+<% if isInApp %>
+    <div id="back"><a href="/"><%= image_tag "mobile/base/back.png" %></a></div>
+<% end %>
+
+<%= javascript_include_tag 'events/anniver_wechat', 'data-turbolinks-track' => true %>

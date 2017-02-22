@@ -1,0 +1,162 @@
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/tab'%>
+<%= javascript_include_tag 'pc/layer'%>
+<%= stylesheet_link_tag  'pc/account'%>
+
+<div class="my_account w990">
+  <div class="trade_t">
+    <h3>我的账户</h3>
+  </div>
+  <div class="trade_b clearfix">
+    <%= render 'subnav' %>
+    <div class="coupons integral left pro_deta1">
+      <div class="title clearfix">
+        <h3 class="left"><span>我的进货宝</span>&nbsp;>我的钱包</h3>
+        <div class="exchange right"><em></em>兑换</div>
+      </div>
+      <p class="p1 clearfix">
+        <span class="left">我的积分<i>&nbsp; <%= current_user.Integral.to_i %> &nbsp;</i></span>
+      </p>
+      <p class="p2">我的优惠券</p>
+      <p class="pro_title">
+      <span><a href="javascript:;" data-type="avaiable" class="red tab-title">可使用&nbsp;(<%=@unused_coupons.count%>)</a></span>
+      <span><a href="javascript:;" data-type="dated" class="tab-title">已过期&nbsp;(<%=@dated_coupons.count%>)</a></span>
+      <span><a href="javascript:;" data-type="used" class="tab-title">已使用&nbsp;(<%=@used_coupons.count%>)</a></span>
+      </p>
+      <div class="tab_body">
+        <div class="tab show" id="avaiable">
+          <% @unused_coupons.each do |coupon| %>
+            <div class="coupons_card">
+            <div class="clearfix">
+              <div class="card_l left">
+                <h3>优惠券</h3>
+                <span>有效期至 <%=coupon.EndDate.strftime('%Y-%m-%d')%></span>
+                <% if coupon.StartDate and coupon.StartDate > Time.now %>
+                  <span><%=coupon.StartDate.strftime('%Y-%m-%d')%>起可使用</span>
+                <% end %>
+              </div>
+              <span class="right sp_r">&yen;<%= coupon.Price %></span>
+            </div>
+            <p class="left"><%= coupon.UseMoney.to_i > 0 ? "订单满#{coupon.UseMoney}元可使用" : "下单即可使用" %></p>
+            <span class="bg_c"></span>
+          </div>
+        <% end%>
+        </div>
+        <div class="tab grey_tab" id="dated">
+          <% @dated_coupons.each do |coupon| %>
+            <div class="coupons_card">
+            <div class="clearfix">
+              <div class="card_l left">
+                <h3>优惠券</h3>
+                <span>有效期至 <%=coupon.EndDate.strftime('%Y-%m-%d')%></span>
+                <% if coupon.StartDate and coupon.StartDate > Time.now %>
+                  <span><%=coupon.StartDate.strftime('%Y-%m-%d')%>起可使用</span>
+                <% end %>
+              </div>
+              <span class="right sp_r">&yen;<%= coupon.Price %></span>
+            </div>
+            <p class="left"><%= coupon.UseMoney.to_i > 0 ? "订单满#{coupon.UseMoney}元可使用" : "下单即可使用" %></p>
+            <span class="bg_c1"></span>
+          </div>
+        <% end%>
+        </div>
+        <div class="tab grey_tab" id="used">
+          <% @used_coupons.each do |coupon| %>
+            <div class="coupons_card">
+            <div class="clearfix">
+              <div class="card_l left">
+                <h3>优惠券</h3>
+                <span>有效期至 <%=coupon.EndDate.strftime('%Y-%m-%d')%></span>
+                <% if coupon.StartDate and coupon.StartDate > Time.now %>
+                  <span><%=coupon.StartDate.strftime('%Y-%m-%d')%>起可使用</span>
+                <% end %>
+              </div>
+              <span class="right sp_r">&yen;<%= coupon.Price %></span>
+            </div>
+            <p class="left"><%= coupon.UseMoney.to_i > 0 ? "订单满#{coupon.UseMoney}元可使用" : "下单即可使用" %></p>
+            <span class="bg_c1"></span>
+          </div>
+        <% end%>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="zhezhao"></div><!-- 遮罩层 end -->
+  <div id="layer">
+    <a href="javascript:;" class="btnCancel">X</a>
+    <h4>优惠券兑换</h4>
+    <div class="number clearfix">
+      <input type="text" class="txt left" name="txt" placeholder="请输入兑换码" />
+      <em class="left cancel">X</em>
+    </div>
+    <p class="wrong"><span></span>请输入正确的兑换码！</p>
+    <input type="button" value="确定" class="button" />
+  </div>
+
+  <div class="layer_sucess">
+    <!-- <a href="javascript:;" class="btnCancel">X</a> -->
+    <h4>优惠券兑换</h4>
+    <p class="ok"><em></em>您已成功兑换优惠券</p>
+    <!-- <input type="button" value="去查看" class="look" /> -->
+  </div>
+</div>
+<script type="text/javascript">
+    $(".tab-title").click(function(e){
+      $(".tab-title").removeClass('red')
+      $(this).addClass('red')
+      var id = e.target.dataset.type;
+      $(".tab_body>.tab").removeClass('show').hide()
+      $("#"+id).addClass('show').show()
+    })
+
+   $(function() {
+        $(".exchange").click(function() {
+            $("#zhezhao").fadeIn(500);
+            $("#layer").fadeIn(500);
+        });
+
+        $(".btnCancel").click(function() {
+            $("#zhezhao").fadeOut(500);
+            $("#layer").fadeOut(500);
+        });
+
+        $('.button').click(function(){
+
+           if ($(".txt").val() == ""){
+                  alert("兑换码!");
+                  $(".txt").focus();
+                  return false;
+            }
+
+
+
+
+            delay((function(_this){
+              return function() {
+                if(_this.promise && _this.promise.state() === "pending"){
+                  return;
+                }
+                return _this.promise = $.ajax({
+                    cache: false,
+                    dataType: "json",
+                    type: 'POST',
+                    url: "/my/exchange_coupon",
+                    data:{coupon_code: $('.txt').val()},
+                    success: function (e) {
+                        if (e.status == "ok") {
+                            setTimeout(function(){
+                              window.location.reload();
+                            },3000);
+                            $('.layer_sucess').show();
+                        }
+                        else {
+                            $('.wrong').html(e.message).show();
+                        }
+                    },
+
+                 });
+              };
+            })(this));
+        });
+    });
+</script>

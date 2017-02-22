@@ -1,0 +1,67 @@
+<% content_for :head do %>
+    <%= stylesheet_link_tag  'scan_product', media: 'all', 'data-turbolinks-track' => true %>
+    <style>
+      body{
+        background-color: #f4f4f4;
+      }
+    </style>
+<% end %>
+<% content_for :header do %>
+<header class="no-search second-page-header">
+  <div class="header-left">
+    <a href="javascript:;" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">历史记录</div>
+  <div class="header-right">
+    <span class="delete-icon"></span>
+    <a href="/barcode_histories" data-method="delete" class="delete-histories hide">删除</a>
+  </div>
+</header>
+<% end %>
+<% content_for :main do %>
+<main class="second-page">
+  <% if @barcode_histories.length != 0 && @products != nil %>
+      <div id="item-box">
+        <% @products.each do |product| %>
+            <!--<div class="main-list-item" onclick="window.location.href='/products/barcode_scanner?ID=<-%= product.ID %>&FromHistories=true'" >-->
+            <div class="main-list-item" onclick="window.location.href='/products/barcode_scanner?ID=<%= product.ID %>&MoreThanOne=true&FromHistories=true'" >
+            <!--<div class="main-list-item" onclick="window.location.href='/products/barcode_scanner?ID=<-%= product.ID %>&FromHistories=true'" >-->
+            <!--<div class="main-list-item" onclick="window.location.href='/products/barcode_scanner?Code=<-%= product.Code %>'" >-->
+              <div class="img" style="width: 20%;">
+                <%= image_tag product.cover_url %>
+              </div>
+              <div class="info">
+                <div class="title">
+                  <% @name = product.Name %>
+                  <% if product.ThirdType == 0 %>
+                      <span class="text-tip">自营</span>
+                  <% else %>
+                      <span class="text-tip">第三方</span>
+                  <% end %>
+                  <span class="title-name"><%= truncate(@name,length: 38)  %></span>
+                </div>
+                <!-- <p>规格：<%= product.product_info.Specification %></p> -->
+                <div class="info-wrapper">
+                  <div class="price-line"><span class="price">￥<%= product.ProductPrice %></span>/<%= product.Unit %>
+                  </div>
+                  <p><%= time_ago_in_words(product.CreateTime) %></p>
+                </div>
+              </div>
+            </div>
+        <% end %>
+      </div>
+  <% else %>
+      <div class="no-history">
+        暂无历史记录
+      </div>
+  <% end %>
+</main>
+<% end %>
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'barcode', 'data-turbolinks-track' => true %>
+<% end %>
+<!--<-% @barcode_histories.each do |barcode_history| %>-->
+<!--用户ID:    <-= barcode_history.UserID %><br>-->
+<!--商品编码: <-%= barcode_history.Code %><br>-->
+<!--<-% end %>-->

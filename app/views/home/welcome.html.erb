@@ -1,0 +1,46 @@
+<%= javascript_include_tag 'pc/welcome'%>
+<%= stylesheet_link_tag  'pc/welcome'%>
+<%= stylesheet_link_tag  'pc/main'%>
+<div class="content">
+	<div class="welcome">
+		<div class="w990">
+			<div class="welcome_top clearfix">
+			    <p class="right">
+			       <a href="/sign_in">登录</a>
+				   <a href="/sign_up">注册</a>
+			    </p>
+			</div>
+			<div class="welcome_logo"></div>
+			<h3>一机在手 进货无忧</h3>
+			<div class="choice">
+				<input type="text" id="choice" placeholder="请点击选择您所在的地区" value="" readonly>
+			</div>
+	    <% cities = City.all_cities %>
+			<div class="show">
+				<span></span>
+				<h4 class="place"><i></i>所在城市</h4>
+				<div class="place_name clearfix">
+	        <% cities.each_with_index do |city, index| %>
+	          <a href="javascript:;" data-id="<%= index + 1 %>" class="city-choice"><%= city.CityName %></a>
+	        <% end %>
+				</div>
+			</div>
+	    <% cities.each_with_index do |city, index| %>
+	      <div class="show_2" id="show_<%= index + 1 %>" data-id="<%= index + 1 %>">
+	        <h4 class="place"><i id="back_<%= index + 1 %>"></i><%= city.CityName %></h4>
+	        <div class="region">
+	          <ul class="clearfix">
+	          <% city.depot_counties.each do |county| %>
+	            <li><a href="javascript:;" class="county-item" data-company-id="<%= city.CompanyID %>" data-depot-id="<%= county.DepotID %>"><%= county.CountyName %></a></li>
+	          <% end %>
+	          </ul>
+	        </div>
+				</div>
+	    <% end %>
+		</div>
+	</div>
+	<div class="bottom">
+		<div class="code"></div>
+		<p>联系客服 法律声明  ©2015 JINHUOBAO.COM.CN 版权所有 京ICP备15050962号-1</p>
+	</div>
+</div>

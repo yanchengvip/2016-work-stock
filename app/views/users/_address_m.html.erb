@@ -1,0 +1,107 @@
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+<% end %>
+<% content_for :header do %>
+<header class="no-search">
+    <div class="header-left">
+        <a href="javascript:;" data-href="/mine" id="back"> </a>
+  </div>
+ <div class="ordersHeader_title">我的地址</div>
+
+ <div class="header-right">
+   <a class="addresses-new" href="javascript:;">新建</a>
+ </div>
+
+</header>
+<% end %>
+<% flash.each do |type, message| %>
+  <% unless message.blank? %>
+    <div class="alert <%= twitterized_type(type) %> fade in text-center">
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
+<% content_for :main do %>
+<main class="address-list">
+    <% @addresses.each do |address| %>
+    <div class="address-box">
+      <%  store_info = address.store_information
+        status = store_info.blank? ? "no" : (case store_info.Status when 0 then 'faild' when 1 then 'ing' when 2 then 'success' end)
+      %>
+      <!--change by lzh-->
+      <!--<-%= address.store_information.Status %>-->
+      <!--<-%= address.store_information.Tel %>-->
+      <!--change by lzh-->
+      <!-- <div class="action clearfix <%= status %>">
+        商店名称<a _href="/addresses/<%= address.ID%>/store_edit" class="certified certified-<%= status %>" style=""></a>
+        <a _href="/addresses/<%= address.ID%>/edit?from_id=<%= params[:from_id]%>" class="edit">编辑</a>
+        <% if not params[:from_id].present? %>
+          <a  _href="/addresses/<%= address.ID%>" class="dele">删除</a>
+        <% end %>
+      </div>
+      <div class="contact">
+        <span class="contact-name"><%= address.ShipName%></span><span class="contact-tel"><%= address.Mobile %></span>
+      </div>
+      <div class="address">
+        <span class="contact-address"><%= "#{address.Province} #{address.City} #{address.County} " %></span>
+      </div>
+      <div class="address-detail contact-address-detail">
+        <%= address.Detailedaddress%>
+      </div> -->
+      <dl class="address-item <%= status %>" id="id-<%= address.ID%>">
+        <dt class="action">
+          <span class="shop-name"><%= "#{address.FaceName}" %></span>
+          <em class="certified certified-<%= status %>"></em>
+          <% if status == "no" %>
+            <a href="/addresses/<%= address.ID%>/store_edit">去认证</a>
+          <% end %>
+          <% if status == "faild" %>
+              <a href="/addresses/<%= address.ID%>/edit?from_id=<%= params[:from_id]%>" data-no-turbolink=true>重新认证</a>
+          <% end %>
+        </dt>
+
+        <dd style="position: relative;">
+          <span class="contact-name"><%= address.ShipName%></span>
+          <% if status == "no"%>
+          <a _href="/addresses/<%= address.ID%>/edit?from_id=<%= params[:from_id]%>" class="edit">修改</a>
+          <% end %>
+        </dd>
+
+        <dd><span class="contact-tel"><%= address.Mobile %></span></dd>
+        <dd><span class="contact-address"><%= "#{address.Province} #{address.City} #{address.County} " %>  <%= address.Detailedaddress%>  </span></dd>
+      </dl>
+
+      <% if status == "faild" %>
+        <div class="faild-reason">审核失败原因:<br><%= address.store_information.RejectReason %></div>
+      <% end %>
+
+      <% if status == "success" %>
+      <ul class="address-info">
+        <% {0 => "小卖部", 2 => "超市", 5 => "餐饮", 6 => "批零兼营", 7 => "网吧", 8 => "旅馆", 9 => "报亭", 10 => "烟酒店", 11 => "批发"}.each do |index, name| %>
+            <% if address.store_information.StoreType == index %>
+                <li  class="type<%= index %>"><%= name  %></li>
+            <% end %>
+        <% end %>
+        <% {0 => "50平米以下", 1 => "50-100平米", 2 => "100-200平米", 3 => "200平米以上"}.each do |index, name| %>
+            <% if address.store_information.StoreArea == index %>
+                <li  class="size<%= index %>"><%= name  %></li>
+            <% end %>
+        <% end %>
+        <% {0 => "写字楼周边", 1 => "医院周边", 2 => "学校周边", 3 => "交通枢纽周边", 5 => "社区周边"}.each do |index, name| %>
+            <% if address.store_information.Nearby == index %>
+                <li  class="position<%= index %>"><%= name  %></li>
+            <% end %>
+        <% end %>
+      </ul>
+      <% end %>
+    </div>
+    <% end %>
+</main>
+<% end %>
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+<script>
+  var fromID = "<%= params[:from_id]%>";
+</script>
+  <%= javascript_include_tag 'address', 'data-turbolinks-track' => true %>
+<% end %>

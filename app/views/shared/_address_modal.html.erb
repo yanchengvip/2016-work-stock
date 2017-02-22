@@ -1,0 +1,21 @@
+<!-- 地址补全弹出框 -->
+  <div class="shadow"></div><!-- 遮罩层 end -->
+  <div class="address_ok">
+      <a href="javascript:;" class="cancel"></a>
+      <%= image_tag 'index/address_bq.png'%>
+      <a href="javascript:;" class="wait">稍后再说</a>
+      <a href="/my/address" class="complete">补全信息</a>
+  </div>
+<script type="text/javascript">
+  $(function() {
+    $(".cancel,.wait").click(function() {
+        $(".shadow").fadeOut(500);
+        $(".address_ok").fadeOut(500);
+    });
+  });
+
+  function notifyAddress() {
+    $(".shadow").fadeIn(500);
+    $(".address_ok").css({ "display": "block" });
+  }
+</script>

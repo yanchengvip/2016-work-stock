@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="608px" height="28px" viewBox="0 0 608 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>title</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#404040" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="20.4540019%"></stop>
+            <stop stop-color="#FFFFFF" offset="34.0800383%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="15" y="27" width="578" height="1"></rect>
+        <mask id="mask-3" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="578" height="1" fill="white">
+            <use xlink:href="#path-2"></use>
+        </mask>
+    </defs>
+    <g id="购物车" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="领券中心－通用" transform="translate(-16.000000, -443.000000)">
+            <g id="title" transform="translate(16.000000, 443.000000)">
+                <rect id="Rectangle-317" fill="#404040" x="0" y="0" width="608" height="12" rx="6"></rect>
+                <path d="M593,28 L15,28 C15,24.6862915 11.8659932,22 8,22 L8,4 L600,4 L600,22 C596.134007,22 593,24.6862915 593,28 Z" id="Combined-Shape" fill="url(#linearGradient-1)"></path>
+                <use id="Rectangle-271" stroke="#E0E0E0" mask="url(#mask-3)" stroke-width="2" stroke-dasharray="5,3" xlink:href="#path-2"></use>
+            </g>
+        </g>
+    </g>
+</svg>

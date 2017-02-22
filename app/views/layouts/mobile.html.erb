@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+  <% if content_for?(:title) %>
+      <%= yield :title %>
+  <% else %>
+      进货宝- 一机在手，进货无忧
+  <% end %>
+  </title>
+  <%= render 'shared_mobile/head'%>
+  <%= javascript_include_tag 'common', 'data-turbolinks-track' => true %>
+  <div id='wx_pic' style='margin:0 auto;display:none;'>
+    <%= image_tag "mobile/300.png", class: "responsive-img" %>
+  </div>
+  <% if content_for?(:head) %>
+    <%= yield :head %>
+  <% end %>
+</head>
+
+<body>
+    <% if content_for?(:header) %>
+        <%= yield :header %>
+    <% end %>
+
+    <% if content_for?(:main) %>
+        <%= yield :main %>
+    <% else %>
+        <main>
+          <%= yield %>
+        </main>
+    <% end %>
+
+    <% if content_for?(:footer) %>
+      <%= yield :footer %>
+    <% else %>
+      <% if Time.now > Time.parse('2016-10-14 23:00') && Time.now < Time.parse('2016-10-21 00:00') %>
+        <%= render 'shared_mobile/nav_footer_anniver' %>
+      <% else %>
+        <%= render 'shared_mobile/nav_footer' %>
+      <% end %>
+    <% end %>
+    <%= yield :script %>
+
+    <% if Rails.env.development? %>
+        <script src="http://127.0.0.1:35729/livereload.js?ext=Chrome"></script>
+    <% end %>
+
+    <script type="text/javascript">
+        var isLimitBuy = <%= sign_in? ? current_user.IsLimitBuy : true %>;
+        <% if flash[:show_tip] %>
+          showCoupons(10)
+        <% end %>
+        // var leastOrderMoney = <%= Settings.order_money[cookies[:company_id]] or 'null' %>;
+        var isLogin = <%= sign_in? ? true : false %>;
+    </script>
+
+    <%= render 'shared_mobile/tongji'%>
+
+</body>
+
+</html>

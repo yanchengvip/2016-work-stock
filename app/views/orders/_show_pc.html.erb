@@ -1,0 +1,152 @@
+<%= stylesheet_link_tag  'pc/buy_car'%>
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/layer'%>
+<%= javascript_include_tag 'pc/screen'%>
+<%= javascript_include_tag 'pc/area'%>
+
+<% content_for :header do %>
+  <%= render 'shared/order_header' %>
+<% end %>
+
+<div class="content w990 clearfix">
+  <div class="buy_car clearfix">
+    <div class="progress right">
+      <ul class="clearfix">
+        <li class="red_left clearfix">
+        <i class="left"></i>
+        <div><span>1.查看购物车</span></div>
+        <i class="right"></i>
+        </li>
+        <li class="red_center clearfix">
+        <i class="left"></i>
+        <div><span>2.确认订单信息</span></div>
+        <i class="right"></i>
+        </li>
+
+        <!-- <li class="<%= (@order.OrderStatus >= 1 && @order.OrderStatus <= 5) || @order.OrderStatus.in?([7, 8]) ? 'red_center' : 'gray_center' %>  clearfix">
+        <i class="left"></i>
+        <div><span>3.在线支付</span></div>
+        <i class="right"></i>
+        </li> -->
+        <li class="<%= (@order.OrderStatus >= 4 && @order.OrderStatus <= 5) || @order.OrderStatus == 8 ? 'red_center' : 'gray_center' %> clearfix">
+        <i class="left"></i>
+        <div><span>4.确认收货</span></div>
+        <i class="right"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div style="clear:both;height:40px;"></div>
+  <p style="color: #e61c44;font-size:16px;font-weight:bold;margin-top:-20px;">说明：满<%= Settings.order_money[cookies[:company_id]] %>元起订，免费配送。下单后48小时送达。</p>
+  <div class="car_list">
+    <h4 style="height:15px;">
+      <font style="float: left;">确认订单信息</font>
+      <font style="float: right;">&nbsp;</font>
+    </h4>
+    <div class="car_list_top confirm clearfix">
+      <span class="p1">宝贝：</span>
+      <span class="p2">产品信息：</span>
+      <span class="p3">单价：</span>
+      <span class="p4">数量：</span>
+      <span class="p5">小计：</span>
+    </div>
+    <div class="message">
+      <table>
+        <% @order_products.each_with_index do |item| %>
+          <tr class="tr_1">
+              <td class="td_1 clearfix">
+                <div class="td_1_left clearfix">
+                  <p class="p_l">
+                  <%= image_tag item.product.cover_url, width: "105", height: "105"%>
+                  </p>
+                </div>
+                <div class="td_1_right">
+                  <p><%= item.product.Name%></p>
+                </div>
+              </td>
+              <td width="130">
+                <%= item.product.Specification%>
+              </td>
+              <td width="150">&yen;<%= item.Price%></td>
+              <td width="114" class="td_3 clearfix">
+                <%= item.Quantity %><br/>
+                <% if !item.is_enough? %>
+                  "库存不足"
+                <% end %>
+              </td>
+              <td width="128">
+                <i>&yen;&nbsp;
+                  <font class="proprice">
+                    <%= item.Quantity * item.Price%>
+                  </font>
+                </i>
+              </td>
+            </tr>
+            <% if item.product.is_group_product? %>
+            <tr class="tr_2">
+              <td class="td_zh" colspan="12">
+                  <div class="lunbo">
+                      <ul class="lunbo-box clearfix">
+                        <% item.product.group_products.includes(:sub_product).each do |g_product| %>
+                          <% sub_product = g_product.sub_product %>
+                          <li class="clearfix">
+                              <p class="left">
+                                <a href="" title="" >
+                                  <%= image_tag sub_product.cover_url('v150'), width: "105", height: "105"%>
+                                </a>
+                              </p>
+                              <div class="left text">
+                                <span class="sp1"><%= sub_product.Name%></span>
+                                <span><%= sub_product.Specification %></span>
+                                <span>￥<%= sub_product.ProductPrice %>/<%= sub_product.Unit %></span>
+                                <span>数量：<%= g_product.Number %></span>
+                              </div>
+                          </li>
+                        <% end %>
+                      </ul>
+                      <a href="javascript:;" class="lft-btn"></a>
+                      <a href="javascript:;" class="rgt-btn"></a>
+                  </div>
+                  <div class="sanj"></div>
+              </td>
+            </tr>
+            <% end %>
+          <% end %>
+          </table>
+        </div>
+        <div class="car_list_bottom express clearfix">
+          <div class="illustrate left">
+            <span>给卖家留言：</span>
+            <span><%= @order.Message == "" ? "无":@order.Message%></span>
+          </div>
+        </div>
+        <div class="invoice left">
+          <p><span class="nm">是否要发票：</span><%= @order.IsHaveInvoice == true ? "是":"否" %></p>
+          <p><span class="nm">&nbsp;&nbsp;&nbsp;发票抬头：</span><%= @order.InvoiceTitle == "" ? "无":@order.InvoiceTitle %></p>
+        </div>
+      </div>
+      <div class="order_information right ">
+        <div class="information clearfix">
+          <p><span class="nm">实付款：</span><span><font style="color:red;font-size:18px;" id="totalprice">&yen;<%= number_to_currency(@order.Money, unit: "")  %></font> 元(订单满<%= Settings.order_money[cookies[:company_id]] %>元起送)</span></p>
+          <p class="p2 clearfix"><span class="nm left">寄送至：</span><font id="address" class="left" style="width:220px;"><%= @order.Address%></font></p>
+          <p><span class="nm">收货人：</span><font id="recipient"><%= @order.ShipName%></font></p>
+          <p><span class="nm">联系电话:</span><font id="tel"><%= @order.ShipTel%></font></p>
+            </div>
+            <% if @status && @order.PayStatus == 0 %>
+                <input type="button" value="去付款" onclick="javascript:window.location.href='/orders/<%= @order.OrderCode%>/payment'"/>
+            <% elsif @order.PayStatus == 1 %>
+              <input style="width: 200px;" type="button" value="返回" onclick="javascript:window.location.href='/my/orders'" />
+            <% else %>
+                <input style="width: 200px;" type="button" value="返回首页" onclick="javascript:window.location.href='/'" />
+                <% if @message.present? %>
+                <script type="text/javascript">
+                  alert("<%= @message%>");
+                </script>
+                <% end %>
+            <% end %>
+      </div>
+    </div>
+
+
+  </div>
+</div>

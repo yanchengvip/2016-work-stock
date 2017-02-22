@@ -1,0 +1,298 @@
+@import "variable";
+.rush-header,
+.page-header {
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+        max-height: none;
+    }
+}
+
+.rush-title {
+    background-image: image-url("mobile/activity/rush_title.png");
+    background-repeat: no-repeat;
+    background-position: 0 .5rem;
+    background-size: 100% auto;
+    height: 3.5rem;
+    font-family: 'Abel', sans-serif;
+    padding: .8rem 0 .3rem 7.5rem;
+    .num,
+    .colon {
+        display: inline-block;
+        background-color: #f18e40;
+        font-size: 1.6rem;
+        width: 2.2rem;
+        height: 2.4rem;
+        line-height: 2.4rem;
+        border-radius: .25rem;
+        text-align: center;
+    }
+    .colon {
+        width: 1.5rem;
+        background: none;
+    }
+}
+
+.rush-gap {
+    background-color: #e5e5e5;
+    height: .5rem;
+}
+
+.rush-items {
+    background-color: #e5e5e5;
+}
+
+.rush-item {
+    background-color: #fff;
+    margin-bottom: .5rem;
+    &:last-child {
+        border-bottom: .5rem solid #e5e5e5;
+        margin: 0;
+    }
+
+}
+
+.rush-instruction {
+    // border-top: .25rem solid #111;
+}
+
+.rush-item-content {
+    padding: .5rem;
+    .img {
+        width: 6.8rem;
+        height: 6.8rem;
+        border: 2px solid #cfcfcf;
+        display: block;
+        float: left;
+        img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    }
+    .info {
+        height: 6.8rem;
+        position: relative;
+        padding-left: 8rem;
+        .price {
+            position: absolute;
+            bottom: 0;
+        }
+        .price-now {
+            color: $jhb-red;
+        }
+        .price-old {
+            text-decoration: line-through;
+            color: #9d9d9d;
+        }
+    }
+}
+
+.rush-item-header {
+    padding: .7rem .5rem;
+    border-bottom: 1px solid #ccc;
+    .wrapper {
+        color: #f35d4c;
+        font-size: 1.2rem;
+        height: 1.5rem;
+        line-height: 1.5rem;
+        border-left: 3px solid #83b72f;
+        padding-left: .2rem;
+    }
+}
+.rush-button {
+    background-image: image-url("mobile/activity/rush_bg.png");
+    background-size: 100% 100%;
+}
+.rush-button,
+.rush-button-over {
+    display: block;
+    width: 6.8rem;
+    height: 2.25rem;
+    line-height: 2.25rem;
+    text-align: center;
+    color: #fff;
+    font-size: 1.1rem;
+    position: absolute;
+    right: .3rem;
+    bottom: 2rem;
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+
+.rush-status {
+    display: block;
+    position: absolute;
+    right: .3rem;
+    bottom: 0;
+    padding: .2rem 0;
+    img {
+        width: 6.8rem;
+        display: block;
+        height: auto;
+    }
+    .status-bar {
+        width: 6.8rem;
+        border-radius: .3rem;
+        background-color: #e6e6e6;
+        margin-left: 0.3rem;
+    }
+    .text,
+    .status-bar,
+    .progress {
+        display: inline-block;
+        height: 1.1rem;
+    }
+    .text {
+        line-height: 1.1rem;
+        font-size: 1rem;
+        color: #9d9d9d;
+    }
+    .progress {
+        @extend .status-bar;
+        margin: 0;
+        &.c1 {
+            background-color: #83b72f;
+        }
+        &.c2 {
+            background-color: #f99f2d;
+        }
+        &.c3 {
+            background-color: #db3838;
+        }
+        background-image: -webkit-linear-gradient(135deg,
+        rgba(255, 255, 255, .15) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, .15) 50%,
+        rgba(255, 255, 255, .15) 75%,
+        transparent 75%,
+        transparent);
+        background-image: -o-linear-gradient(135deg,
+        rgba(255, 255, 255, .15) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, .15) 50%,
+        rgba(255, 255, 255, .15) 75%,
+        transparent 75%,
+        transparent);
+        background-image: linear-gradient(135deg,
+        rgba(255, 255, 255, .15) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, .15) 50%,
+        rgba(255, 255, 255, .15) 75%,
+        transparent 75%,
+        transparent);
+        -webkit-background-size: 1.5rem 1.5rem;
+        background-size: 1.5rem 1.5rem;
+    }
+}
+
+.page-header, .rush-header {
+    &>.back {
+        position: absolute;
+        top: 1rem;
+        left: 1.2rem;
+        img {
+            max-width: 80%;
+        }
+    }
+}
+
+.activity-title {
+    .title {
+        margin: 1rem 0 1rem 10rem;
+        margin-left: 11rem;
+        width: 10rem;
+        display: inline-block;
+        font-size: 1.4rem;
+        color: #fff;
+        height: 2.8rem;
+        line-height: 2.8rem;
+        background-image: image-url("mobile/activity/title_bg.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        text-align: center;
+    }
+}
+
+.activity-items {
+    border-top: 1px solid #ccc;
+    background-color: #e5e5e5;
+}
+
+.activity-item {
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    padding: 1rem;
+    margin-bottom: .5rem;
+    .title {
+        font-size: 1rem;
+        // white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 3.2rem;
+    }
+    .img {
+        width: 6.1rem;
+        height: 6.1rem;
+        border: 1px solid #ccc;
+        display: block;
+        float: left;
+        position: relative;
+        img {
+            max-height: 100%;
+            max-width: 100%;
+        }
+    }
+    .info {
+        height: 6.1rem;
+        position: relative;
+        padding-left: 7rem;
+    }
+    .specifition {
+        color: $jhb-grey;
+    }
+    .price {
+        position: absolute;
+        bottom: 0;
+    }
+    .price-now {
+        color: $jhb-red;
+    }
+    .price-old {
+        text-decoration: line-through;
+        color: $jhb-grey;
+    }
+    .buy-button {
+        display: block;
+        width: 2.3rem;
+        position: absolute;
+        right: .3rem;
+        bottom: 0;
+        img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+    }
+}
+
+.activity-out-of-stock {
+    display: block!important;
+    height: 2rem;
+    line-height: 2rem;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    width: 6rem;
+    color: #fff;
+    font-size: 1.1rem;
+    opacity: .8;
+    background-color: #e73046;
+}

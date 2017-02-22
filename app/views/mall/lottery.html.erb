@@ -1,0 +1,83 @@
+<% content_for :title do %>红包抢不停！<% end %>
+<% content_for :header do %>
+<header class="no-search clearfix">
+  <div class="header-left">
+    <a href="javascript:goBack();" data-no-turbolink id="back">
+    </a>
+  </div>
+  <div class="ordersHeader_title">抽奖</div>
+  <% if (request.env["HTTP_USER_AGENT"] or "").downcase.include?('jinhuobao') %>
+    <div class="header-right">
+      <a href="javascript:shareToWechat(location.href, '赢大奖，红包抢不停！', undefined, window.shareCallback)">
+        <%= image_tag "mobile/base/share.svg" %>
+      </a>
+    </div>
+  <% end %>
+</header>
+<% end %>
+<% content_for :main do %>
+  <main id="lottery">
+    <div class="lottery-box">
+      <div class="wrapper">
+        <div class="row">
+          <div class="prize p1 col s4" data-index=1>
+            <%= image_tag "" %>
+          </div>
+          <div class="prize p2 col s4" data-index=2>
+            <%= image_tag "" %>
+          </div>
+          <div class="prize p3 col s4" data-index=3>
+            <%= image_tag "" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="prize p8 col s4" data-index=8>
+            <%= image_tag "" %>
+          </div>
+          <div class="prize col s4 start">
+            <%= image_tag "mobile/mall/lottery/button.png" %>
+          </div>
+          <div class="prize p4 col s4"  data-index=4>
+            <%= image_tag "" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="prize p7 col s4"  data-index=7>
+            <%= image_tag "" %>
+          </div>
+          <div class="prize p6 col s4" data-index=6>
+            <%= image_tag "" %>
+          </div>
+          <div class="prize p5 col s4" data-index=5>
+            <%= image_tag "" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="history">
+      <a href="/mall/lottery_history"><%= image_tag "mobile/mall/lottery/record.png" %></a>
+    </div>
+    <div class="points-title-through">
+      <span class="points-title-through-wrapper">
+        抽奖活动规则
+      </span>
+      <div class="line"></div>
+    </div>
+    <div id="lottery-rule">
+        <p>抽奖规则:</p>
+        <p>1、每个账户每天可抽奖一次（0：00更新）；</p>
+        <p>2、中奖后，奖品会自动添加到购物车；</p>
+        <p>3、中奖奖品只可随订单一次全部领取，不可删改，不可退换；</p>
+        <p>4、中奖奖品在购物车中保存7天，超过7天未随订单领取，自动从购物车中删除；</p>
+        <p class="main-red">5、如订单中含有中奖奖品，用户取消该订单，订单中的所有奖品随订单一起删除，不可再领。</p>
+        <p>6、本期转盘活动时间截止为：2017年1月23日；</p>
+        <p>7、禁止任何不正当手段参与活动，一经发现，活动发起人有权取消用户的获奖资格；</p>
+        <p>8、本次活动最终解释权归进货宝所有。        </p>
+    </div>
+
+  </main>
+<% end %>
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'mall/new_lottery', 'data-turbolinks-track' => true %>
+<% end %>

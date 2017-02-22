@@ -1,0 +1,23 @@
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+<% end %>
+<header class="location">
+    <div class="header-left">
+        <a href="javascript:goBack()" id="back"></a>
+    </div>
+    <div class="ordersHeader_title">抽奖记录</div>
+</header>
+
+<div id="lottery-history-items">
+<!--     <div class="lottery-history-item">
+        <span class="name">进货宝88元优惠券 测试</span><span class="created">2015-11-22 22:33</span>
+    </div> -->
+    <% @lottery_history_items.each do |lh| %>
+        <div class="lottery-history-item">
+            <span class="name"><%= lh.PrizeName%></span><span class="created"><%= lh.CreateTime.strftime("%Y-%m-%d %H:%M") %></span>
+        </div>
+    <% end %>
+</div>
+
+
+<% content_for :footer do %>&nbsp;<% end %>

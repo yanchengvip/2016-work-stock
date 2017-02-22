@@ -1,0 +1,68 @@
+<% content_for :title do %>幸运大抽奖！<% end %>
+<% content_for :header do %>
+<header class="no-search clearfix">
+  <div class="header-left">
+    <a href="/" id="back">
+    </a>
+  </div>
+  <div class="ordersHeader_title">抽奖</div>
+  <% if (request.env["HTTP_USER_AGENT"] or "").downcase.include?('jinhuobao') %>
+    <div class="header-right">
+      <a href="javascript:shareToWechat(location.href, '幸运大抽奖！')">
+        <%= image_tag "mobile/base/share.svg" %>
+      </a>
+    </div>
+  <% end %>
+</header>
+<% end %>
+<% content_for :main do %>
+  <main id="festival">
+    <div class="header">
+      <%= image_tag "mobile/events/7-20/head.png" %>
+    </div>
+    <div id="lottery-box">
+      <div id="wrapper">
+        <div class="row">
+          <div class="prize p1 col s4" data-index=1>
+            <%= image_tag "mobile/events/7-20/1.png" %>
+          </div>
+          <div class="prize p2 col s4" data-index=2>
+            <%= image_tag "mobile/events/7-20/2.png" %>
+          </div>
+          <div class="prize p3 col s4" data-index=3>
+            <%= image_tag "mobile/events/7-20/3.png" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="prize p8 col s4" data-index=8>
+            <%= image_tag "mobile/events/7-20/5.png" %>
+          </div>
+          <div class="prize col s4" id="start">
+            <%= image_tag "mobile/events/7-20/button.png" %>
+          </div>
+          <div class="prize p4 col s4"  data-index=4>
+            <%= image_tag "mobile/events/7-20/4.png" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="prize p7 col s4"  data-index=7>
+            <%= image_tag "mobile/events/7-20/7.png" %>
+          </div>
+          <div class="prize p6 col s4" data-index=6>
+            <%= image_tag "mobile/events/7-20/2.png" %>
+          </div>
+          <div class="prize p5 col s4" data-index=5>
+            <%= image_tag "mobile/events/7-20/5.png" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tip">
+      <%= image_tag "mobile/events/7-20/tip.gif" %>
+    </div>
+  </main>
+<% end %>
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'events/festival', 'data-turbolinks-track' => true %>
+<% end %>

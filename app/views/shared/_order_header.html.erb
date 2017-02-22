@@ -1,0 +1,139 @@
+<!-- <a name="top"></a> -->
+<div class="header gray_bg">
+    <div class="head_top" style="background:#e8e9e9;">
+        <div class="head_top_box clearfix">
+            <ul class="left">
+                <%= render 'shared/logon' %>
+            </ul>
+            <ul class="right">
+                <li style="margin-top:0px;" class="app_down">APP下载
+                   <i></i>
+                   <div class="code_box"></div>
+                </li>
+                <li style="margin-top:0px;">客服中心热线：010-67832728</li>
+                <li class="my_bao">
+                    <div class="my_bao_top">
+                        <a href="/my/orders" class="my_bao_a">我的进货宝<b class="url"></b></a>
+                    </div>
+                    <div class="text_box">
+                        <ul>
+                            <li><a href="/my/orders">我的订单</a></li>
+                            <li><a href="/my/favorites">我的收藏夹</a></li>
+                            <!-- <li><a href="/my/integral">我的积分</a></li> -->
+                            <li><a href="/my/coupons">我的钱包</a></li>
+                            <li><a href="/my/info">我的资料</a></li>
+                            <li><a href="/my/password">修改密码</a></li>
+                            <li><a href="/my/address">我的收货地址</a></li>
+                        </ul>
+                    </div>
+                    <div class="bor"></div>
+                </li>
+                <li class="collect">
+                    <% enshrines = sign_in? ? current_user.enshrines.includes(:product => [:product_imgs]) : [] %>
+                    <div class="collect_top">
+                        <a href="/my/favorites" class="collent_a"><i class="url btn_b"></i>收藏夹 <%= enshrines.count %> 件<b class="url"></b></a>
+                    </div>
+                    <div class="car_box">
+                        <h3>最近加入的宝贝</h3>
+                        <div class="pro_list">
+                        </div>
+                        <div class="btn">
+                            <a href="/my/favorites"><input type="button" value="查看我的收藏夹" /></a>
+                            <div class="border_02"></div>
+                        </div>
+                    </div>
+                    <div class="bord"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+ $(function () {
+    $("#search").keydown(function (event_e) {
+            if (window.event)
+                event_e = window.event;
+            var int_keycode = event_e.charCode || event_e.keyCode;
+            if (int_keycode == 13) {
+                try {
+                   window.location = '/products?q=' + encodeURI($('#search').val());
+                } finally {
+
+                }
+            }
+        });
+
+    $(".collect").mouseenter(function (event) {
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: 'Get',
+                url: "/enshrines",
+                success: function (e) {
+                    if (e.status == 'ok') {
+                        CreateListEnshrines(e.data);
+                    }
+                },
+                error: function (e) {
+                    alert(e);
+                }
+            });
+
+            event.stopPropagation();
+        });
+})
+
+   function CreateListEnshrines(data) {
+        var arr = new Array();
+        console.log(data.enshrines_list);
+        enshrines_list = data.enshrines_list
+        var countE=0;
+        for (var i = 0; i < enshrines_list.length; i++) {
+            arr.push("<div class=\"clearfix pro_class\" id=\"collect-"+enshrines_list[i].id+"\">");
+            arr.push("<a href=\"/products/" + enshrines_list[i].product_id + "\"><img width=\"55\" height=\"63\" src=\"" + enshrines_list[i].product_img + "\" alt=\"商品\">");
+            arr.push(" <span class=\"sp_t\">"+enshrines_list[i].product_name+"</span></a>");
+            arr.push(" <div class=\"price\">");
+            arr.push(" <span><i>&yen;"+enshrines_list[i].product_price+"</i></span>");
+            arr.push(" <a href=\"javascript:DCollect('"+ enshrines_list[i].id+"')\" class=\"delete\">删除</a>");
+            arr.push("</div></div>");
+            countE=countE+1;
+        }
+        $(".collent_a").empty();
+        $(".collent_a").append("<i class=\"url btn_b btn_t\"></i>收藏夹 "+countE+" 件<b class=\"url\"></b>");
+        $(".pro_list").empty();
+        $(".pro_list").html(arr.join(""));
+    }
+
+  function DCollect(id) {
+
+      $.ajax({
+          cache: false,
+          dataType: "json",
+          type: 'DELETE',
+          url: "/enshrines/"+id,
+          success: function (e) {
+
+              if (e.error_code == 'IsNotVerified') {
+                  window.location = "/user/login";
+              }
+
+              if (e.status == 'ok') {
+                  $('#collect-'+id).remove();
+              }
+          },
+          error: function (e, index) {
+              alert(e);
+          }
+      });
+  }
+
+</script>
+<div class="login_title">
+    <div class="login_top w990 clearfix">
+        <h1 class="left"><a href="/"><%= image_tag 'index/logox.png'%></a></h1>
+        <div class="wrods left">
+            <%= image_tag 'index/words.png'%>
+        </div>
+    </div>
+</div>

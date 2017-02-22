@@ -1,0 +1,44 @@
+<% content_for :title do %>
+  玩财神转盘，赢千元豪礼！
+<% end %>
+<% content_for :head do %>
+  <meta name="description" content="进货宝财神爷等您每日来战！" />
+<% end %>
+<header class="location">
+    <div class="header-left">
+        <a href="/" id="back"></a>
+    </div>
+    <div class="ordersHeader_title">抽奖</div>
+  <div class="header-right">
+        <a href="javascript:shareToWechat()" class="header-small-text">分享</a>
+  </div>
+</header>
+<div id="canvas-container">
+    <canvas id="canvas">
+        Canvas not supported, please user another browser.
+    </canvas>
+    <%= image_tag 'mobile/mall/pointer.png', id:'prize-pointer' %>
+    <a href="/mall/lottery_history" id="lottery-history">我的抽奖记录</a>
+</div>
+
+
+<div class="points-title-through">
+  <span class="points-title-through-wrapper">
+    抽奖活动规则
+  </span>
+  <div class="line"></div>
+</div>
+<div id="lottery-rule">
+<p>抽奖规则:</p>
+<p>1、每人每天可抽奖3次（0：00更新）；</p>
+<p>2、中奖后，奖品会自动发放到账户中；</p>
+<p>3、代金券仅限进货宝已开通城市使用，积分可在积分商城使用；</p>
+<p>4、本期转盘活动时间为5月4日 ~ 5月31日；</p>
+<p>5、禁止任何不正当手段参与活动，一经发现，活动发起人有权取消用户的获奖资格；</p>
+<p>6、本次活动最终解释权归进货宝所有。</p>
+
+</div>
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+    <%= javascript_include_tag 'mall/old_lottery', 'data-turbolinks-track' => true %>
+<% end %>

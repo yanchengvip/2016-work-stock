@@ -1,0 +1,228 @@
+<%= stylesheet_link_tag  'pc/buy_car'%>
+<%= stylesheet_link_tag  'pc/zhifuc'%>
+
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/layer'%>
+<%= javascript_include_tag 'pc/screen'%>
+
+    <div class="content w990 clearfix">
+        <div class="buy_car clearfix">
+            <div class="progress right">
+                <ul class="clearfix">
+                    <li class="red_left clearfix">
+                        <i class="left"></i>
+                        <div><span>1.查看购物车</span></div>
+                        <i class="right"></i>
+                    </li>
+                    <li class="red_center clearfix">
+                        <i class="left"></i>
+                        <div><span>2.确认订单信息</span></div>
+                        <i class="right"></i>
+                    </li>
+                    <!-- <li class="red_center clearfix">
+                        <i class="left"></i>
+                        <div><span>3.在线支付</span></div>
+                        <i class="right"></i>
+                    </li> -->
+                    <li class="gray_right clearfix">
+                        <i class="left"></i>
+                        <div><span>3.确认收货</span></div>
+                        <i class="right"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pay_online clearfix">
+
+
+            <div class="zf_pro">
+                <p>
+                    使用优惠券：
+                    <select id="SCoupons">
+                        <option value="" data-price=0>不使用</option>
+                         <% current_user.usable_coupons(@order.CostItem).each_with_index do |item,index| %>
+                            <% if index ==0 %>
+                              <option value="<%=item.ID%>" data-price=<%=item.Price%> selected>金额: <%=item.Price%><%= "　满#{item.UseMoney}可使用" if item.UseMoney.to_f > 0 %>　有效期至: <%=item.EndDate.strftime("%Y-%m-%d")%></option>
+                            <% else %>
+                                <option value="<%=item.ID%>" data-price=<%=item.Price%>>金额: <%=item.Price%><%= "　满#{item.UseMoney}可使用" if item.UseMoney.to_f > 0 %>　有效期至: <%=item.EndDate.strftime("%Y-%m-%d")%></option>
+                            <% end %>
+                         <% end %>
+                    </select>
+                </p>
+                <!-- <p><label><input id="integral-input" type="checkbox"/></label>
+                是否使用：当前积分<%= current_user.Integral.to_i %>，可抵扣<%= current_user.Integral.to_i.fdiv(100) %>元</p> -->
+                <p>应付金额：<span class="price-total"><%= number_to_currency(@order.Money.round(2), unit: "")  %></span></p>
+                <!-- <p>积分兑换：<input id="integral-input" type="text" onchange="Integral();" style="border:solid 1px #808080;height:25px;" name="name" value="" /></p> -->
+
+
+                <!--div class="yl_zf">
+                    <h3>在线支付:</h3>
+                    <div class="zf_way add_border">
+                        <a href="javascript:;" class="active" mode="zfb"><img src="/Content/images/buycar/zhifub.png" alt="支付宝"></a>
+                        @*<a href="javascript:;" mode="wechat"><img src="images/buycar/weix.png" alt="微信"></a>*@
+                        <a href="javascript:;" mode="cft"><img src="/Content/images/buycar/caifut.png" alt="财付通"></a>
+                    </div>
+                </div-->
+                <div class="xy_zf">
+                    <h3>货到付款:</h3>
+                    <div class="zf_way add_border">
+                        <a href="javascript:;"  class="active" mode="hdfk_xj"><%= image_tag 'buycar/xianj.png',alt:"现金支付"%></a>
+                        <a href="javascript:;" mode="hdfk_pos"><%= image_tag 'buycar/shuak.png',alt:"刷卡支付"%></a>
+                    </div>
+                </div>
+
+                <div class="order_btn right">
+
+                    <!--form target="_blank" action="/PaymentProcess/SubmitAlipay" class="form-horizontal" id="profile-form" method="post"-->
+                    <%= form_tag '/orders/pay' , method:'post',id:'profile-form' do %>
+                        <input type="hidden" id="CouponCode" name="CouponCode" value="" />
+                        <input type="hidden" id="mode" name="mode" value="hdfk_xj" />
+                        <input type="hidden" id="id" name ="id" value="<%= @order.OrderCode %>"/>
+                        <input id="use-integral" name="use_integral" type="hidden" value="0" />
+                        <input id="save" type="submit"  style="cursor:pointer" value="确认" onclick="return checkform();">
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pop">
+        <div class="yiny"></div>
+        <div class="pay">
+            <div class="pay_content">
+                <h3>是否完成支付？</h3>
+                <p>付款完成前请不要关闭此窗口。</p>
+                <p>完成付款后请根据您的情况点击下面的按钮:</p>
+                <div class="bottom">
+                    <a href="/" class="success">已完成支付</a>
+                    <a href="/my/orders" class="wrong">支付遇到问题</a>
+                </div>
+            </div>
+            <a href="javascript:;" class="del"></a>
+            <em></em>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var integralCount = <%= current_user.Integral.to_i.fdiv(100) %>;
+        var priceCount = <%= @order.Money.round(2)  %>;
+        var couponPrice = 0;
+        $(function () {
+
+            $(".del").click(function () {
+                $("#pop").hide();
+            });
+
+            if($("#SCoupons option").length > 1){
+                $("#SCoupons").get(0).selectedIndex=1;
+                $("#CouponCode").val($("#SCoupons").val());
+            }
+
+            $("#SCoupons").change(function () {
+                $("#CouponCode").val($("#SCoupons").val());
+                updatePrice();
+            });
+
+            /*
+            $("#save").click(function () {
+                var mode = $("#mode").val();
+                if (mode == '')
+                {
+                    alert('请选择付款方式');
+                    return;
+                }
+
+                var flag = false;
+
+                $.ajax({
+                    cache: false,
+                    dataType: "json",
+                    type: 'POST',
+                    url: "/orders/<%= @order.OrderCode%>/checkstock",
+                    data: {},
+                    success: function (e) {
+                        if (e.status == "error") {
+                            flag = true;
+                            alert(e.message);
+                        }
+
+                    },
+                    error: function (e) {
+                        alert(e);
+                    }
+                });
+
+
+                
+                if (flag) {
+                    return;
+                }else {
+                    if(mode.substr(0,4) == "hdfk"){
+                        $("#profile-form").attr("target","_self");
+                        $("#profile-form").submit();
+                    }else {
+                        $("#pop").show();
+                        $("#profile-form").submit();
+                    }
+                }
+                
+            });*/
+        })
+
+        function checkform()
+        {
+            Integral();
+            var mode = $("#mode").val();
+            if (mode == '')
+            {
+                alert('请选择付款方式');
+                return false;
+            }
+
+            return true;
+
+        }
+
+        /*function Integral() {
+            var inte = $('#integral-input').val();
+            if(!/^[0-9]*$/.test(inte))
+            {
+                $(node).val(0);
+                return;
+            }
+            if(inte < 0)
+            {
+                inte = 1;
+            }
+            var maxinte = <%= current_user.Integral.to_i %>;
+            if(inte > maxinte)
+            {
+                $(node).val(maxinte);
+                $("#PointPrice").val(maxinte);
+            }else
+            {
+                $("#PointPrice").val(inte);
+            }
+
+        }*/
+
+        function updatePrice(){
+            var price = window.priceCount - ($("#SCoupons option:selected").data("price") -0);
+            if ( $("#integral-input").is(':checked')) {
+                $("#use-integral").val(1);
+                price -= window.integralCount;
+            } else {
+                $("#use-integral").val(0);
+            }
+            price = Math.max(price,0);
+            $('.price-total').html(price);
+        }
+
+        $("#integral-input").change(function() {
+          updatePrice();
+        }); 
+        updatePrice();
+    </script>
+    <% if flash[:error] != nil && flash[:error] != "" %>
+        <script type="text/javascript">alert('<%= flash[:error]%>');</script>
+    <% end %>

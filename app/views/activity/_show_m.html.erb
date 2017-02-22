@@ -1,0 +1,544 @@
+<!-- 二级菜单页 -->
+<%= javascript_include_tag 'vendors/masonry.pkgd.min'%>
+<% content_for :header do %>
+    <header class="no-search clearfix second-page-header">
+      <div class="header-left">
+        <a href="javascript:goBack()" id="back"></a>
+      </div>
+      <div class="ordersHeader_title"><%= @recommend.RecommendName %></div>
+      <% if (request.env["HTTP_USER_AGENT"] or "").downcase.include?('jinhuobao') %>
+        <div class="header-right">
+          <a href="javascript:shareToWechat(location.href)">
+            <%= image_tag "mobile/base/share.svg" %>
+          </a>
+        </div>
+      <% end %>
+    </header>
+<% end %>
+<% content_for :main do %>
+    <!-- container -->
+
+  <% if @recommend.Template == 9 || @recommend.Template == 10 %>
+    <!-- 二级菜单页楼层 -->
+
+    <main class="second-page-new second-page bgcolor" style="<%= "background-color: #{@recommend.BackgroundColor};" if @recommend.BackgroundColor.present? %>"  >
+  <% else %>
+    <main class="second-page jhb-grey bgcolor" style="<%= "background-color: #{@recommend.BackgroundColor};" if @recommend.BackgroundColor.present? %>" >
+  <% end %>
+
+      <div class="top-img">
+        <%= image_tag @recommend.banners.first.try(:pic_url) %>
+      </div>
+      <% if @coupons.present? %>
+          <ul class="coupons-box clearfix three">
+            <% @coupons.each do |coupon| %>
+                <li couponId=<%= coupon.ID %>>
+                  <div class="<%= "have" if coupon.has_collect == 1 %>">
+                    <a href="javascript:;" class="link">领取</a>
+                    <h6><%= coupon.Title %></h6>
+                    <p><span class="coupon-price"><%= coupon.CouponPrice %></span>满<%= coupon.ActivityPrice.to_i %>立减</p>
+                  </div>
+                </li>
+            <% end %>
+          </ul>
+      <% end %>
+
+      <!-- Template值为9-->
+      <% if @recommend.Template ==10 %>
+        <div class="botttom-cont" style="">
+          <!-- 外层遍历-->
+          <% @activity_floors.each  do |activity_floor| %>
+              <div class="item-box">
+                <div class="item two-cont">
+                  <div class="floor-img">
+          <%= link_to image_tag(activity_floor.cover_url('v220'),:class => "lazy",:alt => "楼层图片占位"), "/activity/#{activity_floor.ProductRecommendInfoID}" %>
+                  </div>
+                </div>
+              </div>
+          <% end %>
+          <!-- 外层遍历-->
+        </div>
+      <!-- Template值为10-->
+      <% elsif @recommend.Template == 9 %>
+
+        <div class="botttom-cont" style="">
+          <!-- 顶部导航栏-->
+          <div class="m-nav-wrap">
+            <article class="m-nav-stickytabs">
+              <div class="nav-box">
+                <!-- 导航栏：遍历所有楼层 -->
+                <% count = 0 %>
+                <% @activity_floors.each_with_index do |activity_floor,index| %>
+                    <% temp = case index when 0 then "tab active"  else "tab" end %>
+                      <span class="<%= temp %>">
+                          <%= activity_floor.ShowName %>
+                      </span>
+                    <% count = index %>
+                <% end %>
+              </div>
+                <% if count > 3 %>
+                    <span class="select-btn show-btn"><i></i></span>
+                <% end %>
+            </article>
+          </div>
+          <% product_ids = @activity_floors.inject([]){|a, ac| a | ac.products.map(&:ID)} %>
+          <% @stocks = DepotProductStock.stocks_for(product_ids, session[:depot_ids]) %>
+          <!-- 外层遍历-->
+          <% @activity_floors.each do |activity_floor| %>
+              <div class="item-box">
+                <div class="item two-cont">
+                  <div class="floor-img">
+                    <img class=""  src="<%= activity_floor.cover_url('v220') %>" data-original="<%= activity_floor.cover_url('v220') %>">
+                  </div>
+                  <ul class="item-cont clearfix">
+                    <%
+                      @products = activity_floor.products.includes(:product_info, :sub_products => [:product_info])
+                      .where("Products.State = 2 and (ActivityBeginTime is null or (ActivityBeginTime <= ? and ActivityEndTime > ?))", Time.now, Time.now)
+                    %>
+                    <% count = 0 %>
+                    <% @products.each_with_index do |product,index| %>
+                        <% next if (Company.need_stock?(product.CompanyID) and (!@stocks[product.id] or @stocks[product.id].State != 2)) or (!Company.need_stock?(product.CompanyID) and product.SellState != 2) %>
+                        <!-- 各个楼层只取排序前20的商品-->
+                        <% count += 1 %>
+                        <% break if count==20 %>
+                        <li data-data="<%= product.list_attrs_json %>" id="p-<%= product.ID %>" onclick="showPopup(this)">
+                          <div class="cont-item">
+                            <div class="item-img">
+                              <img class="lazy"  data-original="<%= product.cover_url('v220') %>">
+
+                              <% if Company.need_stock?(product.CompanyID) && @stocks[product.ID].Stock + @stocks[product.ID].PreSaleQuantity <= 0 %>
+                                <span class="mask-text">补货中</span>
+                              <% end %>
+                              <% if product.CornerMark.present? %>
+                                  <i class="img-tip"><%= product.CornerMark %></i>
+                              <% end %>
+                            </div>
+                            <div class="item-text">
+                              <div class="text-top">
+                                <h3 class="text-title"><%= product.Name%></h3>
+                                <% if product.ActivityEndTime && Time.now < product.ActivityEndTime %>
+                                <div class="activity-countdown">剩<%= (product.ActivityEndTime - Time.now).fdiv(3600*24).ceil %>天</div>
+                                <% end %>
+                              </div>
+                              <div class="text-bottom-one">
+                                <p class="price">
+                                  <strong class="red-text">
+                                    <%= product.ProductPrice.round(2) %>
+                                    <i>元/<%= product.Unit%></i>
+                                  </strong>
+                                  <% if product.MinBuyCount.to_i > 1 %>
+                                      <span class="min-buy"><%= product.MinBuyCount %><%= product.Unit%>起订</span>
+                                  <% end %>
+                                </p>
+                                <div class="item-console <%= 'show-console' if product.cart_for(current_user) > 0 %>">
+                                  <a href="javascript:;" onclick="setAmount.add('<%= product.ID %>')" class="add-item">＋</a>
+                                  <div class="item-num" data-min-buycount="<%= product.MinBuyCount || 1 %>">
+                                    <input id="<%= product.ID %>" class="number" data-id="<%= product.ID %>" type="num" value="<%= product.cart_for(current_user) %>" num="<%= product.cart_for(current_user) %>" disabled>
+                                  </div>
+                                  <a href="javascript:;" onclick="setAmount.reduce('<%= product.ID %>')" class="remove-item">－</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                    <% end %>
+                    <!-- 内层遍历-->
+                  </ul>
+                </div>
+              </div>
+          <% end %>
+          <!-- 外层遍历-->
+        </div>
+        <!-- 下拉导航栏-->
+        <div class="shadow-nav hidden">
+          <div class="tit">
+            切换楼层
+            <span class="select-btn hidden-btn"><i></i></span>
+          </div>
+          <ul class="floors clearfix">
+            <% @activity_floors.each do |activity_floor| %>
+                <li>
+                  <%= activity_floor.ShowName %>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+
+        <script type="text/javascript">
+            // 限制标题字数
+            $(".one-cont .text-title").each(function(){
+                var htmlStr = $(this).html();
+                if(htmlStr.length > 48){
+                    $(this).html(htmlStr.slice(0,46) + "...")
+                }
+            })
+            $(".two-cont .text-title,.one-cont-big .text-title").each(function(){
+                var htmlStr = $(this).html();
+                if(htmlStr.length > 26){
+                    $(this).html(htmlStr.slice(0,24) + "...")
+                }
+            })
+            // 吸顶
+            $navBar = $('.m-nav-wrap')[0];
+            headerTop = parseInt($('header').css("height"));
+            navBarTop = $navBar.offsetTop
+            flag = true
+            $(window).scroll(function(){
+                scrollTop = $(document.body).scrollTop();
+                if(navBarTop - headerTop <= scrollTop){
+                    $(".m-nav-stickytabs").css({"position":"fixed","top":"4.4rem"})
+                }else{
+                    $(".m-nav-stickytabs").css({"position":"relative","top":"0"})
+                }
+            })
+            // 菜单显示隐藏
+            var mo=function(e){e.preventDefault();};
+            $(".select-btn").click(function(){
+                $(".shadow-nav").toggleClass("hidden");
+            })
+            $(".show-btn").click(function(){
+                $("html,body").css({"overflow":"hidden"})
+                $(document).on("touchmove",mo)
+                if( $(".m-nav-stickytabs").css("position") == "relative" ){
+                    $("html,body").animate({"scrollTop":navBarTop - headerTop},300);
+                }
+            })
+
+            $(".hidden-btn").click(function(){
+                $("html,body").css({"overflow":"auto"})
+                $(document).unbind("touchmove",mo)
+            })
+
+            // 选项自动滚动
+            function auto(){
+                $(".nav-box").scrollLeft(0);
+                var left = $(".nav-box .active").offset().left - $(document.body).width()/2;
+                $(".nav-box").scrollLeft(left);
+            }
+            var $item = $(".item")
+            var navHeight = $(".nav-box").height() * 2;
+            var timer = 0;
+            $(window).scroll(function(){
+                var scrollTop = $(document.body).scrollTop();
+                $(".nav-box .tab").each(function(){
+                    var index = $(this).index()
+                    if( scrollTop + navHeight + 10 >= $item.eq(index).offset().top){
+                        $(this).addClass("active").siblings().removeClass("active");
+                        $(".floors li").eq(index).addClass("active").siblings().removeClass("active");
+                    }
+                })
+                if($(".nav-box").length != 0){
+                  clearTimeout(timer);
+                  timer = setTimeout(function(){
+                      auto();
+                  },300)
+                }
+
+            })
+            // 切换
+            var height = $(document.body).height()
+            $(".nav-box .tab").click(function(){
+                $(this).addClass("active").siblings().removeClass("active");
+                var index = $(this).index();
+                $(".floors li").eq(index).addClass("active").siblings().removeClass("active");
+                var targetTop = $(".item").eq(index).offset().top - navHeight;
+                $(document.body).scrollTop(targetTop)
+            })
+            $(".floors li").click(function(){
+                $(this).addClass("active").siblings().removeClass("active");
+                var index = $(this).index();
+                $(".nav-box .tab").eq(index).addClass("active").siblings().removeClass("active");
+                var targetTop = $(".item").eq(index).offset().top - navHeight;
+                $(document.body).scrollTop(targetTop)
+                $(".shadow-nav").addClass("hidden");
+                $("html,body").css({"overflow":"auto"})
+                $(document).unbind("touchmove",mo);
+                auto();
+            })
+
+
+
+            // 图片懒加载
+
+            $(function() {
+                $("img.lazy").lazyload({
+                    // placeholder : "images/grey.gif",
+                    threshold : 200,
+                    effect : "fadeIn"
+                });
+            });
+
+        </script>
+      <% else %>
+      <!-- Template默认-->
+      <% temp = case @recommend.Template when 1 then "two-cont" when 2 then "one-cont" when 3 then "one-cont-big" else "one-cont" end %>
+      <div class="botttom-cont <%= temp %>" style="<%= "background-color: #{@recommend.BackgroundColor};" if @recommend.BackgroundColor.present? %>">
+        <div class="cont">
+          <ul class="left-cont clearfix" id="grid">
+            <li class="small-img grid-item" ></li>
+            <% @products.each do |product| %>
+                <% next if (Company.need_stock?(product.CompanyID) and (!@stocks[product.id] or @stocks[product.id].State != 2)) or (!Company.need_stock?(product.CompanyID) and product.SellState != 2) %>
+                <li class="grid-item" data-data="<%= product.list_attrs_json %>" id="p-<%= product.ID %>" onclick="showPopup(this)">
+                  <div class="cont-item">
+                    <div class="item-img">
+                      <img src="<%= product.cover_url('v220') %>">
+                      <% if Company.need_stock?(product.CompanyID) and @stocks[product.ID].Stock + @stocks[product.ID].PreSaleQuantity <= 0 %>
+                          <span class="mask-text">补货中</span>
+                      <% end %>
+                      <% if product.CornerMark.present? %>
+                          <i class="img-tip"><%= product.CornerMark %></i>
+                      <% end %>
+                    </div>
+                    <div class="item-text">
+                      <div class="text-top">
+                        <h3 class="text-title"><%= product.Name%></h3>
+                        <% if product.ActivityEndTime && Time.now < product.ActivityEndTime %>
+                        <div class="activity-countdown">剩<%= (product.ActivityEndTime - Time.now).fdiv(3600*24).ceil %>天</div>
+                        <% end %>
+                      </div>
+                      <% if @recommend.Template != 3 %>
+                          <div class="text-bottom-one">
+                            <p class="price">
+                              <strong class="red-text">
+                                <%= product.ProductPrice.round(2) %>
+                                <i>元/<%= product.Unit%></i>
+                              </strong>
+                              <% if product.MinBuyCount.to_i > 1 %>
+                                  <span class="min-buy"><%= product.MinBuyCount %><%= product.Unit%>起订</span>
+                              <% end %>
+                            </p>
+                            <div class="item-console <%= 'show-console' if product.cart_for(current_user) > 0 %>">
+                              <a href="javascript:;" onclick="setAmount.add('<%= product.ID %>')" class="add-item">＋</a>
+                              <div class="item-num" data-min-buycount="<%= product.MinBuyCount || 1 %>">
+                                <input id="<%= product.ID %>" class="number" data-id="<%= product.ID %>" type="num" value="<%= product.cart_for(current_user) %>" num="<%= product.cart_for(current_user) %>" disabled>
+                              </div>
+                              <a href="javascript:;" onclick="setAmount.reduce('<%= product.ID %>')" class="remove-item">－</a>
+                            </div>
+                          </div>
+                      <% else %>
+                          <dl class="text-bottom-two">
+                            <dt>立减<span class="differ-price">￥00.00</span></dt>
+                            <dd class="price">RMB<span class="now-price"><%= product.ProductPrice %></span></dd>
+                            <dd class="text-line">原价:￥<em class="old-price"><%= product.OriginalPrice %></em>/<%= product.Unit%>
+                              <% if product.MinBuyCount.to_i > 1 %>
+                                  <span class="min-buy"><%= product.MinBuyCount %><%= product.Unit%>起订</span>
+                              <% end %>
+                              <div class="item-console <%= 'show-console' if product.cart_for(current_user) > 0 %>">
+                                <a href="javascript:;" onclick="setAmount.add('<%= product.ID %>')" class="add-item">＋</a>
+                                <div class="item-num" data-min-buycount="<%= product.MinBuyCount || 1 %>">
+                                  <input id="<%= product.ID %>" class="number" data-id="<%= product.ID %>" type="num" value="<%= product.cart_for(current_user) %>" num="<%= product.cart_for(current_user) %>" disabled>
+                                </div>
+                                <a href="javascript:;" onclick="setAmount.reduce('<%= product.ID %>')" class="remove-item">－</a>
+                              </div>
+                            </dd>
+                          </dl>
+                      <% end %>
+                    </div>
+                  </div>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+
+        <!-- 3-->
+      <% end %>
+      <!-- 3-->
+
+      <!-- 瀑布流插件 -->
+      <!-- <script src="https://npmcdn.com/minigrid@3.0.3/dist/minigrid.min.js"></script> -->
+      <script type="text/javascript">
+          /*
+           原理：1.把所有的li的高度值放到数组里面
+           2.第一行的top都为0
+           3.计算高度值最小的值是哪个li
+           4.把接下来的li放到那个li的下面
+           */
+          if($(".two-cont .grid-item").length != 0){
+            var li=$(".grid-item");//区块名称
+            var margin = parseInt(li.css("marginRight"));//设置间距
+            var li_W = li[0].offsetWidth+margin;//取区块的实际宽度
+          }
+
+          function pubuliu(){
+              // console.log(1)
+              var h=[];//记录区块高度的数组
+              var n = $("body").width()/li_W|0;
+              for(var i = 0;i < li.length;i++) {
+                  li_H = li[i].offsetHeight;//获取每个li的高度
+                  if(i < n) {//n是一行最多的li，所以小于n就是第一行了
+                      max_H =Math.max.apply(null,h);
+                      h[i]=li_H;//把每个li放到数组里面
+                      li.eq(i).css("top",0);//第一行的Li的top值为0
+                      li.eq(i).css("left",i * li_W);//第i个li的左坐标就是i*li的宽度
+                  }
+                  else{
+                      min_H =Math.min.apply(null,h) ;//取得数组中的最小值，区块中高度值最小的那个
+                      minKey = getarraykey(h, min_H);//最小的值对应的指针
+                      h[minKey] += li_H+margin ;//加上新高度后更新高度值
+                      li.eq(i).css("top",min_H+margin);//先得到高度最小的Li，然后把接下来的li放到它的下面
+                      li.eq(i).css("left",minKey * li_W);    //第i个li的左坐标就是i*li的宽度
+                  }
+                  //  $("p").eq(i).text("高度："+li_H);//把区块高度值写入对应的区块H2标题里面
+              }
+              max =Math.max.apply(null,h) ;
+              $("#grid").css("height",max);
+          }
+          /* 使用for in运算返回数组中某一值的对应项数(比如算出最小的高度值是数组里面的第几个) */
+          function getarraykey(s, v) {for(k in s) {if(s[k] == v) {return k;}}}
+          /*这里一定要用onload，因为图片不加载完就不知道高度值*/
+
+          // window.onload = function() {pubuliu();};
+          // window.onresize = function() {pubuliu();};
+
+
+
+          // 计算所有的差价
+          function updateDiffer(){
+              $(".text-bottom-two").each(function(){
+                  var defferPrice = $(this).find(".old-price").html() - $(this).find(".now-price").html();
+                  $(this).find(".differ-price").html("￥" + defferPrice.toFixed(2));
+              });
+          }
+          if($(".one-cont-big").length != 0){
+              updateDiffer();
+          }
+
+          // 瀑布流
+          $(function(){
+              setTimeout(function(){
+                  if($(".two-cont .grid-item").length != 0){
+                      $("body").css("backgroundColor",$(".second-page").css("backgroundColor"));
+                      $(".two-cont ul").css({"position":"relative"}).find("li").css("position","absolute");
+                      pubuliu();
+
+                  }
+
+              },0)
+          })
+
+          // 限制标题字数
+          $(".one-cont .text-title").each(function(){
+              var htmlStr = $(this).html();
+              if(htmlStr.length > 45){
+                  $(this).html(htmlStr.slice(0,41) + "...")
+              }
+          })
+          $(".two-cont .text-title,.one-cont-big .text-title").each(function(){
+              var htmlStr = $(this).html();
+              if(htmlStr.length > 26){
+                  $(this).html(htmlStr.slice(0,24) + "...")
+              }
+          })
+
+          // 得到用户的登陆和认证状态
+          var isOK = false;
+          var isLogin = false;
+          <% if sign_in? %>
+            isLogin = true;
+          <% end %>
+          if(isLogin){
+            window.getCerificationStatus(2,function(){
+              isOK = true;
+            })
+          }
+          // 领优惠券
+          $(".coupons-box.three li,.coupons-box.two li").click(function(){
+              if(!isLogin){
+                showDialog("还没有登录，点击确定登录。",function(){
+                  window.location.href = "/sign_in";
+                })
+                return;
+              }else if(!isOK){
+                // window.isCerificationTip("认证才能领取优惠券！")
+                // return;
+              }
+              if($(this).find("div").hasClass("have")){
+                  return;
+              }
+              var that = this;
+              var url = "/coupons/"+ $(this).attr("couponId") +"/collect";
+              $.ajax({
+                  type: "POST",
+                  url: url,
+                  dataType: "json",
+                  success: function(data){
+                      if(data.status == "ok"){
+                          $(that).find("div").addClass("have");
+                          showDialog("领取成功");
+                      }else{
+                          if(data.error_code == "IsNotVerified"){
+                              showDialog("还没有登录，点击确定登录。",function(){
+                                  window.location.href = "/sign_in";
+                              })
+                          }else{
+                              showDialog(data.message,function(){
+                                  window.location.reload();
+                              });
+                          }
+                      }
+                  },
+                  error: function(e){
+                      showDialog(e.message);
+                  }
+              })
+          })
+          $(".coupons-box.one .link").click(function(){
+              if($(this).parents("li").find("div").hasClass("have")){
+                  return;
+              }
+              var that = this;
+              var url = "/coupons/"+ $(this).parents("li").attr("couponId") +"/collect";
+              $.ajax({
+                  type: "POST",
+                  url: url,
+                  dataType: "json",
+                  success: function(data){
+                      if(data.status == "ok"){
+                          $(that).parents("li").find("div").addClass("have");
+                          showDialog("领取成功");
+                      }else{
+                          showDialog(data.message,function(){
+                              window.location.reload();
+                          });
+                      }
+                  },
+                  error: function(e){
+                      showDialog(e.message);
+                  }
+              })
+          })
+          $(function(){
+              // 判断有优惠券张数
+              switch($(".coupons-box li").length){
+                  case 0:
+                      break;
+                  case 1:
+                      $(".coupons-box").removeClass("three").addClass("one").show();
+                      break;
+                  case 2:
+                      $(".coupons-box").removeClass("three").addClass("two").show();
+                      break;
+                  default :
+                      $(".coupons-box").show();
+              }
+              // 阻止冒泡
+              $(".item-console").click(function(event){
+                  event.stopPropagation();
+              })
+          })
+
+      </script>
+       <% if Time.now > Time.parse('2016-10-15 00:00') && Time.now < Time.parse('2016-10-21 00:00') %>
+         <a class="lpt_get_into" href="/activity/anniversary"></a>
+       <% end %>
+    </main>
+<% end %>
+
+
+<% content_for :footer do %>
+    <i></i>
+<% end %>
+<% content_for :script do %>
+
+<% end %>

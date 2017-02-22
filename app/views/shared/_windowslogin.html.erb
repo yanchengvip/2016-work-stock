@@ -1,0 +1,98 @@
+<div class="zhezhao" style="display:none;"></div><!-- 遮罩层 end -->
+<div class="login_input layer">
+  <a href="javascript:;" class="btnCancel">X</a>
+  <ul id="loginbox">
+      <li class="text">手机号码：</li>
+      <li class="input clearfix">
+          <input name="session[tel]" type="text">
+      </li>
+      <li class="text clearfix">
+          <span class="left">登录密码：</span>
+          <a href="javascript:void(0);" class="passwrod" style="display:none;">忘记登录密码？</a>
+      </li>
+      <li class="input clearfix">
+          <input name="session[password]" type="password">
+      </li>
+      <li class="wrong"></li>
+
+      <li class="btn">
+          <input id="Login" type="button" value="登&nbsp;录">
+      </li>
+      <li class="text clearfix">
+          <a href="/passwords/new" style="padding:6px 0 26px 0;" class="left">忘记密码？</a>
+          <a href="/sign_up" style="padding:6px 0 26px 0;" class="right">免费注册</a>
+      </li>
+  </ul>
+
+  <script type="text/javascript">
+      var IsVerify;
+      $(function () {
+          $("#Login").click(function () {
+
+              var arr = $("#loginbox input:visible").serializeArray();
+              var json = {};
+
+              for (var i = 0; i < arr.length; i++) {
+                  json[arr[i].name] = arr[i].value;
+              }
+              console.log(json);
+
+              if (!json["session[tel]"]) {
+                  $(".wrong").html("请输入手机号码").focus();
+                  return;
+              }
+
+              if (!json["session[password]"]) {
+                  $(".wrong").html("请输入密码").focus();
+                  return;
+              }
+
+
+              $.ajax({
+                  cache: false,
+                  dataType: "json",
+                  type: 'POST',
+                  url: "/sign_in",
+                  data: json,
+                  success: function (e) {
+                      if (e.status == 'ok') {
+                          window.location.reload();
+                      } else {
+                          $(".wrong").html(e.message).focus();
+
+                      }
+                  },
+                  error: function (e) {
+                      alert(e);
+                  }
+              });
+
+          });
+      })
+
+      function getCookie(name) {
+          var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+
+          if (arr = document.cookie.match(reg))
+
+              return unescape(arr[2]);
+          else
+              return null;
+      }
+
+      function Login() {
+          if (!!IsVerify) {
+              $("#IsVerify").show();
+          } else {
+              $("#IsVerify").hide();
+          }
+
+          $(".box-mask").css({ "display": "block" });
+          $(".zhezhao").fadeIn(500);
+          center($(".layer"));
+          //载入弹出窗口上的按钮事件
+          checkEvent($(this).parent(), $(".btnSure"), $(".btnCancel"));
+      };
+
+  </script>
+</div>

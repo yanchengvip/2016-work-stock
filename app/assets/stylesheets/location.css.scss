@@ -1,0 +1,77 @@
+@import "variable";
+.location-item {
+    @include bdr-top-bottom(#e0e0e0);
+    height: 4.5rem;
+    padding: 0 1.2rem;
+    font-size: 1.5rem;
+    line-height: 4.5rem;
+    background-color: #fff;
+    color: #404040;
+}
+
+.gps-status {
+    @extend .location-item;
+    margin: 1.6rem 0;
+    .location-title {
+        color: #909090;
+        margin-right: 1.6rem;
+    }
+}
+
+.location-city {
+    @extend .location-item;
+    margin-top: -1px;
+    a {
+        font-size: 1.6rem;
+    }
+    a.arrow {
+        display: block;
+        background-repeat: no-repeat;
+        background-position: 98% 50%;
+        background-size: 1.2rem auto;
+        &.down {
+            background-image: image-url("mobile/base/arrow_down.svg");
+        }
+        &.top {
+            background-image: image-url("mobile/base/arrow_top.svg");
+        }
+    }
+}
+
+.location-city>a,
+.location-text {
+    color: #404040;
+}
+
+.location-counties {
+    // display: none;
+    overflow: hidden;
+    width: 100%;
+    padding: .4rem 0 .4rem .4rem;
+    &.last {
+        margin-bottom: 2rem;
+        @include bdr-bottom(#e0e0e0);
+    }
+}
+
+.location-county-wrapper {
+    display: inline-block;
+    width: 7.8rem;
+    overflow: hidden;
+    padding: .4rem;
+    float: left;
+    &.long {
+        width: 15.6rem;
+    }
+}
+
+.location-county-item {
+    @include bdr(#d0d0d0);
+    color: #606060;
+    display: block;
+    background-color: #fff;
+    height: 3.5rem;
+    line-height: 3.5rem;
+    text-align: center;
+    font-size: 1.4rem;
+}

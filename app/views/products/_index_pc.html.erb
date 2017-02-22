@@ -1,0 +1,438 @@
+<!-- 商品展示页 -->
+<%= stylesheet_link_tag 'pc/main.css'%>
+<%= stylesheet_link_tag 'pc/screen'%>
+
+
+<%= javascript_include_tag 'pc/common'%>
+<%= javascript_include_tag 'pc/ciling'%>
+<%= javascript_include_tag 'pc/tab'%>
+<%= javascript_include_tag 'pc/layer'%>
+<%= javascript_include_tag 'pc/screen'%>
+<%= javascript_include_tag 'pc/com_show'%>
+<script>document.title='进货宝(jinhuobao.com.cn) - <%= params["q"]%> ';</script>
+<div class="main_nav">
+  <div class="main_nav_top">
+      <div class="w1080 clearfix nav_sub">
+      <%= render 'shared/navbar' %>
+      </div>
+  </div>
+</div>
+
+<div class="content w1080">
+  <% if @group %>
+    <% tag_groups = @group.tag_groups.includes(:tags) %>
+    <div class="pro_name"><%= @group.Name %> 商品筛选</div>
+    <div class="screen_top">
+      <div class="pro_category">
+          <ul>
+            <% tag_groups.each do |tag_group| %>
+            <li>
+              <span class="one"><b><%= tag_group.Name%></b></span>
+              <span class="click_add bg_red"><a href="javascript:void(0);" onclick="TagSelect('<%= tag_group.ID%>','')">不限</a></span>
+              <% tag_group.tags.each do |tag| %>
+                <span class="click_add"><a href="javascript:void(0);" onclick="TagSelect('<%= tag_group.ID%>','<%= tag.ID%>')"><%= tag.Name%></a></span>
+              <% end %>
+            </li>
+            <% end %>
+          </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="screen_btn clearfix" style="margin-top:40px;">
+    <div class="today_lowest">
+      <ul class="clearfix" id="pro_list">
+        <!-- 新样式 -->
+        <% @products.each do |product| %>
+          <li class="product-item cart-item">
+            <% if @stocks and @stocks[product.ID].try(:Stock).to_i <= 0 %>
+                <span class="low_stocks "></span>
+                <em class="buhuo">补货中</em>
+            <% end %>
+            <a href="/products/<%= product.ID%>" class="product-img cart-img">
+              <%= image_tag(product.cover_url('v220')) %>
+            </a>
+            <div class="product-cont cart-cont">
+              <h5 class="product-title cart-title"><%= product.Name%></h5>
+              <p><span class="product-price cart-price"><%= product.ProductPrice.round(2)%></span>/<%= product.Unit%></p>
+            </div>
+            <div class="product-buy cart-buy">
+                <span class="open">进</span>
+                <a href="javascript:;" onclick="Cart('<%=product.ID%>',this);" class="add_new  addcar"></a>
+                <label class="i_box product-buy-num cart-buy-num">
+                  <input class="pro_less J_minus" type="button" value="-">
+                  <input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"
+                  onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);" >
+                  <input class=" pro_add J_add" type="button" value="+">
+                </label>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="btm clearfix">
+      <ul id="fenye">
+        <%
+          current_page = @products.current_page
+          total_pages = @products.total_pages
+        %>
+        <li class="up"><a href="javascript:PageSwitch(<%= current_page - 1 > 0 ? current_page - 1 : 1 %>);">&lt;</a></li>
+        <% if total_pages < 6 %>
+          <% 1.upto(total_pages > 6 ? 6 : total_pages).each do |index| %>
+            <li><a class="<%= 'now' if index == current_page %>" href="javascript:PageSwitch(<%= index %>);"><%= index %></a></li>
+          <% end %>
+        <% else %>
+          <% (current_page - 2 < 1 ? 1 : current_page - 2).upto(current_page + 3 > total_pages ? total_pages : current_page + 3).each do |index| %>
+            <li><a class="<%= 'now' if index == current_page %>" href="javascript:PageSwitch(<%= index %>);"><%= index %></a></li>
+          <% end %>
+          <% if current_page + 6 <= total_pages %>
+            <li><p><a href="javascript:PageSwitch(<%= current_page + 6 %>);">...</a></p></li>
+          <% end %>
+        <% end %>
+        <li class="down"><a href="javascript:PageSwitch(<%= current_page + 1 <= total_pages ? current_page + 1 : total_pages %>);">&gt;</a></li>
+        <li class="total">共<%= total_pages %>页</li>
+        <li class="total">去第<input type="text" name="go" id="go">页</li>
+      </ul>
+  </div>
+</div>
+<% if !sign_in? %>
+
+<% end %>
+
+<script type="text/javascript">
+    $(function () {
+
+        $("#s_city").change(function () {
+            PageSwitch(1);
+        });
+
+        $(document).keydown(function (event_e) {
+            if (window.event)
+                event_e = window.event;
+            var int_keycode = event_e.charCode || event_e.keyCode;
+            if (int_keycode == 13) {
+                try {
+                    var index = parseInt($("#go").val());
+                    if (index > 0) {
+                        PageSwitch(index);
+                    }
+                } finally {
+
+                }
+            }
+        });
+    })
+
+    // 限制字数
+    function htmlStr(html,num){
+        return html.slice(0,num) + "...";
+    }
+    function TagSelect(key, val) {
+
+        if (val == "") {
+            delete tag[key];
+        }
+        else {
+            tag[key] = val;
+        }
+        PageSwitch(1);
+    }
+
+    var tag = {};
+
+    function PageSwitch(index) {
+        var tags = new Array();
+        for (var i in tag) {
+            tags.push(tag[i]);
+        }
+
+        $.ajax({
+            cache: false,
+            dataType: "json",
+            type: 'GET',
+            url: "/products",
+            data: { "fid": getQueryString("fid"), "sid": getQueryString("sid"), "tags": tags.toString(), "page": index, "q": getQueryString("q") == null ? null : decodeURI(getQueryString("q")) },
+            success: function (e) {
+                pcCreateList(e.data.products, index, e.data.total_pages);
+                $(".product-title").each(function(){
+                  if($(this).html().length > 25){
+                    var str = $(this).html();
+                    $(this).html(htmlStr(str,25));
+                  }
+                })
+            },
+            error: function (e, index) {
+                alert(e);
+            }
+        });
+    }
+
+    function pcCreateList(Product, index, total_pages) {
+
+        if (Product.length < 1)
+        {
+            $("#pro_list").html("");
+            $("#fenye").html("");
+            return;
+        }
+
+        var html = new Array();
+
+        var page = new Array();
+
+        var htmlStr = '';
+        for (var i = 0; i < Product.length; i++) {
+
+            // html.push("<li class=\"second\" style=\"border-right:1px solid #EEEDED;border-bottom:1px solid #EEEDED;\">");
+            // html.push("<a target=\"_blank\" href=\"/products/");
+            // html.push(Product[i].id);
+            // html.push("\"><img width=\"220\" height=\"220\" src=\"");
+            // html.push(Product[i].cover);
+            // html.push("\">");
+            // /*html.push("<span class=\"year_goods \"></span>");*/
+            // html.push("</a><p>");
+            // if (Product[i].stock <= 0){
+            //   html.push("<span class=\"low_stocks \"></span>");
+            //   html.push("<em class=\"buhuo\">补货中</em>");
+            // }
+            // html.push(Product[i].name);
+            // html.push("</p><span class=\"now_price\">&yen;");
+            // html.push(parseFloat(Product[i].price).toFixed(2));
+            // html.push(" <em style='color:#8D8B8B;font-size:12px;'>/" + Product[i].unit + "</em></span>");
+            // /*html.push(" <em style='color:#8D8B8B;font-size:12px;'>/" + Product[i].unit + "</em></span><span style=\"text-decoration: line-through;color:#BBBAA8;\">");
+            // html.push(parseFloat(Product[i].original_price).toFixed(2));*/
+            // html.push("</span><a href=\"javascript:void(0);\" onclick=\"Cart('");
+            // html.push(Product[i].id);
+            // html.push("',this)\" class=\"url car add_new\"></a>");
+
+            // html.push("<div class=\"bot_box clearfix\">");
+            // html.push("<span class=\"now_price left\">&yen;");
+            // html.push(parseFloat(Product[i].price).toFixed(2));
+            // html.push(" <em style='color:#fff;font-size:12px;'>/" + Product[i].unit + "</em></span>");
+            // html.push("<label class=\"i_box clearfix\">");
+            // html.push("<input class=\"pro_less J_minus\" type=\"button\" value=\"\">");
+            // html.push("<input name=\"Number\" class=\"pro_num J_input\" type=\"text\" value=\"1\" maxlength=\"5\" onkeyup=\"(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);\">");
+            // html.push("<input class=\"pro_add J_add\" type=\"button\" value=\"\">");
+            // html.push("</label>");
+            // html.push("<a href=\"javascript:void(0);\" onclick=\"Cart('");
+            // html.push(Product[i].id);
+            // html.push("',this)\" class=\"car add_new buy_car\"></a>");
+            // html.push("</div>");
+            // html.push("</li>");
+            // 新列表样式
+            var quehuoStr = ""
+            if(Product[i].stock <= 0){
+                var quehuoStr = '<span class="low_stocks "></span>'+
+                                '<em class="buhuo">补货中</em>'
+            }
+            htmlStr += '<li class="product-item cart-item">'+
+                        quehuoStr+
+                        '<a href="/products/'+ Product[i].id +'" class="product-img cart-img">'+
+                          '<img src="'+ Product[i].cover +'" alt="">'+
+                        '</a>'+
+                        '<div class="product-cont cart-cont">'+
+                          '<h5 class="product-title cart-title">'+ Product[i].name +'</h5>'+
+                          '<p><span class="product-price cart-price">'+ parseFloat(Product[i].price).toFixed(2) +'</span>/'+ Product[i].unit +'</p>'+
+                        '</div>'+
+                        '<div class="product-buy cart-buy">'+
+                            '<span class="open">进</span>'+
+                            '<a href="javascript:;" onclick="Cart(\''+ Product[i].id +'\',this);" class="add_new  addcar"></a>'+
+                            '<label class="i_box product-buy-num cart-buy-num">'+
+                              '<input class="pro_less J_minus" type="button" value="-">'+
+                              '<input name="Number" id="" class="pro_num J_input" type="text" value="1" maxlength="5"'+
+                              'onkeyup="(this.v=function(){ this.value ==\'\'? this.value = 1 : this.value; }).call(this);" >'+
+                              '<input class=" pro_add J_add" type="button" value="+">'+
+                            '</label>'+
+                          '</div>'+
+                      '</li>'
+        }
+
+        // $("#pro_list").html(html.join(""));
+        // 插入新样式
+        $("#pro_list").html(htmlStr);
+
+
+        var count = total_pages;
+
+        page.push("<li class=\"up\"><a href=\"javascript:PageSwitch(" + (index - 1 > 0 ? index - 1 : 1) + ");\">&lt</a></li>");
+        if (count < 6) {
+
+            for (var j = 1; j <= (count > 6 ? 6 : count) ; j++) {
+                page.push("<li>");
+                if (j == index) {
+                    page.push("<a class=\"now\" href=\"javascript:PageSwitch(");
+                } else {
+                    page.push("<a href=\"javascript:PageSwitch(");
+                }
+                page.push(j);
+                page.push(");\">");
+                page.push(j);
+                page.push("</a></li>");
+            }
+        }
+        else {
+            for (var j = index - 2 ; j <= (index + 3 > count ? count : index + 3) ; j++) {
+                if (j < 1) {
+                    continue;
+                }
+                page.push("<li>");
+                if (j == index) {
+                    page.push("<a class=\"now\" href=\"javascript:PageSwitch(");
+                } else {
+                    page.push("<a href=\"javascript:PageSwitch(");
+                }
+                page.push(j);
+                page.push(");\">");
+                page.push(j);
+                page.push("</a></li>");
+            }
+            if (index + 6 <= count) {
+                page.push("<li>");
+                page.push("<p><a href=\"javascript:PageSwitch(" + (index + 6) + ")\">...</a></p>");
+
+                page.push("</li>");
+            }
+        }
+
+        page.push("<li class=\"down\"><a href=\"javascript:PageSwitch(" + (index + 1 <= count ? index + 1 : count) + ");\">&gt</a></li>");
+        page.push("<li class=\"total\">共");
+        page.push(count);
+        page.push("页</li>");
+
+        page.push("<li class=\"total\">去第<input type=\"text\" name=\"go\" id=\"go\" />页</li>");
+        $("#fenye").html(page.join(""));
+        $(function(){
+            $(".today_lowest li").hover(function(){
+              $(this).find('.bot_box').show();
+              },function(){
+              $(this).find('.bot_box').hide();
+              }
+            )
+        })
+
+        // form值加减
+        $(".i_box .J_add").bind("click", function (event) {
+            var oldValue=parseInt($(this).parent().find(".J_input").val());
+            oldValue++;
+            $(this).parent().find(".J_input").val(oldValue);
+            return false;
+        })
+        $(".i_box .J_minus").bind("click",function(event){
+            var oldValue=parseInt($(this).parent().find(".J_input").val());
+            oldValue--;
+            if(oldValue<1){
+                oldValue=1;
+            }
+            $(this).parent().find(".J_input").val(oldValue);
+            return false;
+        })
+
+        $.fn.numeral = function() {
+            $(this).css("ime-mode", "disabled");
+            this.bind("keypress",function(e) {
+             var code = (e.keyCode ? e.keyCode : e.which);  //兼容火狐 IE
+                if(!/msie/.test(navigator.userAgent.toLowerCase()) && (e.keyCode==0x8))  //火狐下不能使用退格键
+                {
+                   return;
+                }
+                return code >= 48 && code<= 57;
+            });
+        };
+        $(".J_input").numeral();
+
+        }
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return r[2]; return null;
+    }
+
+
+    // 红色条动画效果
+    function moveCart(that, target, fn) {
+    var $buyNum = $(that).find('.coat-buy-num');
+    clearTimeout(that.timer);
+    $(that).stop();
+    var $tempThat = $(that);
+    that.timer = setTimeout(function() {
+        $tempThat.animate({ width: target }, function() {
+                if (fn != undefined) {
+                    fn();
+                }
+            });
+        }, 20);
+    }
+
+
+    // function Cart(EP_ID, node) {
+    //     var number = $(node).parent().find(".J_input").val()-0;
+    //     /*if (number > 60) {
+    //         alert('单件商品数量不能超过60');
+    //         return;
+    //     }*/
+
+    //     $.ajax({
+    //         cache: false,
+    //         dataType: "json",
+    //         type: 'POST',
+    //         url: "/carts",
+    //         data: { "cart": { "ProductID": EP_ID, "Number": number }},
+    //         success: function (e) {
+    //           if (e.status == 'ok') {
+    //               /*alert('添加成功');*/
+    //               var addcar = $(node);
+    //               var img = addcar.parent().parent().find('img').attr('src');
+    //               var flyer = $('<img class="u-flyer" src="'+img+'">');
+    //               flyer.fly({
+    //                   start: getPosition(node),
+    //                   end:getPosition($("#end")[0]),
+    //                   onEnd: function(){
+    //                       $("#msg").show().animate({width: '250px'}, 200).fadeOut(1000); //提示信息
+    //                       addcar.css("cursor","default").removeClass('orange').unbind('click');
+    //                       flyer.remove();
+    //                   }
+    //               });
+    //           } else if (e.error_code == 'IsNotVerified') {
+    //             Login();
+    //           } else if (e.message == "NoDefaultAddress") {
+    //             notifyAddress();
+    //           } else {
+    //               alert(e.message);
+    //           }
+    //         },
+    //         error: function (e, index) {
+    //             alert(e);
+    //         }
+    //     });
+
+    // }
+
+    $(function(){
+         // 红条动画
+        $(".today_lowest").on("mouseenter",".product-buy",function(){
+            var $tempThat = $(this);
+            moveCart(this,"100%",function(){
+              $tempThat.find('.product-buy-num').show();
+            });
+        })
+        var oldWidth = $(".product-buy").width();
+        $(".today_lowest").on("mouseleave",".product-buy",function(){
+            var $tempThat = $(this);
+          $tempThat.find('.product-buy-num').hide();
+          moveCart(this,oldWidth);
+        })
+        // 限制字数
+        $(".product-title").each(function(){
+          if($(this).html().length > 25){
+            var str = $(this).html();
+            $(this).html(htmlStr(str,25))
+          }
+        })
+
+    })
+
+
+</script>

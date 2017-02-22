@@ -1,0 +1,221 @@
+﻿@charset "utf-8";
+
+/* CSS Document */
+
+
+/* 公共png */
+
+.url {
+    background: image-url('index/sprite.png') no-repeat 0 0;
+}
+
+
+/* welcome */
+
+.welcome{
+    width: 100%;
+    height: 838px;
+    background: #e61c44 image-url('index/welcome_bg.jpg')  no-repeat;
+    background-position: center center;
+    background-size: auto 100%;
+    margin-bottom: 80px;
+}
+
+.welcome_top p a{
+    display: inline-block;
+    font-size: 14px;
+    color: #fff;
+    margin: 20px 30px 0 0;
+}
+
+.welcome_logo{
+    width: 214px;
+    height: 98px;
+    background-image: image-url('index/welcome.png');
+}
+
+.welcome h3{
+    text-align: center;
+    color: #fff;
+    font-size: 35px;
+    margin: 104px 0 70px 0;
+    font-family : 微软雅黑,宋体;
+}
+
+.welcome .choice{
+    text-align: center;
+}
+
+.welcome input{
+    text-align: center;
+    width: 630px;
+    height: 56px;
+    line-height: 56px;
+    color: #e95767;
+    margin: 0 auto;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+input::-webkit-input-placeholder {
+　　color: #e95767 !important; /* WebKit browsers /
+　　input:-moz-placeholder {
+　　color: #e95767 !important; / Mozilla Firefox 4 to 18 /
+　　}
+　　input::-moz-placeholder {
+　　color: #e95767 !important; / Mozilla Firefox 19+ /
+　　}
+　　input:-ms-input-placeholder {
+　　color: #e95767 !important; / Internet Explorer 10+ */
+}
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #e95767;  
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #e95767;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #e95767;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #e95767;
+}
+
+.welcome .show,.welcome .show_2{
+    width: 630px;
+    // height: 160px;
+    border-radius: 7px;
+    background: #fff;
+    margin: 0 auto;
+    margin-top: 26px;
+    position: relative;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+.welcome .show_2{
+    // margin-top: -160px;
+}
+
+.welcome .show span,
+.welcome .show_2 span{
+    display: block;
+    width:0; 
+    height:0; 
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    border-left:8px solid transparent;
+    border-right:8px solid transparent;
+    border-bottom:8px solid #fff;
+}
+
+
+.welcome .show h4.place,.welcome .show_2 h4.place{
+    font-size: 19px;
+    color: #737373;
+    font-weight: normal;
+    padding: 18px 0 20px 30px;
+    cursor: pointer;
+}
+
+.welcome .show h4.place i{
+    display: inline-block;
+    width: 20px;
+    height: 24px;
+    background-image: image-url('index/place.png');
+    position: relative;
+    top: 4px;
+    right: 10px;
+}
+
+.welcome .show_2 h4.place i{
+    display: inline-block;
+    width: 12px;
+    height: 24px;
+    background-image: image-url('index/back.png');
+    position: relative;
+    top: 4px;
+    right: 10px;
+    margin-left: 18px;
+    cursor: pointer;
+}
+
+.welcome .show .place_name{
+    width: 588px;
+    // height: 80px;
+    text-align: center;
+    line-height: 80px;
+    border-top: 1px solid #e3e3e3;
+    margin: 0 auto;
+    font-size: 26px;
+}
+
+.welcome .show_2 .region{
+    width: 588px;
+    height: 80px;
+    border-top: 1px solid #e3e3e3;
+    margin: 0 auto;
+    padding-left: 20px;
+}
+
+.welcome .show_2 .region ul li{
+    float: left;
+    margin: 20px 34px 0 0;
+}
+
+.welcome .show_2 .region ul li a{
+    color: #2d3e50;
+    font-size: 16px;
+}
+
+.welcome .show_2 .region ul li a:hover{
+    color: #0089dc;
+}
+
+.welcome .show .place_name a{
+    color: #585858;
+}
+
+.welcome .show .place_name a:hover{
+    color: #0089dc;
+}
+
+.welcome .show .place_name a.city-choice{
+    padding: 0 50px 0 56px;
+    float: left;
+}
+
+
+.bottom{
+    width: 990px;
+    margin: 0 auto;
+}
+
+.bottom p{
+    width: 600px;
+    margin: 0 auto;
+    padding: 208px 0 58px 0;
+}
+
+.code{
+    width: 426px;
+    height: 174px;
+    text-align: center;
+    background-image: image-url('index/code_03.png');
+    margin: 0 auto;
+}
+
+.hidden{
+    display: none;
+}
+
+

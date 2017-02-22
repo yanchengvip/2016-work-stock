@@ -1,0 +1,63 @@
+<!-- 购买优惠券状态 -->
+<% content_for :head do %>
+<style>
+  .title{
+    /*padding-top: 12rem;*/
+    height: 15.3rem;
+    line-height: 3.3rem;
+    text-align: center;
+    font-size: 1.8rem;
+    background-size: auto 6.3rem;
+    color: #303033;
+  }
+  .title img{
+    width: 6.3rem;
+    height: 6.3rem;
+    margin: 3.5rem auto 2rem;
+  }
+  .text{
+    text-align: center;
+    font-size: 1.4rem;
+    line-height: 3.3rem;
+    color: #303033;
+  }
+  .link-box{
+    padding-left: 3rem;
+  }
+  .link-box a{
+    display: inline-block;
+    width: 11rem;
+    height: 3.7rem;
+    line-height: 3.7rem;
+    text-align: center;
+    border: 1px solid #E62E46;
+    color: #E62E46;
+    border-radius: 0.4rem;
+    font-size: 1.4rem;
+  }
+  .link-box a:first-child{
+    margin-right: 4rem;
+  }
+</style>
+<% end %>
+<% content_for :header do %>
+  <header class="no-search clearfix second-page-header">
+    <div class="ordersHeader_title">支付成功</div>
+  </header>
+<% end %>
+<% content_for :main do %>
+<main class="second-page-new second-page">
+<div class="title">
+  <%= image_tag "mobile/coupon/sales-state.png" %>
+  <br>
+  支付成功！
+</div>
+<p class="text">恭喜您获得50元优惠券，到我的钱包查看</p>
+<p class="link-box">
+  <a href="/">返回首页</a><a href="/my/coupons?refresh=true#/">我的钱包</a>
+</p>
+</main>
+<% end %>
+<% content_for :footer do %>
+&nbsp;
+<% end %>

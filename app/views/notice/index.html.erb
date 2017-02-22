@@ -1,0 +1,36 @@
+<!-- 我的消息页 -->
+<% content_for :header do %>
+<header class="no-search clearfix second-page-header">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">我的消息</div>
+</header>
+<% end %>
+<% content_for :main do %>
+  <main class="message">
+    <ul>
+      <li onClick="window.location.href = '/notice/mine' ">
+        <div class="img-box bj0">
+          <% if current_user and current_user.unread_notifications.size > 0 %>
+          <i></i>
+          <% end %>
+        </div>
+        <div class="content">
+          <h6>信息通知<span class="right"><%= @notification.CreateTime.strftime("%m-%d　%H:%M") if @notification %></span></h6>
+          <p><%= @notification.Content if @notification %></p>
+        </div>
+      </li>
+    </ul>
+  </main>
+  <script>
+    $(".message .content p").each(function(){
+      $(this).html().length > 40 ? $(this).html($(this).html().slice(0,36)+ '...') : '';
+    })
+  </script>
+
+<% end %>
+
+<% content_for :footer do %>
+    &nbsp;
+<% end %>

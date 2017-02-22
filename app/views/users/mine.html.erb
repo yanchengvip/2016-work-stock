@@ -1,0 +1,172 @@
+<% content_for :header do %> <% end %>
+<div id="mine-header">
+<!--   <div class="back">
+    <a href="javascript:goBack()" id="back" class="valign">
+      <%= image_tag "mobile/back.png" %>
+    </a>
+  </div>-->
+
+ <div class="white-text clearfix">
+   <% verified_addresses = current_user.verified_addresses %>
+   <% level_style = verified_addresses.size > 0 ? "bj#{current_user.user_level.try(:UserLevel).to_i}" : ""%>
+   <div class="user-img <%= level_style %>">
+    </div>
+    <p>
+
+      <span><%= current_user.verified_addresses.size > 0 ? current_user.level_name : "未认证" %></span>
+
+      <!--<span><-%= current_user.verified_addresses.size > 0 ? current_user.level_name : "未认证" %></span>-->
+      <!--<-% if current_user.verified_addresses.size == 0 %>-->
+        <!--<a href="/my/address" class="to-authen">点击认证 &gt;</a>-->
+      <!--<-% end %>-->
+      <br>
+      <%= current_user.Phone %>
+    </p>
+
+  </div>
+</div>
+
+<div class="mine-blocks row">
+  <a href="/my/orders">
+    <div class="mine-block col s4 big-text order">
+      我的订单
+    </div>
+  </a>
+  <a href="/my/coupons">
+    <div class="mine-block col s4 big-text coupon">
+      我的卡券
+    </div>
+  </a>
+  <a href="/mall">
+    <div class="mine-block col s4 big-text mall">
+      我的余额
+    </div>
+  </a>
+</div>
+<div class="gap"></div>
+<!-- <div class="mine-item place">北京市（默认）</div>
+<div class="gap"></div> -->
+<div class="mine-item address"><a href="/my/address" class="jhb-grey">地址管理<span class="right-arrow"><%= image_tag "mobile/right_icon.png" %></span></a></div>
+<!-- <div class="gap"></div>
+<div class="mine-item share">
+  把进货宝分享给朋友
+  <a href="javascript:share()"  class="jhb-red">分享给朋友再得25元</a>
+  <div class="right-arrow"><%= image_tag "mobile/right_icon.png" %></div>
+</div> -->
+<div class="line"></div>
+<!--
+<div class="mine-item star">
+  我的收藏
+    <div class="right-arrow"><%= image_tag "mobile/right_icon.png" %></div>
+</div>
+-->
+<% if cookies[:company_id] == '746f572e-adeb-4a98-85d2-468bdaad99d0' %>
+  <div class="mine-item star">
+    <a href="javascript:checkIn()" class="jhb-grey">每日签到<span class="right-arrow"><%= image_tag "mobile/right_icon.png" %></span></a>
+  </div>
+  <div class="line"></div>
+<% end %>
+<div class="mine-item change-pw">
+  <a href="/my/password" class="jhb-grey">修改密码<span class="right-arrow"><%= image_tag "mobile/right_icon.png" %></span></a>
+</div>
+<div class="line"></div>
+<div class="mine-item service"><a href="javascript:;" class="jhb-grey">在线客服<span class="right-arrow"><%= image_tag "mobile/right_icon.png" %></span></a></div>
+<div class="line"></div>
+<div class="mine-item service-tel">联系我们 <span class="jhb-light-grey">&emsp;<a href="tel:010-67832728" style="text-decoration: underline;color: #426ab3">010-67832728 转 6023</a></span><span class="right-arrow"><%= image_tag "mobile/right_icon.png" %></span></div>
+<div class="line"></div>
+<div class="mine-item about"><a href="/common/mobile_about" class="jhb-grey">关于我们<span class="right-arrow"><%= image_tag "mobile/right_icon.png" %></span></a></div>
+<div class="gap"></div>
+<div class="mine-item exit">
+  <a href="javascript:void(0);" class="jhb-grey">退出账户<span class="right-arrow"><%= image_tag "mobile/right_icon.png" %></span></a>
+</div>
+<div class="gap"></div>
+<% if false %>
+  <!-- share_url = '<%= "#{Settings.base_url}invitations?share_code=#{Base64.encode64(current_user.ID).strip()}" %>'; -->
+<% end %>
+<% content_for :script do %>
+  <script>
+  var checkIn = function() {
+    return $.postJSON("/check_in", function(o) {
+      return showDialog(o.message);
+    });
+  };
+  // 美恰客服
+  (function(m, ei, q, i, a, j, s) {
+        m[a] = m[a] || function() {
+            (m[a].a = m[a].a || []).push(arguments)
+        };
+        j = ei.createElement(q),
+            s = ei.getElementsByTagName(q)[0];
+        j.async = true;
+        j.charset = 'UTF-8';
+        j.src = i + '?v=' + new Date().getUTCDate();
+        s.parentNode.insertBefore(j, s);
+    })(window, document, 'script', '//static.meiqia.com/dist/meiqia.js', '_MEIQIA');
+    _MEIQIA('entId', '17793');
+
+    // 在这里开启手动模式（必须紧跟美洽的嵌入代码）
+    // _MEIQIA('manualInit');
+    _MEIQIA('init');
+    _MEIQIA('withoutBtn');
+    // 启动第三方服务
+    $(".service").click(function(){
+        _MEIQIA('showPanel');
+      })
+
+    //退出账户询问
+    $(".exit a").click(function(){
+      showDialog({
+        "cancelText" : "确定",
+        "yesText" : "取消",
+        "msg" : "您确定退出吗？",
+        "position" : "atButtom",
+        "cancel" : function(){
+          $.deleteJSON("/sign_out",function(data){
+            // if(data.status == "ok"){
+            //   window.location.reload();
+            // }else{
+            //   console.log(data);
+            // }
+            window.logoutSuccess()
+            setTimeout(function (){
+                location.href = "/sign_in"
+            }, 0)
+          })
+          // window.showLoading()
+          // document.cookie = 'remember_token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+          // setTimeout(function(){
+          //   window.hideLoading()
+          //   location.reload()
+          // }, 0)
+        },
+        "callback" : function(){
+          }
+      })
+      setTimeout(function(){
+        $("#msg-box").css("transform","translateY(-100%)")
+      },100)
+    })
+    // 把用户等级加入用户属性
+
+    $(function(){
+      var _vds = _vds || [];
+        window._vds = _vds;
+        (function(){
+          _vds.push(['setAccountId', '8743a63472281a9d']);
+
+          _vds.push(['setCS1', 'user_id', '<%= current_user.ID %>']);
+          _vds.push(['setCS3', 'user_level', '<%= current_user.verified_addresses.size > 0 ? current_user.level_name : "未认证" %>']);
+          _vds.push(['setCS4', 'company_name', 'GrowingIO']);
+
+          (function() {
+            var vds = document.createElement('script');
+            vds.type='text/javascript';
+            vds.async = true;
+            vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(vds, s);
+          })();
+        })();
+    })
+  </script>
+<% end %>

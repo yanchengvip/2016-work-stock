@@ -1,0 +1,123 @@
+<% content_for :title do %>
+  下载进货宝
+<% end %>
+<% content_for :head do %>
+<script>
+var clientWidth, doc;
+doc = document.documentElement;
+clientWidth = doc.clientWidth;
+if (clientWidth <= 640) {
+  doc.style.fontSize = 20 * (clientWidth / 640) + 'px';
+};
+</script>
+<style>
+html,
+body {
+  height: 100%;
+  background-color: #ea1644;
+}
+
+@media (max-width: 740px) {
+  main {
+    min-height: 100%!important;
+  }
+
+}
+main {
+  /*background-color: #edba00;
+  margin: 0 auto;
+  max-height: 100%;
+  min-height: 50rem;
+  height: auto;
+  background-image: url(<%= asset_path "mobile/inviteEvent/wechat_bg.png"%>);
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  max-width: 32rem;
+  position: relative;*/
+  position: relative;
+  min-height: 100%;
+}
+
+.hide {
+  display: none;
+}
+
+.button {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  margin-left: -9rem;
+  width: 18rem;
+  height: auto;
+}
+
+#wechat {
+  width: 100%;
+  height: 100%;
+  z-index: 3000;
+  position: relative;
+  overflow: hidden;
+}
+.download-box{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: -5%;
+  background-image: url(<%= asset_path "mobile/inviteEvent/download-bg.png"%>);
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: auto 110%;
+}
+.download-box .button{
+  position: absolute;
+  bottom: 20%;
+  left: 51%;
+  margin-left: -6.5rem;
+  width: 13rem;
+  height: auto;
+}
+.download-box .wenzi{
+  position: absolute;
+  bottom: -5%;
+  left: 0;
+  width: 100%;
+  height: 5rem;
+  text-align: center;
+  /*background-image: url(<%= asset_path "mobile/inviteEvent/write-wenzi.png"%>);*/
+  /*background-position: center top;
+  background-repeat: no-repeat;
+  background-size: 80% auto;*/
+}
+.wenzi img{
+  max-height: 100%;
+  max-width: 80%;
+}
+</style>
+<% end %>
+<main>
+  <% ua = (request.env["HTTP_USER_AGENT"] or "").downcase %>
+  <% is_wechat = ua.include?("micromessenger") %>
+  <% is_android = ua.include?("android") %>
+  <% is_in_app = ua.include?("jinhuobao") %>
+  <% is_ios = (ua.include?("iphone") or ua.include?("ipad") or ua.include?("ipod")) %>
+  <% if is_wechat and (not is_ios) %>
+    <%= image_tag "mobile/wechat.gif", id: "wechat"%>
+  <% end %>
+  <div class="download-box">
+    <% if is_wechat %>
+      <% if is_ios %>
+        <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.davidchoice.jinhuobao"><%= image_tag "mobile/inviteEvent/yellow-btn.png", class: 'button' %></a>
+      <% end %>
+    <% else %>
+      <% if is_ios %>
+        <a href="https://appsto.re/cn/wUDhab.i"><%= image_tag "mobile/inviteEvent/yellow-btn.png", class: 'button' %></a>
+      <% else %>
+        <a href="http://d.jinhuobao.com.cn/apk"><%= image_tag "mobile/inviteEvent/yellow-btn.png", class: 'button' %></a>
+      <% end %>
+    <% end %>
+    <div class="wenzi">
+      <%= image_tag "mobile/inviteEvent/write-wenzi.png"%>
+    </div>
+  </div>
+</main>

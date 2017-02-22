@@ -1,0 +1,196 @@
+<!-- 优惠券列表 -->
+<!-- <link href='http://fonts.useso.com/css?family=Squada+One:300,400,600&subset=latin,latin-ext' rel='stylesheet'> -->
+<header class="no-search clearfix second-page-header">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">领券中心</div>
+</header>
+  <div class="coupon-list-box get-coupons">
+    <ul class="list-title clearfix">
+      <li class="active">通用</li>
+      <li>品牌</li>
+      <li>品类</li>
+      <li>单品</li>
+    </ul>
+    <div class="list-cont">
+      <ul class="public-coupon coupon-list">
+        <% if !@coupons[1].to_a.empty? %>
+        <% @coupons[1].to_a.each do |coupon| %>
+        <li class="<%= "is-have" if coupon.has_collect == 1 %>" couponId="<%= coupon.ID %>">
+          <div class="coupon-cont clearfix">
+            <div class="cont-img left">
+              <%= image_tag coupon.LogoUrl %>
+            </div>
+            <div class="coupon-state right">
+              <h4>通用券</h4>
+              <% if coupon.has_collect == 1 %>
+              <a href="<%= coupon.use_url %>" class="coupon-use">去使用</a>
+              <% else %>
+              <a href="javascript:;" class="coupon-no">立即领取</a>
+              <% end %>
+            </div>
+            <div class="cont-text">
+              <h3><%= coupon.Title %></h3>
+              <p><span><%= coupon.CouponPrice %></span><%= coupon.SubTitle %></p>
+            </div>
+          </div>
+        </li>
+        <% end %>
+        <%else%>
+          <li class="no-have-coupon">
+            已经抢光了，到其他类型优惠券看看吧
+          </li>
+        <%end%>
+      </ul>
+      <ul class="brand-coupon coupon-list">
+        <% if !@coupons[3].to_a.empty? %>
+        <% @coupons[3].to_a.each do |coupon| %>
+        <li class="<%= "is-have" if coupon.has_collect == 1 %>" couponId="<%= coupon.ID %>">
+          <div class="coupon-cont clearfix">
+            <div class="cont-img left">
+              <%= image_tag coupon.LogoUrl %>
+            </div>
+            <div class="coupon-state right">
+              <h4>品牌券</h4>
+              <% if coupon.has_collect == 1 %>
+              <a href="<%= coupon.use_url %>" class="coupon-use">去使用</a>
+              <% else %>
+              <a href="javascript:;" class="coupon-no">立即领取</a>
+              <% end %>
+            </div>
+            <div class="cont-text">
+              <h3><%= coupon.Title %></h3>
+              <p><span><%= coupon.CouponPrice %></span><%= coupon.SubTitle %></p>
+            </div>
+          </div>
+        </li>
+        <% end %>
+        <% else %>
+          <li class="no-have-coupon">
+            已经抢光了，到其他类型优惠券看看吧
+          </li>
+        <% end %>
+      </ul>
+      <ul class="type-coupon coupon-list">
+        <% if !@coupons[2].to_a.empty? %>
+        <% @coupons[2].to_a.each do |coupon| %>
+        <li class="<%= "is-have" if coupon.has_collect == 1 %>" couponId="<%= coupon.ID %>">
+          <div class="coupon-cont clearfix">
+            <div class="cont-img left">
+              <%= image_tag coupon.LogoUrl %>
+            </div>
+            <div class="coupon-state right">
+              <h4>品类券</h4>
+              <% if coupon.has_collect == 1 %>
+              <a href="<%= coupon.use_url %>" class="coupon-use">去使用</a>
+              <% else %>
+              <a href="javascript:;" class="coupon-no">立即领取</a>
+              <% end %>
+            </div>
+            <div class="cont-text">
+              <h3><%= coupon.Title %></h3>
+              <p><span><%= coupon.CouponPrice %></span><%= coupon.SubTitle %></p>
+            </div>
+          </div>
+        </li>
+        <% end %>
+        <% else %>
+          <li class="no-have-coupon">
+            已经抢光了，到其他类型优惠券看看吧
+          </li>
+        <% end %>
+      </ul>
+      <ul class="single-coupon coupon-list">
+        <% if !@coupons[4].to_a.empty? %>
+        <% @coupons[4].to_a.each do |coupon| %>
+        <li class="<%= "is-have" if coupon.has_collect == 1 %>" couponId="<%= coupon.ID %>">
+          <div class="coupon-cont clearfix">
+            <div class="cont-img left">
+              <%= image_tag coupon.LogoUrl %>
+            </div>
+            <div class="coupon-state right">
+              <h4>单品券</h4>
+              <% if coupon.has_collect == 1 %>
+              <a href="<%= coupon.use_url %>" class="coupon-use">去使用</a>
+              <% else %>
+              <a href="javascript:;" class="coupon-no">立即领取</a>
+              <% end %>
+            </div>
+            <div class="cont-text">
+              <h3><%= coupon.Title %></h3>
+              <p><span><%= coupon.CouponPrice %></span><%= coupon.SubTitle %></p>
+            </div>
+          </div>
+        </li>
+        <% end %>
+        <% else %>
+        <li class="no-have-coupon">
+            已经抢光了，到其他类型优惠券看看吧
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<script type="text/javascript">
+  $(function(){
+    var isOK = false;
+    var isLogin = false;
+    <% if sign_in? %>
+      isLogin = true;
+    <% end %>
+    if(isLogin){
+      // 得到用户认证状态
+      window.getCerificationStatus(2,function(){
+        isOK = true;
+      })
+    }
+    $(".coupon-list-box .list-title li").click(function(){
+      $(this).addClass("active").siblings().removeClass("active");
+      $(".coupon-list-box .list-cont ul").eq($(this).index()).show().siblings().hide();
+    })
+
+    $(".coupon-no").click(function(){
+      if(!isLogin){
+        showDialog("还没有登录，点击确定登录。",function(){
+          window.location.href = "/sign_in";
+        })
+        return;
+      }else if(!isOK){
+        // window.isCerificationTip("认证成功才能领取优惠券")
+        // return;
+      }
+      var $that = $(this)
+      var $tempParent = $(this).parents("li").eq(0);
+      var url = "/coupons/"+ $tempParent.attr("couponId") +"/collect";
+      $.ajax({
+        type: "POST",
+        url: url,
+        dataType: "json",
+        success: function(data){
+          if(data.status == "ok"){
+            $tempParent.addClass("is-have");
+            $that.parent().append("<a class='coupon-use' href='"+ data.data.use_url +"'>去使用</a>")
+          }else{
+            if(data.error_code == "IsNotVerified"){
+              showDialog("还没有登录，点击确定登录。",function(){
+                window.location.href = "/sign_in";
+              })
+            }else{
+              showDialog(data.message,function(){
+                window.location.reload();
+              });
+            }
+          }
+        },
+        error: function(e){
+          console.log(e.error_code)
+        }
+      })
+    })
+
+
+  })
+</script>
+
+

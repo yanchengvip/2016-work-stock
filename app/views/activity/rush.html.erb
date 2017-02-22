@@ -1,0 +1,105 @@
+<% content_for :header do %>
+  <%= render 'shared_mobile/back_share_header' %>
+<% end %>
+
+<% content_for :main do %>
+
+<main class="second-page  jhb-grey rush">
+  <div class="rush-header">
+    <%= image_tag @recommend.info_pic %>
+  </div>
+  <div class="botttom-cont one-cont seckill-cont  cont-bgcolor">
+      <p class="day-nav"><span class="active">今日秒杀</span><span>明日预热</span></p>
+      <div class="items">
+        <ul class="item-box today">
+          <% @today_products.each_with_index do |product, i| %>
+            <% if Company.need_stock?(product.CompanyID) %>
+              <% next if !@stocks or !@stocks[product.ID] or @stocks[product.ID].State != 2 %>
+            <% else %>
+              <% next if product.SellState != 2 %>
+            <% end %>
+            <!-- 可以抢了在li类名上加 now-buy  抢完加end-buy  什么都不加就是 等待抢-->
+            <% buy_status = product.ActivityBeginTime > Time.now ? "" : (product.CurrentActivityAmount.to_i < product.MaxActivityAmount.to_i && product.ActivityEndTime > Time.now ? "now-buy" : "end-buy") %>
+            <li class="item <%= buy_status %>">
+              <div class="item-bg">
+                <p><span class="hour"><%= product.ActivityBeginTime.strftime("%H") %></span><span class="minute"><%= product.ActivityBeginTime.strftime("%M") %></span></p>
+              </div>
+              <div class="item-padding">
+                <div class="cont-item">
+                  <div class="item-img">
+                    <%= image_tag product.cover_url('v100') %>
+                  </div>
+                  <div class="item-text">
+                    <div class="text-top">
+                      <h3 class="text-title"><%= product.Name%></h3>
+                      <p class="speci"><!-- 规格：<span></span> --></p>
+                    </div>
+                    <div class="text-bottom-one">
+                      <p class="price"><strong class="red-text">¥<%= product.ProductPrice%><i>/<%= product.Unit%> </i></strong><span class="old-price text-line">¥<%= product.OriginalPrice%>/<%= product.Unit%></span> </p>
+                      <div class="progress-bar">
+                      <% percent = ((product.MaxActivityAmount.to_i - product.CurrentActivityAmount.to_i).fdiv(product.MaxActivityAmount.to_i)*100).round(0) %>
+                        <span><i style="width: <%= percent %>%;"></i></span>
+                        <em>还剩<%= percent %>%</em>
+                      </div>
+                      <a href="javascript:rushBuy('<%= product.ID %>');" class="add-cart button-bj"></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+        <ul class="item-box tomorrow" style="display: none;">
+          <% @tomorrow_products.each_with_index do |product, i| %>
+            <% if Company.need_stock?(product.CompanyID) %>
+              <% next if !@stocks or !@stocks[product.ID] or @stocks[product.ID].State != 2 %>
+            <% else %>
+              <% next if product.SellState != 2 %>
+            <% end %>
+            <% if product.ActivityBeginTime >= Date.tomorrow %>
+            <li class="item">
+              <div class="item-bg">
+                <p><span class="hour"><%= product.ActivityBeginTime.strftime("%H") %></span><span class="minute">00</span></p>
+              </div>
+              <div class="item-padding">
+                <div class="cont-item">
+                  <div class="item-img">
+                    <%= image_tag product.cover_url('v100') %>
+                  </div>
+                  <div class="item-text">
+                    <div class="text-top">
+                      <h3 class="text-title"><%= product.Name%></h3>
+                      <p class="speci">规格：<span><%= product.Specification%></span></p>
+                    </div>
+                    <div class="text-bottom-one">
+                      <p class="price"><strong class="red-text">¥<%= product.ProductPrice%><i>/<%= product.Unit%> </i></strong><span class="old-price text-line">¥<%= product.OriginalPrice%>/<%= product.Unit%></span> </p>
+                      <div class="progress-bar">
+                      <% percent = ((product.MaxActivityAmount.to_i - product.CurrentActivityAmount.to_i).fdiv(product.MaxActivityAmount.to_i)*100).round(0) %>
+                        <span><i style="width: <%= percent %>%;"></i></span>
+                        <em>还剩<%= percent %>%</em>
+                      </div>
+                      <a href="javascript:rushBuy('<%= product.ID %>');" class="add-cart button-bj"></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+      <div class="seckill-explain">
+        <ol class="explain-cont">
+          <li>该活动参与平台其他折扣活动</li>
+          <li>订单起送金额为<%= @company_city.try(:SendPrice) || 500 %>元</li>
+          <li>每期商品数量有限</li>
+          <li>同一账户ID/IP，同一收货地址，同一手机号，具有特殊标记的某一批收货地址重复下单视为恶意下单</li>
+          <li>本活动最终解释权归进货宝所有</li>
+        </ol>
+      </div>
+  </div>
+</main>
+<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'rush', 'data-turbolinks-track' => true %>
+<% end %>

@@ -1,0 +1,30 @@
+defaults: &defaults
+  base_url: 'http://www.ccc.com.cn/'
+  img_base_url: 'http://admin.ccc.com.cn/'
+  qiniu_base_url: 'https://ccc.com/'
+  sms:
+    enable: true
+    expire_in: 30   # 分钟
+    check_code_temp: 39738
+    check_voice_number: 'ccccc'
+  order_money:
+    "22294f4c-dacc-48d6-aba8-d6c8fbe8cf7e": 500
+    "d1d929ec-3af1-45f3-8047-b9abd47e8de5": 300
+    "746f572e-adeb-4a98-85d2-468bdaad99d0": 0
+    "92417d6e-8c94-44fa-aef7-c841462b1ccb": 50
+    "f706ce0d-2477-4824-8958-8261c0707bde": 150
+  buy_coupon: 'ccccc'
+  ignore_stock:
+    "ccccc": true
+
+development:
+  <<: *defaults
+  buy_coupon: 'xxxxx'
+  jht_order_cancle: 'http://xxxx.com.cn/jht2/user_orders/order_handling'
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
+  jht_order_cancle: 'http://xxxxx.com.cn/jht2/user_orders/order_handling'

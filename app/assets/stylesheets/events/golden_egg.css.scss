@@ -1,0 +1,462 @@
+// image-url("mobile/events/golden_egg image-url("mobile/events/golden_egg
+main{
+  margin-top: 4.4rem;
+  padding-bottom: 0;
+}
+#header{
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.main {
+  height: 51rem;
+  background: image-url("mobile/events/golden_egg/bg.png");
+  -webkit-background-size: 100% auto;
+  background-size: 100% auto;
+  position: relative;
+  .activity-time{
+    position: absolute;
+    top: 9rem;
+    left: 7.5rem;
+    color: #fff;
+    span:first-child{
+      display: inline-block;
+    }
+    span:last-child{
+      display: inline-block;
+      transform:translateY(-0.2rem) rotateZ(-4deg);
+
+    }
+  }
+  .egg {
+    display: block;
+    width: 11.6rem;
+    height: 16.25rem;
+    position: absolute;
+    left: 50%;
+    top: 11rem;
+    margin-left: -5.8rem;
+    background: image-url("mobile/events/golden_egg/golden-egg.png") no-repeat top center;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+  }
+  .egg-liehen {
+    display: none;
+    width: 11.6rem;
+    height: 16.25rem;
+    position: absolute;
+    left: 50%;
+    top: 11rem;
+    margin-left: -5.8rem;
+    background: image-url("mobile/events/golden_egg/broken-egg.png") no-repeat top center;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+  }
+  .hammer {
+    width: 5.5rem;
+    height: 8.6rem;
+    transform: rotateZ(-20deg);
+    position: absolute;
+    left: 66%;
+    top: 13rem;
+    background: image-url("mobile/events/golden_egg/hammer.png") no-repeat top center;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    animation: shake;
+    &.shake {
+      transform-origin: 50% 50%;
+      -webkit-animation: shake 1s linear 0.5s infinite;
+      -o-animation: shake 1s linear 0.5s infinite;
+      animation: shake 1s linear 0.5s infinite;
+    }
+    &.rotate30 {
+      transform-origin: 50% 50%;
+      -webkit-animation: rotate30 0.3s ease-out alternate backwards;
+      -o-animation: rotate30 0.3s ease-out alternate backwards;
+      animation: rotate30 0.3s ease-out alternate backwards;
+    }
+  }
+  .egg-broke {
+    &.win {
+      width: 27rem;
+      height: 12.9rem;
+      position: absolute;
+      left: 48%;
+      top: 14.3rem;
+      margin-left: -13.5rem;
+      background: image-url("mobile/events/golden_egg/win-egg.png") no-repeat bottom center;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+
+
+    }
+    &.lose {
+      width: 27rem;
+      height: 12rem;
+      position: absolute;
+      left: 48%;
+      top: 15.2rem;
+      margin-left: -13.5rem;
+      background: image-url("mobile/events/golden_egg/lose-egg.png") no-repeat bottom center;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+  }
+  .chance {
+    position: absolute;
+    top: 29rem;
+    left: 50%;
+    margin-left: -6rem;
+    width: 12rem;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 1.2rem;
+    background-color: #998B4E;
+    border-radius: 1rem;
+    text-align: center;
+    color: #fff;
+    span {
+      color: yellow;
+    }
+  }
+  .lottery-info {
+    position: absolute;
+    top: 33rem;
+    width: 100%;
+    height: 14.5rem;
+    color: #8F5D00;
+    background: image-url("mobile/events/golden_egg/lottery-info.png") no-repeat top 0.5rem center;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    padding: 0 2rem;
+    box-sizing: border-box;
+    .lottery-title {
+      text-align: center;
+      height: 1.6rem;
+      line-height: 1.6rem;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    ul {
+      margin: 0;
+      box-sizing: border-box;
+      height: 12.4rem;
+      padding: 0.45rem 0.9rem;
+      overflow: hidden;
+      li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        height: 2.8rem;
+        line-height: 2.8rem;
+        font-size: 1.2rem;
+        span {
+          display: inline-block;
+        }
+        .tel {
+          width: 10.94rem;
+        }
+        .verb {
+          text-align: center;
+          width: 5.47rem;
+        }
+        .reward {
+          padding-left: 3rem;
+          color: #EF4444;
+          width: 7.94rem;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}
+@keyframes scaleMax {
+  0% {
+    transform: scale(0.1,0.1);
+  }
+  100% {
+    transform: scale(1,1);
+  }
+}
+@-webkit-keyframes scaleMax {
+  0% {
+    transform: scale(0.1,0.1);
+  }
+  100% {
+    transform: scale(1,1);
+  }
+}
+@-moz-keyframes scaleMax {
+  0% {
+    transform: scale(0.1,0.1);
+  }
+  100% {
+    transform: scale(1,1);
+  }
+}
+@keyframes rotate30 {
+  0% {
+    transform: rotate(-20deg);
+  }
+
+  100% {
+    transform: rotate(-60deg);
+  }
+}
+@-webkit-keyframes rotate30 {
+  0% {
+    transform: rotate(-20deg);
+  }
+
+  100% {
+    transform: rotate(-60deg);
+  }
+}
+@-moz-keyframes rotate30 {
+  0% {
+    transform: rotate(-20deg);
+  }
+
+  100% {
+    transform: rotate(-60deg);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(-20deg);
+  }
+
+  12.5% {
+    transform: rotate(-13deg);
+  }
+
+  25% {
+    transform: rotate(-20deg);
+  }
+
+  37.5% {
+    transform: rotate(-27deg);
+  }
+
+  50% {
+    transform: rotate(-20deg);
+  }
+
+  100% {
+    transform: rotate(-20deg);
+  }
+}
+@-webkit-keyframes shake {
+  0% {
+    transform: rotate(-20deg);
+  }
+
+  12.5% {
+    transform: rotate(-13deg);
+  }
+
+  25% {
+    transform: rotate(-20deg);
+  }
+
+  37.5% {
+    transform: rotate(-27deg);
+  }
+
+  50% {
+    transform: rotate(-20deg);
+  }
+
+  100% {
+    transform: rotate(-20deg);
+  }
+}
+@-moz-keyframes shake {
+  0% {
+    transform: rotate(-20deg);
+  }
+
+  12.5% {
+    transform: rotate(-13deg);
+  }
+
+  25% {
+    transform: rotate(-20deg);
+  }
+
+  37.5% {
+    transform: rotate(-27deg);
+  }
+
+  50% {
+    transform: rotate(-20deg);
+  }
+
+  100% {
+    transform: rotate(-20deg);
+  }
+}
+
+
+.prize-info {
+  background-color: #34B9D9;
+  .prize-wrapper {
+    width: 28.8rem;
+    margin: 0 auto;
+    position: relative;
+    height: auto;
+    -webkit-background-size: 17.6rem 8rem;
+    padding-bottom: 2rem;
+    .prize-title {
+      height: 8rem;
+      background: image-url("mobile/events/golden_egg/title-bg.png")no-repeat top center;
+      background-size: 14.65rem 8rem;
+      color: #fff;
+      text-align: center;
+      box-sizing: border-box;
+      padding-top: 3.6rem;
+      /*background-color: #ccc;*/
+    }
+    .prize-set {
+      margin-top: -2.2rem;
+      border-radius: 1rem;
+      /*height: 41rem;*/
+      background-color: #80D8F7;
+      padding: 1rem;
+    }
+  }
+  &.prize-settings .prize-wrapper .prize-set {
+    height: 41rem;
+    background: image-url("mobile/events/golden_egg/lottery-settings.png") no-repeat top 1rem center;
+    background-color: #80D8F7;
+    -webkit-background-size: 96% 96%;
+    background-size: 96% 96%;
+  }
+  &.prize-intro .prize-wrapper .prize-set p {
+    color: #fff;
+    line-height: 2rem;
+    margin: .2rem 0;
+    &:first-child{
+      margin-top: 1rem;
+    }
+  }
+}
+
+.shadow {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  .popup {
+    display: none;
+    position: absolute;
+    top: 10rem;
+    left: 50%;
+    width: 22rem;
+    height: 28rem;
+    margin-left: -11rem;
+    background-color: #ccc;
+    &.popup-win {
+      display: block;
+      background: image-url("mobile/events/golden_egg/popup-win.png") no-repeat top center;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      transform-origin: 50% 50%;
+      -webkit-animation: scaleMax 0.3s ease-out alternate backwards;
+      -o-animation: scaleMax 0.3s ease-out alternate backwards;
+      animation: scaleMax 0.3s ease-out alternate backwards;
+      .prize-img {
+        display: block;
+        width: 11rem;
+        height: 11rem;
+        border-radius: 50%;
+        margin: 5rem auto 0;
+        border: none;
+        &.prize0{
+          background: image-url("mobile/events/golden_egg/reward0.png");
+          background-size: 100% 100%;
+        }
+        &.prize1{
+          background: image-url("mobile/events/golden_egg/reward1.png");
+          background-size: 100% 100%;
+        }
+        &.prize3{
+          background: image-url("mobile/events/golden_egg/reward3.png");
+          background-size: 100% 100%;
+        }
+      }
+      p {
+        width: 100%;
+        text-align: center;
+        margin: 0;
+      }
+      .prize-tip {
+        color: #fff;
+        position: absolute;
+        top: 17rem;
+      }
+      .prize-detail {
+        color: #E62E46;
+        position: absolute;
+        top: 20.3rem;
+      }
+      .btn {
+        display: block;
+        width: 8rem;
+        height: 3.2rem;
+        text-align: center;
+        line-height: 3.2rem;
+        &.close {
+          position: absolute;
+          top: 23.7rem;
+          left: 2.8rem;
+          border: 0.1rem solid #fff;
+          color: #fff;
+          background-color: #F95F6F;
+        }
+        &.sure {
+          position: absolute;
+          top: 23.7rem;
+          left: 12rem;
+          border: 0.1rem solid #fff;
+          color: #F95F6F;
+          background-color: #fff;
+        }
+      }
+    }
+    &.popup-lose {
+      display: block;
+      background: image-url("mobile/events/golden_egg/popup-lose.png") no-repeat top 2rem center;
+      -webkit-background-size: 13.5rem 13rem;
+      background-size: 13.5rem 13rem;
+      background-color: #fff;
+      transform-origin: 50% 50%;
+      -webkit-animation: scaleMax 0.3s ease-out alternate backwards;
+      -o-animation: scaleMax 0.3s ease-out alternate backwards;
+      animation: scaleMax 0.3s ease-out alternate backwards;
+      p {
+        text-align: center;
+        color: #C0C0C0;
+      }
+      .tip {
+        margin-top: 19rem;
+      }
+      .detail {}
+      .closebtn {
+        color: #606060;
+        text-decoration: none;
+        text-align: center;
+        line-height: 3.2rem;
+        display: block;
+        width: 15.6rem;
+        height: 3.2rem;
+        margin: 0 auto;
+        box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}

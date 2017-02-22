@@ -1,0 +1,36 @@
+#festival {
+    background-color: #e42c4b;
+    img {
+        max-width: 100%;
+    }
+    #lottery-box {
+        padding: 0 1.4rem;
+    }
+    #wrapper {
+        background-image: image-url("mobile/events/7-20/bg.png");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        padding: 1.1rem 1.15rem;
+        .prize {
+            height: 7.1rem;
+            padding: 0 .2rem;
+            margin-bottom: .4rem;
+            img {
+                border-radius: 1rem;
+                background-color: #ffdb1f;
+            }
+            &.on {
+                img {
+                    background-color: #f23d35;
+                }
+            }
+        }
+    }
+    #start {
+        img {
+            background-image: image-url("mobile/events/7-20/red.png");
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+    }
+}

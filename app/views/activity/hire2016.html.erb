@@ -1,0 +1,27 @@
+<% content_for :head do %>
+    <% content_for :title do %>
+    2016进货宝春季大招募
+    <% end %>
+    <%= stylesheet_link_tag 'events/hire2016', media: 'all', 'data-turbolinks-track' => true %>
+    <meta name="description" content="进货宝。" />
+    <div id='wx_pic' style='margin:0 auto;display:none;'>
+        <%= image_tag "mobile/300.png" %>
+    </div>
+<% end %>
+
+<div id="swiper-container">
+    <div class="swiper-wrapper">
+        <% for i in (1..11) %>
+            <div class="swiper-slide">
+                <%= image_tag "mobile/events/hire2016/#{i}.png" %>
+            </div>
+        <% end %>
+    </div>
+</div>
+<% ua = (request.env["HTTP_USER_AGENT"] or "").downcase %>
+<% isInApp = ua.include?('jinhuobao') %>
+<% if isInApp %>
+    <div id="back"><a href="/"><%= image_tag "mobile/base/back.png" %></a></div>
+<% end %>
+
+<%= javascript_include_tag 'events/hire2016', 'data-turbolinks-track' => true %>

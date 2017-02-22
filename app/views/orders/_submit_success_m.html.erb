@@ -1,0 +1,39 @@
+<!-- 提交订单页 -->
+<% content_for :header do %>
+<header class="no-search clearfix">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">提交结果</div>
+</header>
+<% end %>
+
+<div class="success-box">
+  <h2>恭喜您</h2>
+  <% orders = @order_group.orders %>
+  <p>您有<span class="success-num"><%= Utils::NumberProcess.number_to_cn(orders.count) %></span>个订单提交成功</p>
+  <% orders.each do |order| %>
+  <ul class="order-list" s-num="<%= orders.count %>">
+    <li><span>订单 </span><%= order.OrderCode %></li>
+    <!--change by lzh-->
+    <!--<li><span>金额 </span><-%= order.Money %></li>-->
+    <li><span>金额 </span><%= order.Money %></li>
+    <!--change by lzh-->
+  </ul>
+  <% end %>
+  <%= image_tag "mobile/cart/successimg.svg" %>
+</div>
+<div class="look-orders">
+  <p>订单详情请到<a href="/my/orders" class="look">我的订单</a>查询</p>
+</div>
+<% if Time.now > Time.parse('2016-10-16 00:00') && Time.now < Time.parse('2016-10-21 00:00') %>
+<a href="/activity/anniver_share_page" class="share-btn"><%= image_tag "mobile/events/anniver_share_page/share-button.png" %></a>
+<% end %>
+<% content_for :footer do %>
+  <div></div>
+<% end %>
+
+<% content_for :script do %>
+
+<%= javascript_include_tag 'orders', 'data-turbolinks-track' => true %>
+<% end %>

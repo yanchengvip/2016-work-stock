@@ -1,0 +1,49 @@
+<% content_for :head do %>
+    <% content_for :title do %>
+    进货宝女老板写给女老板的一封信
+    <% end %>
+    <%= stylesheet_link_tag 'events/women_s_day', media: 'all', 'data-turbolinks-track' => true %>
+    <meta name="description" content="进货宝努力让更多的女老板们努力成就更完美的自己，无畏且自信。" />
+    <div id='wx_pic' style='margin:0 auto;display:none;'>
+        <%= image_tag "mobile/events/women_s_day/share.jpg" %>
+    </div>
+
+<% end %>
+<main class="normal">
+ <div id="fullpage">
+    <div class="section" id="p1">
+        <div class="layer l1"></div>
+    </div>
+    <div class="section" id="p2">
+        <div class="layer l1"></div>
+    </div>
+    <div class="section" id="p3">
+        <div class="layer l1"></div>
+    </div>
+    <div class="section" id="p4">
+        <div class="layer l1"></div>
+    </div>
+    <div class="section" id="p5">
+        <div class="layer l1"></div>
+    </div>
+    <div class="section" id="p6">
+        <div class="layer l1"></div>
+    </div>
+    <div class="section" id="p7">
+        <div class="layer l1">
+            <input type="text" placeholder="请输入手机号">
+            <a class="btn" href="javascript:getCoupon()"><%= image_tag "mobile/events/women_s_day/btn.png" %></a>
+        </div>
+    </div>
+</div>
+<div id="pop-up"><div id="msg"></div></div>
+<% ua = (request.env["HTTP_USER_AGENT"] or "").downcase %>
+<% isInApp = ua.include?('jinhuobao') %>
+<div class="layer share-tip"></div>
+<div id="arrow"><a href="javascript:goToNext();"><%= image_tag "mobile/invitationLetter/arrow.png" %></a></div>
+<% if isInApp %>
+    <div id="back"><a href="/"><%= image_tag "mobile/back.png" %></a></div>
+<% end %>
+</main>
+
+<%= javascript_include_tag 'events/women_s_day', 'data-turbolinks-track' => true %>

@@ -1,0 +1,70 @@
+<% content_for :header do %>
+<style type="text/css">
+  body{
+    background-color: #f3f4f5;
+  }
+</style>
+
+<header class="no-search title clearfix">
+  <div class="header-left">
+
+  </div>
+  <div class="login-mode">
+    <div class="password-login active">密码登录</div>
+    <div class="code-login">快捷登录</div>
+  </div>
+  <div class="header-right"><a href="/sign_up" class="sign-up-link">注册</a></div>
+</header>
+<% end %>
+<% content_for :main do %>
+  <main class="container new-tel">
+    <div class="pass-login">
+      <%= form_tag "/invitations/accept", class: "pure-form login" do %>
+        <fieldset class="">
+          <div class="tel-num input-box">
+            <span>手机号</span>
+            <input type="number" id="tel" class="" name="session[tel]" placeholder="请输入手机号" required>
+          </div>
+          <div class="tel-password input-box">
+            <span>密码</span>
+            <input type="password" class="" id="" name="session[password]" placeholder="请输入密码" required>
+          </div>
+        </fieldset>
+        <p class="get-password"><a href="/passwords/new">忘记密码</a></p>
+        <div class="btn btn-sign-in">登录</div>
+      <% end %>
+    </div>
+    <div class=" tel-login">
+      <%= form_tag "/tel_login", class: "pure-form login" do %>
+        <fieldset class="">
+          <div class="tel-num input-box">
+            <span>手机号</span>
+            <input type="number" id="tel_" class="" name="session[tel]" placeholder="请输入手机号" required>
+          </div>
+          <div class="tel-code input-box">
+            <span>验证码</span>
+            <input type="number" class="" id="code" name="check-code" placeholder="请输入验证码" required>
+            <div type="button" id="getcode" class="get-sms-code" >获取验证码</div>
+          </div>
+        </fieldset>
+        <p class="phone-voice">未收到验证码？ <a href="javascript:;">请尝试语音播报</a></p>
+        <div class="btn new-tel-btn">登录</div>
+        <p>点击登录，即表示您同意<a href="/common/mobile_agreement">《进货宝用户协议》</a></p>
+      <% end %>
+      <!-- <div class="other-login">
+        <div class="line-text center-align"><span>其他登录方式</span></div>
+        <ul>
+          <li><a href="#">微信登录</a></li>
+          <li><a href="#">支付宝登录</a></li>
+          <li><a class="tel-login-link" href="/tel_login">账号密码登录</a></li>
+        </ul>
+      </div> -->
+    </div>
+  </main>
+<% end %>
+<% content_for :footer do %>
+    &nbsp;
+<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'session', 'data-turbolinks-track' => true %>
+<% end %>

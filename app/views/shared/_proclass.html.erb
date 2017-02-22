@@ -1,0 +1,28 @@
+<div class="nav_category">
+    <ul class="clearfix nav_title">
+      <li class="<%= 'back_g' if request.path == '/' %>"><a href="/">首页</a></li>
+      <% first_groups = ProductGroup.first_groups.includes(:second_groups) %>
+      <% first_groups.each_with_index do |f_group, index| %>
+        <li class="first">
+          <a href="/products?fid=<%=f_group.ID%>" class="a1"><%= f_group.Name %></a>
+          <div class="goods_box">
+              <ul>
+                <% second_groups = f_group.second_groups %>
+                <% second_groups.each_with_index do |s_group, index| %>
+                  <% if index % 2 == 0 %>
+                    <li class="clearfix">
+                      <a href="/products?sid=<%=s_group.ID%>" class="left"><%= s_group.Name %></a>
+                  <% else %>
+                      <a href="/products?sid=<%=s_group.ID%>" class="right"><%= s_group.Name %></a>
+                    </li>
+                  <% end %>
+                <% end %>
+                <% if second_groups.size % 2 == 1 %>
+                  </li>
+                <% end %>
+              </ul>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+</div>

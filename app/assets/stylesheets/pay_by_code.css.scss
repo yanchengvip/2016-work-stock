@@ -1,0 +1,199 @@
+.pay {
+    .order-info {
+        background-color: #fff;
+        margin: 1.2rem 0;
+        font-size: 1.3rem;
+        color: #606060;
+        padding: 0.8rem 1.2rem;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    td {
+        padding: 0;
+        height: 2.8rem;
+    }
+    .tab-title {
+        width: 28%;
+    }
+    .tab-cont {}
+    td:nth-child(2) {
+        color: #4A4A4A;
+    }
+    .order-item-box {
+        padding-left: 1.2rem;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+        overflow: hidden;
+    }
+    .order-item {
+        padding-left: 0;
+    }
+    .pay-items-title {
+        font-size: 1.2rem;
+        color: #404040;
+        border-bottom: 1px solid #e0e0e0;
+        line-height: 2.5rem;
+    }
+}
+
+.pay-box {
+    position: fixed;
+    width: 100%;
+    height: 4rem;
+    line-height: 4rem;
+    left: 0;
+    bottom: 0;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    padding-left: 0.8rem;
+    font-size: 1.4rem;
+    color: #606060;
+    z-index: 9;
+    input {
+        color: #E62E46;
+        border: 1px solid #D0D0D0;
+        border-radius: 0.5rem;
+        padding-right: 0.5rem;
+        width: 10rem;
+        height: 3rem;
+    }
+    .go-pay {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 11rem;
+        height: 100%;
+        background-color: #EF4444;
+        color: #fff;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+}
+
+.pay-mode-box {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    display: none;
+    z-index: 10;
+    .shadow {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,.4);
+    }
+    .pay-mode {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: 1.2rem;
+        border-top: 1px solid #e0e0e0;
+        color: #606060;
+        // transition: .2s;
+        // transform: translateY(100%);
+        overflow: hidden;
+        background-color: #fff;
+    }
+    // .blur {
+    //     width: 150%;
+    //     height: 150%;
+    //     position: absolute;
+    //     left: -10%;
+    //     top: -10%;
+    //     filter: blur(5px);
+    //     z-index: -1;
+    //     img {
+    //         width: 100%;
+    //         height: 100%;
+    //     }
+    // }
+    h4 {
+        margin: 0;
+        font-size: 1.6rem;
+        text-align: center;
+        line-height: 4.3rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .mode-list {
+        font-size: 1.6rem;
+        margin-bottom: 0.8rem;
+        li {
+            height: 4.4rem;
+            line-height: 4.4rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .check {
+            background: image-url('mobile/orders/checkpay.png') 27.8rem center no-repeat;
+            background-size: 1.8rem auto;
+        }
+        em {
+            width: 3.2rem;
+            height: 3.2rem;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 100% 100%;
+            margin-top: 0.6rem;
+            float: left;
+            margin-right: 0.8rem;
+        }
+        .weixin {
+            background-image: image-url('mobile/orders/weixinpay.png');
+        }
+        .zhaoshang {
+            background-image: image-url('mobile/orders/zhaoshangpay.png');
+        }
+        .fenqi {
+            background-image: image-url('mobile/orders/fenqipay.png');
+        }
+        span {
+            font-size: 1.2rem;
+            border-radius: 0.2rem;
+            margin-left: 0.5rem;
+        }
+        // .discount {
+        //     border: 1px solid #EC9A13;
+        //     color: #EC9A13;
+        // }
+        // .cost {
+        //     border: 1px solid #909090;
+        //     color: #909090;
+        // }
+    }
+    .fenqi-pay span{
+      border: 1px solid #909090;
+      color: #909090;
+    }
+    .zhaoshang-pay span{
+      border: 1px solid #EC9A13;
+      color: #EC9A13;
+    }
+    .pay-btn {
+        width: 29.6rem;
+        height: 4rem;
+        line-height: 4rem;
+        text-align: center;
+        background-color: #EF4444;
+        color: #fff;
+        font-size: 1.6rem;
+        display: block;
+        margin-bottom: 0.8rem;
+        border-radius: 0.4rem;
+    }
+}
+
+.show {
+    display: block;
+}
+
+// .pay-mode-box.show{
+//   .pay-mode{
+//     transform: translateY(0);
+//   }
+// }

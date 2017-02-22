@@ -1,0 +1,362 @@
+<% content_for :head do %>
+  <% content_for :title do %>
+    进货宝 - 1周年庆
+  <% end %>
+  <style type="text/css" media="all">
+    html { background-color:#fe0058; max-width: 32rem;margin-left: auto;margin-right: auto;}
+  </style>
+  <%= stylesheet_link_tag 'events/anniversary', media: 'all', 'data-turbolinks-track' => true %>
+  <meta name="description" content="进货宝。" />
+<% end %>
+<% content_for :header do %>
+  <header class="no-search clearfix"id="header" >
+    <div class="header-left">
+      <a href="/" id="back">
+      </a>
+    </div>
+    <div class="ordersHeader_title">周年庆主会场</div>
+    </div>
+    </header>
+<% end %>
+
+<% content_for :main do %>
+  <main class="anniver-contailer">
+    <section class="back-to-top">
+      <%= image_tag "mobile/events/anniversary/backToTop.png" %>
+    </section>
+    <section class="venue" >
+      <%= image_tag "mobile/events/anniversary/venue.png" %>
+    </section>
+    <section class="countdown anniver-start" >
+
+      <h3 class="countdown-title">距离周年庆开启还剩</h3>
+      <div class="red-line"></div>
+      <div class="time-box" data-time="<%= Time.now.strftime('%Y/%m/%d %H:%M:%S') %>">
+        <span class="day"><em>0</em><em>0</em></span><strong>天</strong>
+        <span class="hour"><em>0</em><em>0</em></span><strong>时</strong>
+        <span class="minute"><em>0</em><em>0</em></span><strong>分</strong>
+        <span class="second"><em>0</em><em>0</em></span><strong>秒</strong>
+      </div>
+    </section>
+    <section class="nav-list" >
+      <div>
+        <% idx = Time.now.day - 15%>
+        <% @pic_floors.each_with_index do |floor, index| %>
+          <% name = floor.FloorName.split(" ") %>
+          <% flag = (index == idx) %>
+          <a href="<%= flag ? '/activity/' + floor.ProductRecommendInfoID : 'javascript:void(0);' %>" class="<%= if flag then 'on' else '' end %>">
+            <span><%= name[0] %></span>
+            <span><%= name[1..-1].join(' ') %></span>
+          </a>
+        <% end %>
+      </div>
+    </section>
+    <!-- 大转盘  -->
+    <section class="turntable" >
+      <div class="title">
+        <%= image_tag "mobile/events/anniversary/turntable.png" %>
+      </div>
+      <a href="javascript:void(0);" class="rule" >
+        活动规则>>
+      </a>
+      <div class="prize-box" >
+        <div class="wrapper">
+          <div class="row">
+            <div class="prize p1 col s4" data-index=1>
+              <%= image_tag "mobile/events/anniversary/turntable1.png" %>.
+            </div>
+            <div class="prize p2 col s4" data-index=2>
+              <%= image_tag "mobile/events/anniversary/turntable2.png" %>
+            </div>
+            <div class="prize p3 col s4" data-index=3>
+              <%= image_tag "mobile/events/anniversary/turntable3.png" %>
+            </div>
+          </div>
+          <div class="row" >
+            <div class="prize p8 col s4" data-index=8>
+              <%= image_tag "mobile/events/anniversary/turntable8.png" %>
+            </div>
+            <div class="prize  col s4" id="start">
+              <%= image_tag "mobile/events/anniversary/hong_buttn.png" %>
+            </div>
+            <div class="prize p4 col s4" data-index=4>
+              <%= image_tag "mobile/events/anniversary/turntable4.png" %>
+            </div>
+          </div>
+          <div class="row" >
+            <div class="prize p7 col s4" data-index=7>
+              <%= image_tag "mobile/events/anniversary/turntable7.png" %>
+            </div>
+            <div class="prize p6 col s4" data-index=6>
+              <%= image_tag "mobile/events/anniversary/turntable6.png" %>
+            </div>
+            <div class="prize p5 col s4" data-index=5>
+              <%= image_tag "mobile/events/anniversary/turntable5.png" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="coupon-lpt" >
+    <% if cookies['company_id'] == '22294f4c-dacc-48d6-aba8-d6c8fbe8cf7e' %>
+      <div class="title" >
+        <%= image_tag "mobile/events/anniversary/coupon.png" %>
+      </div>
+      <div class="coupon-list" >
+        <% if @coupons.present? %>
+        <div class="row g1">
+          <% @coupons[0..2].to_a.each do |coupon| %>
+          <div class="item" data-id="<%= coupon.ID %>">
+            <span>￥<%= coupon.CouponPrice %></span>
+            <div class="logo"><button <%= "disabled=true" if Time.now < Date.parse('2016-10-15') %>><%= image_tag coupon.LogoUrl %></button></div>
+          </div>
+          <% end %>
+        </div>
+        <div class="row g2">
+          <% @coupons[3..6].to_a.each do |coupon| %>
+          <div class="item" data-id="<%= coupon.ID %>">
+            <span>￥<%= coupon.CouponPrice %></span>
+            <div class="logo"><button <%= "disabled=true" if Time.now < Date.parse('2016-10-15') %>><%= image_tag coupon.LogoUrl %></button></div>
+          </div>
+          <% end %>
+        </div>
+        <div class="row g3">
+          <% @coupons[7..9].to_a.each do |coupon| %>
+          <div class="item" data-id="<%= coupon.ID %>">
+            <span>￥<%= coupon.CouponPrice %></span>
+            <div class="logo"><button <%= "disabled=true" if Time.now < Date.parse('2016-10-15') %>><%= image_tag coupon.LogoUrl %></button></div>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+        </div>
+      <% end %>
+    </section>
+    <section class="popup-box">
+      <div class="layer"></div>
+      <div class="wrapper">
+        <div class="rule-top">
+          <span class="rule-title" >
+            抽奖活动规则
+          </span>
+          <div class="line"></div>
+        </div>
+        <div class="rule-content">
+          <p>抽奖规则:</p>
+          <p>1. 周年庆期间每人每天可抽奖1次(0:00更新);</p>
+          <p>2. 中奖后，奖品会自动发放到账户中;</p>
+          <p>3. 周年庆转盘活动时间截止2016年10月20日23时59分59秒;</p>
+          <p>4. 禁止任何不正当手段参与活动，一经发现，活动发起人有权取消用户的获奖资格;</p>
+          <p>5. 本次活动最终解释权归进货宝所有。</p>
+        </div>
+        <div class="close">X</div>
+      </div>
+    </section>
+    <% if Time.now > Time.parse('2016-10-16 00:00') && Time.now < Time.parse('2016-10-21 00:00') %>
+    <section class="second-page-new second-page" style="padding-top:0;" >
+        <div class="botttom-cont" style="padding-top:0;">
+          <!-- 顶部导航栏-->
+          <div class="m-nav-wrap">
+            <article class="m-nav-stickytabs">
+              <div class="nav-box">
+                <!-- 导航栏：遍历所有楼层 -->
+                <% count = 0 %>
+                <% @pro_floors.each_with_index do |activity_floor,index| %>
+                    <% temp = case index when 0 then "tab active"  else "tab" end %>
+                      <a class="<%= temp %>" href="#floor<%= index %>">
+                        <%= activity_floor.ShowName %>
+                      </a>
+                    <% count = index %>
+                <% end %>
+              </div>
+                <% if count > 3 %>
+                  <span class="select-btn show-btn"><i></i></span>
+                <% end %>
+            </article>
+          </div>
+          <!-- 外层遍历-->
+          <% @pro_floors.each_with_index do |activity_floor,index| %>
+              <div class="item-box" id="floor<%= index %>">
+                <div class="item two-cont">
+                  <div class="floor-img">
+                    <img class=""  src="<%= activity_floor.cover_url('v220') %>" data-original="<%= activity_floor.cover_url('v220') %>">
+                  </div>
+                  <ul class="item-cont clearfix">
+                    <!-- 内层遍历-->
+                    <!--.order("activity_floor_products.Sort ASC")-->
+                    <!-- @products = activity_floor.products.where("Products.State = 2 ") %>-->
+
+
+                    <% @products = activity_floor.products.joins("left join DepotProductStocks dps on dps.ProductID = Products.ID").where("Products.State = 2 and dps.State = 2 and dps.DepotID in (?)",session[:depot_ids]) %>
+                    <% @stocks = DepotProductStock.stocks_for(@products.map(&:ID), session[:depot_ids]) if @products %>
+                    <!--"<div % activity_floor.products.each_with_index do |product,index| %>"-->
+                    <% @products.each_with_index do |product,index| %>
+                        <!-- 各个楼层只取排序前20的商品-->
+                        <% break if index==20 %>
+                        <li data-data="<%= product.list_attrs_json %>" id="p-<%= product.ID %>" onclick="showPopup(this)">
+                          <div class="cont-item">
+                            <div class="item-img">
+                              <img class="lazy"  data-original="<%= product.cover_url('v220') %>">
+
+                              <% if @stocks[product.id] && @stocks[product.id].Stock <= 0 %>
+                                <span class="mask-text">补货中</span>
+                              <% end %>
+                              <% if product.CornerMark.present? %>
+                                  <i class="img-tip"><%= product.CornerMark %></i>
+                              <% end %>
+                            </div>
+                            <div class="item-text">
+                              <div class="text-top">
+                                <h3 class="text-title"><%= product.Name%></h3>
+                              </div>
+                              <div class="text-bottom-one">
+                                <p class="price">
+                                  <strong class="red-text">
+                                    <%= product.ProductPrice.round(2) %>
+                                    <i>元/<%= product.Unit%></i>
+                                  </strong>
+                                  <% if product.MinBuyCount.to_i > 1 %>
+                                      <span class="min-buy"><%= product.MinBuyCount %><%= product.Unit%>起订</span>
+                                  <% end %>
+                                </p>
+                                <div class="item-console <%= 'show-console' if product.cart_for(current_user) > 0 %>">
+                                  <a href="javascript:;" onclick="setAmount.add('<%= product.ID %>')" class="add-item">＋</a>
+                                  <div class="item-num" data-min-buycount="<%= product.MinBuyCount || 1 %>">
+                                    <input id="<%= product.ID %>" class="number" data-id="<%= product.ID %>" type="num" value="<%= product.cart_for(current_user) %>" num="<%= product.cart_for(current_user) %>" disabled>
+                                  </div>
+                                  <a href="javascript:;" onclick="setAmount.reduce('<%= product.ID %>')" class="remove-item">－</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                    <% end %>
+                    <!-- 内层遍历-->
+                  </ul>
+                </div>
+              </div>
+          <% end %>
+          <!-- 外层遍历-->
+        </div>
+        <!-- 下拉导航栏-->
+        <div class="shadow-nav hidden">
+          <div class="tit">
+            切换楼层
+            <span class="select-btn hidden-btn"><i></i></span>
+          </div>
+          <ul class="floors clearfix">
+            <% @pro_floors.each_with_index do |activity_floor,index| %>
+                <li>
+                  <a href="#floor<%= index %>">
+                    <%= activity_floor.ShowName %>
+                  </a>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+        <script type="text/javascript">
+            // 限制标题字数
+            $(".one-cont .text-title").each(function(){
+                var htmlStr = $(this).html();
+                if(htmlStr.length > 48){
+                    $(this).html(htmlStr.slice(0,46) + "...")
+                }
+            })
+            $(".two-cont .text-title,.one-cont-big .text-title").each(function(){
+                var htmlStr = $(this).html();
+                if(htmlStr.length > 26){
+                    $(this).html(htmlStr.slice(0,24) + "...")
+                }
+            })
+            // 菜单显示隐藏
+            var mo=function(e){e.preventDefault();};
+            $(".select-btn").click(function(){
+                $(".shadow-nav").toggleClass("hidden");
+            })
+            $(".show-btn").click(function(){
+                $("html,body").css({"overflow":"hidden"})
+                $(document).on("touchmove",mo)
+                if( $(".m-nav-stickytabs").css("position") == "relative" ){
+                    $("html,body").animate({"scrollTop":navBarTop - headerTop},300);
+                }
+            })
+
+            $(".hidden-btn").click(function(){
+                $("html,body").css({"overflow":"auto"})
+                $(document).unbind("touchmove",mo)
+            })
+
+            // 选项自动滚动
+            function auto(){
+                $(".nav-box").scrollLeft(0);
+                var left = $(".nav-box .active").offset().left - $(document.body).width()/2;
+                $(".nav-box").scrollLeft(left);
+            }
+            var $item = $(".item-box")
+            var navHeight = $(".nav-box").height() * 2;
+            var timer = 0;
+            $(window).scroll(function(){
+              var scrollTop = $(document.body).scrollTop();
+                $(".nav-box .tab").each(function(){
+                  var index = $(this).index()
+                    if( scrollTop + navHeight >= $item.eq(index).offset().top){
+                        $(this).addClass("active").siblings().removeClass("active");
+                        $(".floors li").eq(index).addClass("active").siblings().removeClass("active");
+                    }
+                })
+                if($(".nav-box").length != 0){
+                  clearTimeout(timer);
+                  timer = setTimeout(function(){
+                      auto();
+                  },300)
+                }
+
+            })
+            // 切换
+            var height = $(document.body).height()
+            $(".nav-box .tab").click(function(){
+                $(this).addClass("active").siblings().removeClass("active");
+                var index = $(this).index();
+                $(".floors li").eq(index).addClass("active").siblings().removeClass("active");
+                //$(".item-box").css("padding-top","0")
+                // $(document.body).scrollTop(targetTop)
+            })
+            $(".floors li").click(function(){
+                $(this).addClass("active").siblings().removeClass("active");
+                var index = $(this).index();
+                $(".nav-box .tab").eq(index).addClass("active").siblings().removeClass("active");
+                var targetTop = $(".item").eq(index).offset().top - navHeight;
+                $(document.body).scrollTop(targetTop)
+                $(".shadow-nav").addClass("hidden");
+                $("html,body").css({"overflow":"auto"})
+                $(document).unbind("touchmove",mo);
+                auto();
+            })
+
+
+
+            // 图片懒加载
+
+            $(function() {
+                $("img.lazy").lazyload({
+                    // placeholder : "images/grey.gif",
+                    threshold : 200,
+                    effect : "fadeIn"
+                });
+            });
+
+        </script>
+    </section>
+    <section class="declaraction">
+      所有活动最终解释权归进货宝公司所有
+    </section>
+    <% end  %>
+  </main>
+<% end %>
+
+<% content_for :script do %>
+  <%= javascript_include_tag 'events/anniversary', 'data-turbolinks-track' => true %>
+<% end %>
+<% content_for :footer do %>
+  <i></i>
+<% end %>

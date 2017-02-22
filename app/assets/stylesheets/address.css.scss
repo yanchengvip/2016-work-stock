@@ -1,0 +1,589 @@
+@import "variable";
+dl,
+dt,
+dd {
+    margin: 0;
+    padding: 0;
+}
+
+.address-box {
+    margin-top: 1rem;
+    background-color: #fff;
+}
+
+.address-item {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: 1.2rem;
+    line-height: 2.2rem;
+    background-color: #fff;
+    @include bdr-top-bottom(#e0e0e0);
+    color: #404040;
+    dt,
+    dd {
+        padding-right: 1.2rem;
+        margin-bottom: 0.75rem;
+    }
+    .action {
+        @include bdr-bottom(#d0d0d0);
+        a {
+            float: right;
+            color: #E62E46;
+            font-size: 1.2rem;
+            padding-right: 1rem;
+            margin-left: 2rem;
+            background: image-url("mobile/mine/red-right.png") right center no-repeat;
+            background-size: 0.5rem auto;
+        }
+    }
+    .contact {
+        margin-top: .5rem;
+    }
+    .contact {
+        display: flex;
+        justify-content: space-between;
+    }
+    .contact-name {
+        margin-right: 1.5rem;
+    }
+    .address-detail {
+        margin-bottom: .5rem;
+    }
+    &.active {
+        color: #c74748;
+        .iconfont {
+            color: #c74748;
+        }
+    }
+    .address-detail {}
+    .iconfont {
+        font-size: 1.3rem;
+        color: #aaa;
+        position: absolute;
+        right: 1rem;
+        // top: 1.2rem;
+    }
+    .edit {
+        // float: right;
+        height: 2.2rem;
+        position: absolute;
+        right: 1.2rem;
+        top: 0rem;
+        padding-left: 1.5rem;
+        color: #909090;
+        background: image-url("mobile/mine/address-edit.png") left center no-repeat;
+        background-size: auto 1.4rem;
+    }
+}
+
+.address-item:before,
+.address-item:after {
+    border-color: transparent;
+}
+
+.address-item.jhb-grey {
+    margin: 0;
+    padding: 1.2rem;
+    font-size: 1.3rem;
+    line-height: 2.1rem;
+    .contact {
+        display: block;
+        margin: 0;
+        span {
+            color: #404040;
+            margin-right: 2.4rem;
+        }
+    }
+}
+
+.faild-reason {
+    padding: 0.6rem 1.2rem;
+    font-size: 1.2rem;
+    background-color: rgba(255,229,0,.32);
+    color: #773F0E;
+    margin-top: -0.75rem;
+}
+
+.address-info {
+    height: 4rem;
+    line-height: 4rem;
+    li {
+        float: left;
+        // margin-right: 2rem;
+        height: 100%;
+        padding-left: 4rem;
+        background-size: 2.5rem 2.5rem;
+        background-position: 1.2rem center;
+        background-repeat: no-repeat;
+    }
+}
+
+.addresses-new {
+    font-size: 1.5rem;
+    color: #E62E46;
+}
+
+// address new
+#address-new-form {
+    margin-top: 1.6rem;
+    position: relative;
+    background-color: #fff;
+    @include bdr-top-bottom(#e0e0e0);
+    padding: 0 1.6rem;
+    overflow: hidden;
+    .input-item {
+        width: 100%;
+        height: 4.5rem;
+        line-height: 4.5rem;
+        @include bdr-bottom(#e0e0e0);
+        position: relative;
+        font-size: 1.5rem;
+        color: #606060;
+        &.error {
+            @include bdr-bottom(#e0e0e0);
+        }
+        &.tip {
+            width: 120%;
+            margin-left: -10%;
+            padding-left: 10%;
+            background-color: #f3f4f5;
+            font-size: 1rem;
+            color: #606060;
+        }
+    }
+    .input-tag {
+        position: absolute;
+        height: 100%;
+        line-height: 4.5rem;
+    }
+    input,
+    input:focus,
+    input:active,
+    .as-input {
+        outline-width: 0;
+        border: 0;
+        height: 100%;
+        color: #404040;
+        padding-left: 7.5rem;
+        background-color: #fff;
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+    .as-input {
+        line-height: 4.5rem;
+    }
+    .select-box {
+        padding-left: 7.5rem;
+        height: 100%;
+        select {
+            border: none;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        label {
+            margin-top: 1rem;
+        }
+    }
+    .shop-num {
+        padding-left: 7.5rem;
+        label {
+            display: inline-block;
+            height: 2.6rem;
+            line-height: 2.6rem;
+            font-size: 1.2rem;
+            color: #606060;
+            padding: 0 0.7rem;
+            margin-right: 1.3rem;
+            border: 1px solid #f0f0f0;
+            border-radius: 0.4rem;
+        }
+        input {
+            width: auto;
+            display: none;
+        }
+        .active {
+            background-color: #EF4444;
+            color: #fff;
+            border-color: #EF4444;
+        }
+    }
+}
+
+.address-btn {
+    display: block;
+    width: 29.6rem;
+    height: 4rem;
+    line-height: 4rem;
+    font-size: 1.6rem;
+    color: #fff;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #C0C0C0;
+    border-radius: 0.4rem;
+    margin-top: 3.2rem;
+    &.main-ok {
+        background-color: #EF4444;
+    }
+}
+.agreement{
+  padding-left: 1.2rem;
+  font-size: 1rem;
+  color: #606060;
+  line-height: 3rem;
+  a{
+    color: #E62E46;
+  }
+}
+.picker-header {
+    height: 3rem;
+    background-color: #FFF;
+    text-align: center;
+    @include bdr-top-bottom(#e0e0e0);
+    position: relative;
+    font-size: 1.5rem;
+    line-height: 3rem;
+    .close-picker {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: inline-block;
+        font-size: 1.2rem;
+        line-height: 3rem;
+        padding: 0 1rem;
+        color: #0894ec;
+    }
+}
+
+// 我的地址页显示认证状态
+.address-item .action {
+    height: 3.5rem;
+    line-height: 3.5rem;
+    color: #404040;
+    span,
+    em,
+    a {
+        vertical-align: middle;
+    }
+    .shop-name {
+        font-size: 1.3rem;
+    }
+    .certified {
+        display: inline-block;
+        margin-left: 0.2rem;
+        width: 7rem;
+        height: 1.6rem;
+        background-size: auto 100%;
+        background-position: left center;
+        background-repeat: no-repeat;
+    }
+    .certified-success {
+        background-image: image-url('mobile/mine/certified-ok.png');
+    }
+    .certified-no {
+        background-image: image-url('mobile/mine/certified-no.png');
+    }
+    .certified-ing {
+        background-image: image-url('mobile/mine/certified-ing.png');
+    }
+    .certified-faild {
+        background-image: image-url('mobile/mine/certified-faild.png');
+    }
+}
+
+
+// 认证门面
+.certified {
+    .upload-box {
+        padding: 0.4rem 1.6rem;
+    }
+
+    .upload-item {
+        margin-bottom: 1.2rem;
+        background-color: #fff;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    // p{
+    //     font-size: 1.2rem;
+    //     line-height: 2.8rem;
+    //     color: #606060;
+    // }
+    .img-box {
+        display: block;
+        position: initial !important;
+        width: 28.8rem;
+        height: 16.2rem;
+        line-height: 16.2rem;
+        // background: image-url('mobile/base/camera.svg') center center no-repeat #fff;
+        // background-size: 8rem 8rem;
+        text-align: center;
+        overflow: hidden;
+        img {
+            max-height: 100%;
+            max-width: 100%;
+            vertical-align: middle;
+            display: none;
+        }
+        i {
+            vertical-align: middle;
+        }
+        &:before {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            font-size: 1.2rem;
+            line-height: 3em;
+            text-align: left;
+            text-indent: 1em;
+            color: #606060;
+            background-image: image-url('mobile/base/camera.svg');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: 8rem auto;
+        }
+    }
+
+    #licenseimg .img-box:before {
+        content: "请上传营业执照";
+        background-color: #fff;
+    }
+
+    .up-ing:before {
+        content: "上传中,请稍后" !important;
+        background-image: image-url('mobile/loading.gif') !important;
+        color: #fff;
+        background-color: rgba(0, 0, 0, .2) !important;
+        // background-color: rgba(255,255,255,.8);
+    }
+
+    .up-end:before {
+        content: "点击可重新上传店铺营业执照"!important;
+        background-image: image-url('mobile/base/write-camera.png') !important;
+        background-color: rgba(0, 0, 0, .2) !important;
+        color: #fff;
+    }
+
+    .up-err:before {
+        content: "上传失败,重新上传"!important;
+        background-image: image-url('mobile/base/write-camera.png') !important;
+        background-color: rgba(0, 0, 0, .2) !important;
+        color: #fff;
+    }
+
+    .judge {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 9;
+        // background-color: red;
+    }
+
+    .sub-btn {
+        display: block;
+        text-align: center;
+        width: 29.6rem;
+        margin: 0 auto;
+        height: 4rem;
+        line-height: 4rem;
+        font-size: 1.8rem;
+        color: #fff;
+        background-color: #C0C0C0;
+    }
+
+    .main-ok {
+        background-color: #EF4444;
+    }
+
+    input {
+        cursor: pointer;
+    }
+}
+.store-info-box {
+    margin-bottom: 3rem;
+    .store-info {
+        float: left;
+        width: 33.3%;
+        text-align: center;
+        padding-top: 7.5rem;
+        line-height: 2.6rem;
+        font-size: 1.4rem;
+        color: #606060;
+        background-image: image-url('mobile/mine/select-btn.png');
+        background-repeat: no-repeat;
+        background-position: center top;
+        background-size: 7.5rem 7.5rem;
+    }
+}
+.info-cont-box {
+    position: fixed;
+    min-width: 100%;
+    min-height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 99;
+    display: none;
+    .info-cont {
+        background-color: rgba(0, 0, 0, .8);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: none;
+        // filter: blur(5px);
+        ul {
+            position: absolute;
+            left: 50%;
+            width: 100%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+        }
+        li {
+            float: left;
+            width: 50%;
+            padding-top: 7.5rem;
+            line-height: 2.6rem;
+            font-size: 1.6rem;
+            line-height: 2em;
+            text-align: center;
+            height: 10.7rem;
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: 7.5rem 7.5rem;
+            color: #fff;
+            margin-bottom: 2.5rem;
+        }
+        &.type-info {
+            li {
+                width: 33.3%;
+            }
+        }
+    }
+
+    .closed {
+        position: absolute;
+        width: 3rem;
+        height: 3rem;
+        background: image-url('mobile/activity/closed.svg') center center no-repeat;
+        background-size: 100% 100%;
+        left: 50%;
+        margin-left: -1.5rem;
+        bottom: 3.2rem;
+    }
+}
+.type0 {
+    background-image: image-url('mobile/mine/storeInfo/store.png') !important;
+
+}
+.type2 {
+    background-image: image-url('mobile/mine/storeInfo/superMarket.png') !important;
+}
+.type5 {
+    background-image: image-url('mobile/mine/storeInfo/restaurant.png') !important;
+}
+.type6 {
+    background-image: image-url('mobile/mine/storeInfo/wholesaleAndRetail.png') !important;
+
+}
+.type7 {
+    background-image: image-url('mobile/mine/storeInfo/internet.png') !important;
+}
+.type8 {
+    background-image: image-url('mobile/mine/storeInfo/hotel.png') !important;
+}
+.type9 {
+    background-image: image-url('mobile/mine/storeInfo/kiosk.png') !important;
+}
+.type10 {
+    background-image: image-url('mobile/mine/storeInfo/smokeHotel.png') !important;
+}
+.type11 {
+    background-image: image-url('mobile/mine/storeInfo/wholesale.png') !important;
+}
+.position0 {
+    background-image: image-url('mobile/mine/storeInfo/office.png') !important;
+}
+.position1 {
+    background-image: image-url('mobile/mine/storeInfo/hospital.png') !important;
+}
+.position2 {
+    background-image: image-url('mobile/mine/storeInfo/school.png') !important;
+}
+.position3 {
+    background-image: image-url('mobile/mine/storeInfo/traffic.png') !important;
+}
+.position5 {
+    background-image: image-url('mobile/mine/storeInfo/quarters.png') !important;
+}
+.size0 {
+    background-image: image-url('mobile/mine/storeInfo/50.png') !important;
+}
+.size1 {
+    background-image: image-url('mobile/mine/storeInfo/50-100.png') !important;
+}
+.size2 {
+    background-image: image-url('mobile/mine/storeInfo/100-200.png') !important;
+}
+.size3 {
+    background-image: image-url('mobile/mine/storeInfo/200.png') !important;
+}
+
+// 新建地址弹窗
+#callServer-tip{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0,0,0,.4);
+  z-index: 99;
+  .tip-box{
+    background-color: #fff;
+    width: 23rem;
+    height: 22rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -11.5rem;
+    margin-top: -11rem;
+    border-radius: 1rem;
+    font-size: 1.4rem;
+    color: #606060;
+    text-align: center;
+    padding-top: 2.5rem;
+  }
+  p{
+    margin-bottom: 3rem;
+  }
+  a{
+    font-size: 1.5rem;
+    color: #E62E46;
+    display: inline-block;
+    width: 18.3rem;
+    height: 4rem;
+    line-height: 4rem;
+    border-radius: .4rem;
+    margin-bottom: 2.5rem;
+    border: 1px solid #FF8894;
+  }
+  i{
+    width: 2.4rem;
+    height: 2.4rem;
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    background: image-url('mobile/gray-closed.png') center center no-repeat;
+    background-size: 80% 80%;
+  }
+}

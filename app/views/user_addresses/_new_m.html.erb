@@ -1,0 +1,70 @@
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+    <%= stylesheet_link_tag    'vendors/picker', media: 'all', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag    'map', 'data-turbolinks-track' => true %>
+<% end %>
+<% content_for :header do %>
+<header class="no-search">
+    <div class="header-left">
+        <!-- <a href="javascript:;" data-href="/my/address?from_id=<%= params[:from_id] %>" id="back"></a> -->
+    </div>
+  <div class="ordersHeader_title">店铺地址</div>
+
+  <!-- <div class="header-right">
+    <a class="address-new-save">保存</a>
+  </div> -->
+</header>
+<% end %>
+<% content_for :main do %>
+<script>
+  var fromID = null;
+</script>
+<main class="address-new">
+    <%= form_tag "/addresses?from_id=#{ params[:from_id] }", method: "post", autocomplete:"off" ,id: "address-new-form" do %>
+      <div class="input-item"><div class="input-tag">收货人：</div><input type="text" name="user_address[ShipName]" placeholder="请输入收货人姓名" required></div>
+      <div class="input-item"><div class="input-tag">手机号：</div><input type="tel" name="user_address[Mobile]" placeholder="请输入您的联系方式" value="<%= session[:tel_param] %>" autocomplete="off" required></div>
+      <div class="input-item tip">提交后店铺位置将作为唯一认证收货地址</div>
+      <div class="input-item"><div class="input-tag">店铺名称：</div><input type="text" name="user_address[FaceName]" placeholder="例如:进货宝超市" required></div>
+      <div class="input-item"><div class="input-tag">所在区域：</div><input type="text" id="picker" readonly=readonly placeholder="请选择省/市/区" required>
+      </div>
+      <!-- <div class="input-item show-map"><div class="input-tag">详细位置：</div><input type="text" name="user_address[Supplements]" value="<%= @address.Supplements %>" onfocus="this.value = this.value;" placeholder="例如:解放路一号" readonly="readonly" required></div> -->
+      <div class="input-item detailed-address"><div class="input-tag">详细位置：</div><input type="text" placeholder="请补充详细地址" name="user_address[Detailedaddress]" value="<%= @address.Detailedaddress %>" required></div>
+      <input type="hidden" name="user_address[Province]">
+      <input type="hidden" name="user_address[City]">
+      <input type="hidden" name="user_address[County]">
+      <input type="hidden" name="user_address[Latitude]">
+      <input type="hidden" name="user_address[Longitude]">
+    <% end %>
+
+    <!--<a id="new-save" class="address-btn">-->
+    <!--&lt;!&ndash;<-% if params[:newSignUp] == "true" %>&ndash;&gt;-->
+
+      <!--提交-->
+          <!--&lt;!&ndash;<-% else %>&ndash;&gt;-->
+      <!--&lt;!&ndash;<>&ndash;&gt;-->
+    <!--</a>-->
+
+    <a id="new-save" class="address-btn">注册</a>
+    <p class="agreement">点击注册，即表示您同意<a href="javascript:;" onclick="window.location.href='/common/mobile_agreement?refresh=true#/addresses/new'">《进货宝用户注册协议》</a></p>
+
+    <div class="map-box">
+      <header class="no-search">
+        <div class="header-left">
+          <a href="javascript:;" id="map-back"></a>
+        </div>
+        <div class="ordersHeader_title"><input type="search"  id="q" name="q" placeholder="小区/学校/街道/店铺名等"></div>
+      </header>
+      <div class="map">
+        <div id="suggest-list">
+        </div>
+        <div id="map"></div>
+        <div id="poi-items"></div>
+      </div>
+    </div>
+</main>
+<% end %>
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'address', 'data-turbolinks-track' => true %>
+  <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=lhVaCHKcR1BzGRoqyGzphudBeP2de9Ic&s=1"></script>
+<% end %>

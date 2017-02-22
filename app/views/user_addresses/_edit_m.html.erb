@@ -1,0 +1,62 @@
+<% content_for :head do %>
+    <style>html{background-color: #f4f4f4;}</style>
+    <%= stylesheet_link_tag    'vendors/picker', media: 'all', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag    'map','data-turbolinks-track' => true %>
+
+<% end %>
+
+
+<% content_for :header do %>
+<header class="no-search clearfix">
+    <div class="header-left">
+        <a href="javascript:;" data-href="/my/address?from_id=<%= params[:from_id] %>" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">修改地址</div>
+</header>
+<% end %>
+
+<% content_for :main do %>
+<main class="address-new edit-address">
+    <%= form_tag @address, method: "put", autocomplete:"off", id: "address-new-form" do %>
+          <div class="input-item"><div class="input-tag">收货人：</div><input type="text" name="user_address[ShipName]" value="<%= @address.ShipName %>" required></div>
+          <div class="input-item"><div class="input-tag">联系方式：</div><input type="tel" name="user_address[Mobile]" value="<%= @address.Mobile %>" required></div>
+          <div class="input-item"><div class="input-tag">收货地址：</div><input type="text" id="picker" value="<%= @address.Province %> <%= @address.City %> <%= @address.County %>" readonly=readonly required>
+          </div>
+          <!-- <div class="input-item show-map"><div class="input-tag">详细位置：</div><input type="text" name="user_address[Supplements]" value="<%= @address.Supplements %>" onfocus="this.value = this.value;" placeholder="例如:解放路一号" readonly="readonly" required></div> -->
+          <!--change by lzh  -->
+          <div class="input-item detailed-address"><div class="input-tag">详细位置：</div><input type="text" placeholder="请补充详细地址" name="user_address[Detailedaddress]" value="<%= @address.Detailedaddress %>" required></div>
+          <!--change by lzh  -->
+
+          <div class="input-item"><div class="input-tag">店铺名称：</div><input type="text" name="user_address[FaceName]" value="<%= @address.FaceName %>" required></div>
+          <input type="hidden" name="user_address[Province]" value="<%= @address.Province %>">
+          <input type="hidden" name="user_address[City]" value="<%= @address.City %>">
+          <input type="hidden" name="user_address[County]" value="<%= @address.County %>">
+          <input type="hidden" name="user_address[Latitude]" value="<%= @address.Latitude %>">
+          <input type="hidden" name="user_address[Longitude]" value="<%= @address.Longitude %>">
+    <% end %>
+    <a id="edit-save" class="address-btn">保存</a>
+    <div class="map-box">
+      <header class="no-search">
+        <div class="header-left">
+          <a href="javascript:;" id="map-back"></a>
+        </div>
+        <div class="ordersHeader_title"><input type="search"  id="q" name="q" placeholder="小区/学校/街道/店铺名等"></div>
+      </header>
+      <div class="map">
+        <div id="suggest-list">
+        </div>
+        <div id="map"></div>
+        <div id="poi-items"></div>
+      </div>
+    </div>
+</main>
+<script>
+  var fromID = "<%= params[:from_id] %>";
+</script>
+<% end %>
+
+<% content_for :footer do %>&nbsp;<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'address', 'data-turbolinks-track' => true %>
+  <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=lhVaCHKcR1BzGRoqyGzphudBeP2de9Ic&s=1"></script>
+<% end %>

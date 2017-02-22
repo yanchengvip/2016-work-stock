@@ -1,0 +1,170 @@
+<div class="address">
+  <div class="old_address clearfix">
+
+    <div class="layer">
+      <div class="layer_con">
+        <ul>
+          <%= form_for @address, :html => {id: "new_user_address"}  do |f| %>
+              <li class="clearfix">
+                <span><i>*</i>选择所在地区：</span>
+                <% if !@provinces %>
+                    <%= select_tag 'user_address[Province]', nil, class:'select_box' %>
+                    <%= select_tag 'user_address[City]', nil, class:'select_box' %>
+                    <%= select_tag 'user_address[County]', nil, class:'select_box' %>
+                <% else %>
+                    <%= select_tag 'user_address[Province]', options_for_select(@provinces,@address.Province), class:'select_box' %>
+                    <%= select_tag 'user_address[City]', options_for_select(@cities,@address.City), class:'select_box' %>
+                    <%= select_tag 'user_address[County]', options_for_select(@counties,@address.County), class:'select_box' %>
+                <% end %>
+                <%= f.hidden_field :CountyID %>
+                <span id="errArea"></span>
+              </li>
+              <li class="clearfix">
+                <span><i>*</i>详细地址：</span>
+                <%= f.text_field :Detailedaddress, placeholder: '建议您如实填写详细收获地址，例如街道名称，门牌号码，楼层和房间号等信息', class: 'txt' %>
+                <span id="errAddress"></span>
+              </li>
+              <li class="clearfix">
+                <span><i>*</i>收件人：</span>
+                <%= f.text_field :ShipName, class: 'txt' %>
+                <span id="errName"></span>
+              </li>
+              <li class="clearfix">
+                <span><i>*</i>联系方式：</span>
+                <%= f.text_field :Mobile, class: 'txt', placeholder: '请输入联系方式' %>
+                <span id="errMobile"></span>
+              </li>
+              <li class="pad65 btn clearfix">
+                <input type="button" value="保存" onclick="return Save();"/>
+              </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+
+      (function () {
+        $("#user_address_Province").change(function () {
+          var val = $("#user_address_Province").find('option:selected').attr('data-id');
+          if (val != '') {
+            Ajax("/addresses/cities", "provinceID=" + val, "user_address_City");
+          }
+          $("#user_address_City").val('');
+          $("#user_address_County").val('');
+        });
+        $("#user_address_City").change(function () {
+          var val = $("#user_address_City").find('option:selected').attr('data-id');
+          if (val != '') {
+            Ajax("/addresses/counties", "cityID=" + val, "user_address_County");
+          }
+          $("#user_address_County").val('');
+        });
+        $("#user_address_County").change(function () {
+          var val = $("#user_address_County").find('option:selected').attr('data-id');
+          $("#user_address_CountyID").val(val);
+        });
+        <% if !@provinces %>
+        Ajax("/addresses/provinces", "", "user_address_Province");
+        <% end %>
+      })()
+
+      function Ajax(url, json, node) {
+        $.ajax({
+          type: "GET",
+          url: url,
+          dataType: "json",
+          data: json,
+          success: function (mmsg) {
+            var msg = mmsg.data;
+            var Arr = new Array();
+            Arr.push("<option value='' data-id=''></option>");
+            for (var i = 0; i < msg.length; i++) {
+              Arr.push("<option value='" + msg[i].name + "' data-id='" + msg[i].id + "'>" + msg[i].name + "</option>");
+            }
+            $("#" + node).html(Arr.join(""));
+          }
+        });
+      }
+
+      function Save() {
+          if ($("#user_address_Province").val() == '') {
+            alert('省不能为空');
+            $("#user_address_Province").focus();
+            return false;
+          }
+
+          if ($("#user_address_City").val() == '') {
+            alert('市不能为空');
+            $("#user_address_City").focus();
+            return false;
+          }
+
+          if ($("#user_address_County").val() == '') {
+            alert('区不能为空');
+            $("#user_address_County").focus();
+            return false;
+          }
+
+          if ($("#user_address_Detailedaddress").val() == '') {
+            alert('详细地址不能为空');
+            $("#user_address_Detailedaddress").focus();
+            return false;
+          }
+          if ($("#user_address_ShipName").val() == '') {
+            alert('收件人不能为空');
+            $("#user_address_ShipName").focus();
+            return false;
+          }
+          if ($("#user_address_Mobile").val() == '') {
+            alert('联系方式不能为空');
+            $("#user_address_Mobile").focus();
+            return false;
+          }
+
+          if ((/^(\d{8}|\d{11})$/g).test($("#user_address_Mobile").val()) == false) {
+            alert('联系方式格式错误');
+            return false;
+          }
+
+          $("#new_user_address").submit();
+        };
+    </script>
+
+
+    <div class="table_list">
+      <table>
+        <tr class="tr_1">
+          <th>收货人</th>
+          <th>所在地区</th>
+          <th>详细地址</th>
+          <th>电话/手机</th>
+          <th>操作</th>
+        </tr>
+        <% @addresses.each do |address| %>
+            <tr class="tr_2">
+              <td><%= address.ShipName %></td>
+              <td width="94"><%= address.Province %> <%= address.City %> <%= address.County %></td>
+              <td width="148"><%= address.Detailedaddress %></td>
+              <td><%= address.Mobile %></td>
+              <td>
+                <% if address.IsDefault == true %>
+                    <b>默认</b>
+                <% else %>
+                    <%= link_to '设为默认', defadd_user_address_path(id: address.ID), method: :put %>
+                <% end %>
+                <span>|</span>
+                <% if address.ID == params[:id] %>
+                    <b>修改</b>
+                <% else %>
+                    <%= link_to '修改', controller: :users, action: :address, id: address.ID %>
+                <% end %>
+                <span>|</span>
+                <%= link_to '删除', user_address_path(address), method: :delete, id: address.ID %>
+              </td>
+            </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>

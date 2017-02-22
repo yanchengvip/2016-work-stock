@@ -1,0 +1,12 @@
+	<ul class="left login-box">
+<% if sign_in? %>
+        <li style=""><a href="/my/orders"><%=current_user.Phone%></a></li>
+        <li style=""><a href="/sign_out" data-method="delete">退出</a></li>
+<% else %>
+        <li style=""><a href="">欢迎使用进货宝</a></li>
+        <!-- <li style=""><a href="/sign_in">登录</a></li> -->
+        <!-- <li><a href="/sign_up">注册</a></li> -->
+        <li style=""><a href="javascript:showLogin('phone');"">一键登录</a></li>
+        <!-- <li><a href="javascript:showLogin();">新注册</a></li> -->
+<% end %>
+	</ul>

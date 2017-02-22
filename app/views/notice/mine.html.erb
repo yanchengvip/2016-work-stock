@@ -1,0 +1,38 @@
+<!-- 消息通知详情页 -->
+<% content_for :header do %>
+<style>
+  body{
+    background-color: #eee;
+  }
+</style>
+<header class="no-search clearfix second-page-header">
+  <div class="header-left">
+    <a href="javascript:goBack()" id="back"></a>
+  </div>
+  <div class="ordersHeader_title">信息通知</div>
+</header>
+<% end %>
+<% content_for :main do %>
+  <main class="message-content">
+    <ul>
+      <% @notifications.each do |notification| %>
+      <li onClick="window.location.href = '<%= notification.link %>'">
+        <p class="time"><%= notification.CreateTime.strftime("%m-%d　%H:%M")%></p>
+        <div class="content">
+          <h6><%= notification.type_str %> <span>立即查看<span></h6>
+          <p><%= notification.Content %></p>
+        </div>
+      </li>
+      <% end %>
+    </ul>
+  </main>
+  <script>
+    $(".message-content  .content p").each(function(){
+      $(this).html().length > 20 ? $(this).html($(this).html().slice(0,19)+ '...') : '';
+    })
+  </script>
+<% end %>
+
+<% content_for :footer do %>
+    &nbsp;
+<% end %>

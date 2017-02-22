@@ -1,0 +1,42 @@
+<% content_for :header do %>
+<style>
+  body{
+    background-color: #f3f4f5;
+  }
+</style>
+<header class="no-search title clearfix">
+  <div class="header-left">
+    <a href="javascript:goBack()" id=""></a>
+  </div>
+  <div class="ordersHeader_title">账号密码登录</div>
+  <div class="header-right">
+    <a class="sign-up-link" href="/sign_up">注册</a>
+  </div>
+</header>
+<% end %>
+<% content_for :main do %>
+  <main class="container new-tel">
+    <div class=" pt-login">
+      <%= form_tag "/invitations/accept", class: "pure-form login" do %>
+        <fieldset class="">
+          <div class="tel-num input-box">
+            <span>手机号</span>
+            <input type="number" id="tel" class="" name="session[tel]" placeholder="请输入手机号" required>
+          </div>
+          <div class="tel-password input-box">
+            <span>密码</span>
+            <input type="password" class="" id="" name="session[password]" placeholder="请输入密码" required>
+          </div>
+        </fieldset>
+        <p class="get-password"><a href="/passwords/new">忘记密码</a></p>
+        <div class="btn btn-sign-in">登录</div>
+      <% end %>
+    </div>
+  </main>
+<% end %>
+<% content_for :footer do %>
+    &nbsp;
+<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'session', 'data-turbolinks-track' => true %>
+<% end %>

@@ -1,0 +1,45 @@
+<% content_for :head do %>
+    <%= stylesheet_link_tag 'events/invite', media: 'all', 'data-turbolinks-track' => true %>
+    <meta name="description" content="天天有好货，分秒送惊喜。拿不完的优惠券，占不完的大便宜，一切尽在进货宝。" />
+<% end %>
+<main class="normal">
+  <%= image_tag "mobile/inviteEvent/user.png", class: "user" %>
+  <%= image_tag "mobile/inviteEvent/coin.png", class: "coin" %>
+  <%= image_tag "mobile/inviteEvent/ticket.png", class: "ticket" %>
+
+  <%= form_tag "/sign_in", class: "pure-form box-up" do %>
+    <div>进货宝送你25元奖励，快快领取吧！</div>
+    <fieldset>
+      <input type="tel" placeholder="请输入你的手机号" id="tel" name="Phone">
+      <div class="input-group">
+        <input type="text" placeholder="请输入验证码" id="code" name="check_code">
+        <button class="pure-button">获取验证码</button>
+      </div>
+    </fieldset>
+  <% end %>
+
+    <div class="box-up">
+        <p>您已领取奖励，</p>
+        <p>请直接下载进货宝吧！</p>
+    </div>
+
+    <div class="congratulations">
+        <p>恭喜你获得25元奖励！</p>
+        <p>马上下载注册进货宝领取吧！</p>
+    </div>
+
+
+  <a href="javascript:;" class="cash"><%= image_tag "mobile/inviteEvent/cash_button.png", class: "button" %></a>
+  <a href="http://d.jinhuobao.com.cn/" class="download"><%= image_tag "mobile/inviteEvent/download_button.png", class: "button" %></a>
+  <div class="intro">
+      <p>产品简介</p>
+      <p>进货宝是一家超级逆天采购平台，全网货源最低价，全城定位免费送。还有优惠拿不停，转发好友注册成功即送价值连城的25元优惠券！快去分享吧。</p>
+  </div>
+  <div class="rule">
+      <p>活动规则</p>
+      <p>1.活动开始时间：2015年11月23日</p>
+      <p>2.活动中遇到任何问题请拨打客服电话：4000-688-688</p>
+  </div>
+</main>
+
+<%= javascript_include_tag 'invite_event', 'data-turbolinks-track' => true %>

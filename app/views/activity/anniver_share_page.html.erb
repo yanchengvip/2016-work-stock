@@ -1,0 +1,60 @@
+<% content_for :title do %>进货宝周年庆，千万豪礼大放送！千家品牌齐狂欢，万家门店一起嗨！<% end %>
+	<%= stylesheet_link_tag 'events/anniver_share_page', media: 'all', 'data-turbolinks-track' => true %>
+	<div id='wx_pic' style='margin:0 auto;display:none;'>
+        <%= image_tag "mobile/events/anniver_wechat/300.jpg" %>
+    </div>
+<% if (request.env["HTTP_USER_AGENT"] or "").downcase.include?('jinhuobao') %>
+	<% content_for :header do %>
+	<header class="no-search clearfix" id="header">
+	  <div class="header-left">
+	    <a href="/" id="back">
+	    </a>
+	  </div>
+	  <div class="ordersHeader_title">进货宝周年庆</div>
+	    <div class="header-right">
+	      <a href="javascript:shareToWechat(location.href, '进货宝周年庆，千万豪礼大放送！千家品牌齐狂欢，万家门店一起嗨！', undefined, window.getPoints)">
+	        <%= image_tag "mobile/base/share.svg" %>
+	      </a>
+	    </div>
+	</header>
+	<% end %>
+<% end %>
+<div class="anniver-container">
+	<section class="banner-top">
+		<%= image_tag "mobile/events/anniver_share_page/banner-top.png" %>
+	</section>
+	<div class="new-user">
+		<a href="https://m.jinhuobao.com.cn/sign_up">
+			<%= image_tag "mobile/events/anniver_share_page/new-reg.png" %>
+		</a>
+	</div>
+	<div class="brand-title">
+		<%= image_tag "mobile/events/anniver_share_page/brand-title.png" %>
+	</div>
+	<div class="brands">
+		<div class="row">
+			<a href="https://gsactivity.diditaxi.com.cn/gulfstream/activity/v2/giftpackage/index?g_channel=4ec4e4701ffccffe07bdb9d27c75c9fd"><%= image_tag "mobile/events/anniver_share_page/brand-didi.png" %></a>
+		</div>
+		<div class="row">
+			<a href="http://wechat.lechun.cc/active/act_coupon.html?bindcode=4e35547aa7a64e9e8ca2da52a1b90414"><%= image_tag "mobile/events/anniver_share_page/brand-lechun.png" %></a>
+		</div>
+		<div class="row twocol">
+			<a href="http://m.to8to.com/yezhu/zxbjcs-2016072100?to8to_from=5_14_1"><%= image_tag "mobile/events/anniver_share_page/brand-tubatu.png" %></a>
+			<a href="http://x.1mxian.com/activity_h5/register_jinhuobao_1008/index.html"><%= image_tag "mobile/events/anniver_share_page/brand-yimixian.png" %></a>
+		</div>
+		<div class="row twocol">
+			<a href="https://h5.daxia520.com/activity/SAK4Z99KAYUG743C"><%= image_tag "mobile/events/anniver_share_page/brand-daxia.png" %></a>
+			<a href="http://t.cn/Rcpx1TH"><%= image_tag "mobile/events/anniver_share_page/brand-ispa.png" %></a>
+		</div>
+	</div>
+	<div class="anniver-rule">
+		<p>免责声明：</p>
+		<p>1、本平台可能会与第三方合作向用户提供相关产品或服务在此情况下如第三方提供的相关产品或服务未达到平台用户的预期可及时与我们取得联系。但本平台不对第三方产品或服务负责亦不负任何法律责任。</p>
+		<p>2、本声明未涉及的问题参见国家有关法律法规，当本声明与国家法律法规冲突时，以国家法律法规为准。</p>
+		<p>3、本活动最终解释权归属本平台及母公司所有。</p>
+	</div>
+</div>
+<% content_for :footer do %><i></i><% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'events/anniver_share_page', 'data-turbolinks-track' => true %>
+<% end %>

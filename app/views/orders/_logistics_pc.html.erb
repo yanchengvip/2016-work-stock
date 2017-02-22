@@ -1,0 +1,187 @@
+<%= stylesheet_link_tag  'pc/buy_car'%>
+<%= javascript_include_tag 'pc/index'%>
+<%= javascript_include_tag 'pc/layer'%>
+<%= javascript_include_tag 'pc/screen'%>
+<%= javascript_include_tag 'pc/area'%>
+
+<div class="content w990 clearfix">
+  <div class="logistics_pro">
+    <div class="line"></div>
+    <ul class="clearfix">
+      <li>
+        <h3>下单</h3>
+        <em class="red_b"></em>
+        <span><%= @order.PayDatetime.strftime("%Y-%m-%d %H:%M:%S")%></span>
+      </li>
+      <% count = @logistics_logs.size %>
+      <em class="em_1 <%= count > 0 ? 'line_red' : 'line_gray'%>"></em>
+      <li>
+        <h3>确认</h3>
+        <em class="<%= count > 0 ? 'red_b' : 'gray_b'%>"></em>
+        <% if count > 0%>
+        <span><%= @logistics_logs.last.OperationDate.strftime("%Y-%m-%d %H:%M:%S")%></span>
+        <% end %>
+      </li>
+      <em class="em_2 <%= count > 1 ? 'line_red' : 'line_gray'%>"></em>
+      <li>
+        <h3>打印</h3>
+        <em class="<%= count > 1 ? 'red_b' : 'gray_b'%>"></em>
+        <% if count > 1%>
+        <span><%= @logistics_logs[-2].OperationDate.strftime("%Y-%m-%d %H:%M:%S")%></span>
+        <% end %>
+      </li>
+      <em class="em_3 <%= count > 2 ? 'line_red' : 'line_gray'%>"></em>
+      <li>
+        <h3>配货</h3>
+        <em class="<%= count > 2 ? 'red_b' : 'gray_b'%>"></em>
+        <% if count > 2%>
+        <span><%= @logistics_logs[-3].OperationDate.strftime("%Y-%m-%d %H:%M:%S")%></span>
+        <% end %>
+      </li>
+      <em class="em_4 <%= count > 3 ? 'line_red' : 'line_gray'%>"></em>
+      <li>
+        <h3>发出</h3>
+        <em class="<%= count > 3 ? 'red_b' : 'gray_b'%>"></em>
+        <% if count > 3%>
+        <span><%= @logistics_logs[-4].OperationDate.strftime("%Y-%m-%d %H:%M:%S")%></span>
+        <% end %>
+      </li>
+      <em class="em_5 <%= count > 4 ? 'line_red' : 'line_gray'%>"></em>
+      <li>
+        <h3>完成</h3>
+        <em class="<%= count > 4 ? 'red_b' : 'gray_b'%>"></em>
+        <% if count > 4%>
+        <span><%= @logistics_logs.first.OperationDate.strftime("%Y-%m-%d %H:%M:%S")%></span>
+        <% end %>
+      </li>
+    </ul>
+    <div class="line"></div>
+  </div>
+  <div style="clear:both;height:40px;"></div>
+  <div class="car_list">
+    <h4 style="height:15px;">
+      <font style="float: left;">订单详情</font>
+      <span style="margin-left: 869px;font-size: 16px;"><%= @order.RandNum %></span>
+      <!-- <font style="float: right; color: #e61c44;font-size:16px;font-weight:bold;">说明：满<%= Settings.order_money[cookies[:company_id]] %>元起订，免费配送。下单后48小时送达。</font> -->
+    </h4>
+    <div class="car_list_top confirm clearfix">
+      <span class="p1">宝贝：</span>
+      <span class="p2">产品信息：</span>
+      <span class="p3">单价：</span>
+      <span class="p4">数量：</span>
+      <span class="p5">小计：</span>
+    </div>
+    <div class="message">
+      <table>
+        <% @order.order_products.each_with_index do |item| %>
+          <tr class="tr_1">
+              <td class="td_1 clearfix">
+                <div class="td_1_left clearfix">
+                  <p class="p_l">
+                  <%= image_tag item.product.cover_url, width: "105", height: "105"%>
+                  </p>
+                </div>
+                <div class="td_1_right">
+                  <p><%= item.product.Name%></p>
+                </div>
+              </td>
+              <td width="130">
+                <%= item.product.Specification%>
+              </td>
+              <td width="150">&yen;<%= item.product.ProductPrice%></td>
+              <td width="114" class="td_3 clearfix">
+                <%= item.Quantity %><br/>
+                <% if !item.is_enough? %>
+                  "库存不足"
+                <% end %>
+              </td>
+              <td width="128">
+                <i>&yen;&nbsp;
+                  <font class="proprice">
+                    <%= item.Quantity * item.product.ProductPrice%>
+                  </font>
+                </i>
+              </td>
+            </tr>
+            <% if item.product.is_group_product? %>
+            <tr class="tr_2">
+              <td class="td_zh" colspan="12">
+                  <div class="lunbo">
+                      <ul class="lunbo-box clearfix">
+                        <% item.product.group_products.includes(:sub_product).each do |g_product| %>
+                          <% sub_product = g_product.sub_product %>
+                          <li class="clearfix">
+                              <p class="left">
+                                <a href="" title="" >
+                                  <%= image_tag sub_product.cover_url('v150'), width: "105", height: "105"%>
+                                </a>
+                              </p>
+                              <div class="left text">
+                                <span class="sp1"><%= sub_product.Name%></span>
+                                <span><%= sub_product.Specification %></span>
+
+                                <span>￥<%= sub_product.ProductPrice %>/<%= sub_product.Unit %></span>
+                                <span>数量：<%= g_product.Number %></span>
+                              </div>
+                          </li>
+                        <% end %>
+                      </ul>
+                      <a href="javascript:;" class="lft-btn"></a>
+                      <a href="javascript:;" class="rgt-btn"></a>
+                  </div>
+                  <div class="sanj"></div>
+              </td>
+            </tr>
+            <% end %>
+          <% end %>
+      </table>
+    </div>
+  </div>
+
+  <div class="received_amount clearfix">
+    <div class="received_message left">
+      <div class="top">
+        <p class="clearfix">
+          <span class="left">收货信息：</span>
+          <span class="left ellipsis"><%= @order.ShipName%>.<%= @order.ShipTel.gsub(/(\d{3})\d{4}/, '\1****')%>.</span>
+        </p>
+        <p class="clearfix">
+          <span class="left">支付方式：</span>
+          <span class="left">货到付款</span>
+        </p>
+      </div>
+      <div class="bottom clearfix">
+        <div class="illustrate" style="margin: 28px 0 14px 0">
+            <span>给卖家留言：</span>
+            <span><%= @order.Message == "" ? "无":@order.Message%></span>
+        </div>
+        <!-- <p style="margin-bottom:20px;"><span class="nm">发票抬头：</span><%= @order.InvoiceTitle == "" ? "无":@order.InvoiceTitle %></p> -->
+      </div>
+    </div>
+    <div class="received_money right">
+      <div class="clearfix">
+         <p>订单总额：<span>¥ <%= @order.CostItem.to_f %></span></p>
+         <p>
+             <% if @order.AppDiscount.to_f > 0%>
+                <span>APP下单减免：<%= @order.AppDiscount.to_f.round(2)%>元</span>
+              <% end %>
+          </p>
+         <p class="clearfix"><span class="left">已优惠：</span><span class="left">¥ <%= @order.giveaway_total.round(2)%></span></p>
+         <p class="clearfix"><span class="left">合计：</span><span class="left"><font style="color:red;font-size:18px;" id="totalprice">&yen;<%= number_to_currency(@order.Money, unit: "")  %></font></span></p>
+      </div>
+      <% if @status && @order.PayStatus == 0 %>
+            <input type="button" value="去付款" onclick="javascript:window.location.href='/orders/<%= @order.OrderCode%>/payment'"/>
+        <% elsif @order.PayStatus == 1 %>
+          <input style="width: 200px;" type="button" value="返回" onclick="javascript:window.location.href='/my/orders'" />
+        <% else %>
+            <input style="width: 200px;" type="button" value="返回首页" onclick="javascript:window.location.href='/'" />
+            <% if @message.present? %>
+            <script type="text/javascript">
+              alert("<%= @message%>");
+            </script>
+            <% end %>
+        <% end %>
+    <div class="line_sj"></div>
+  </div>
+</div>
+

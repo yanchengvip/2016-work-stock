@@ -1,0 +1,22 @@
+<%= javascript_include_tag 'pc/index'%>
+
+<%= stylesheet_link_tag  'pc/account'%>
+
+<div class="my_account w990">
+  <div class="trade_t">
+    <h3>我的账户</h3>
+  </div>
+  <div class="trade_b clearfix">
+    <%= render 'shared/users_subnav' %>
+    <div class="integral left">
+      <p class="p1">我的积分</p>
+      <p class="p2">可用积分<i>&nbsp; <%= current_user.Integral.to_i %> &nbsp;</i></p>
+      <br />
+      <p>我的分享链接</p>
+      <p><%= Settings.base_url + '?share_code=' + Base64.encode64(current_user.ID) %></p>
+      <br />
+    </div>
+
+
+  </div>
+</div>

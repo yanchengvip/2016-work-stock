@@ -1,0 +1,453 @@
+<%= stylesheet_link_tag  'pc/buy_car'%>
+<style type="text/css">
+    .right-nav-icon,
+    .head-top-left{
+        display: none;
+    }
+</style>
+
+<%= javascript_include_tag 'pc/common'%>
+<% content_for :header do %>
+
+<%= render 'shared/header' %>
+<% end %>
+
+
+    <div class="content w1080">
+        <div class="buy_car clearfix">
+            <div class="progress right">
+                <ul class="clearfix">
+                    <li class="red_left clearfix">
+                        <i class="left"></i>
+                        <div><span>1.查看购物车</span></div>
+                        <i class="right"></i>
+                    </li>
+                    <li class="gray_center clearfix">
+                        <i class="left"></i>
+                        <div><span>2.确认订单信息</span></div>
+                        <i class="right"></i>
+                    </li>
+                    <!-- <li class="gray_center clearfix">
+                        <i class="left"></i>
+                        <div><span>3.在线支付</span></div>
+                        <i class="right"></i>
+                    </li> -->
+                    <li class="gray_right clearfix">
+                        <i class="left"></i>
+                        <div><span>3.确认收货</span></div>
+                        <i class="right"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="car_list">
+          <h4><span class="url"></span>购物车</h4>
+          <div class="car_list_top clearfix">
+              <span class="p1">&nbsp;&nbsp;&nbsp;&nbsp;宝贝：</span>
+              <span class="p2">产品信息：</span>
+              <span class="p3">单价：</span>
+              <span class="p4">数量：</span>
+              <span class="p5">小计：</span>
+              <span class="p6">操作：</span>
+          </div>
+          <% @carts_group.each do |key, carts| %>
+
+            <% company = carts.first.company %>
+            <div class="message" id="cart-<%= key %>" data-least-order-money=<%= Settings.order_money[key] %> data-name="<%= third_name(company) %>">
+                <div class="cart-title">
+                    <input name="input-<%= key %>-parent" type="checkbox" data-key=<%= key %> id="checkbox<%= key %>" class="input-checkall">
+                    <%= image_tag 'buycar/logo.png' %>
+                    <label for="checkbox<%= key %>"><%= third_name(company) %></label> <span class="main-red">满<%= Settings.order_money[key] %>起送</span>
+                </div>
+                <table id="CartList">
+                  <% totalPrice = 0 %>
+                  <% carts.each_with_index do |item,index| %>
+                    <% totalPrice = totalPrice + (item.Number * item.product.ProductPrice) %>
+                    <% stock = @stocks[item.ProductID].present? ? @stocks[item.ProductID].Stock.to_i : 0 %>
+                    <tr class="tr_1" <%= "data-stock=#{stock}" if stock < 60 %>>
+                        <td class="td_1 clearfix">
+                            <div class="td_1_left clearfix">
+                                <input name="input-<%= key %>" ckey="<%= item.ID%>" ekey="<%= item.ProductID%>" <%= 'checked=checked' if item.is_checked? %> type="checkbox" />
+                                <p class="product_name">
+                                  <a href="/products/<%= item.ProductID%>" title="<%= item.product.Name%>" >
+                                    <%= image_tag item.product.cover_url('v150') , width: "105", height: "105", alt:item.product.Name%>
+                                  </a>
+                                  <% if stock < item.Number.to_i %>
+                                    <span class="low_stocks ">库存不足</span>
+                                  <% end %>
+                                </p>
+                            </div>
+                            <div class="td_1_right">
+                                <p class="p1"><%=item.product.Name%></p>
+                                <p class="purchase_number">限购数量<em><%= item.product.MaxSaleAmount %></em></p>
+                            </div>
+                        </td>
+                        <td width="130">
+                            <%= item.product.Specification %>
+                        </td>
+                        <td width="150">&yen;<font class="unit"><%= number_to_currency(item.product.ProductPrice, unit: "", delimiter: '')%></font>
+                        </td>
+                        <td width="114" class="td_3 clearfix">
+                            <p class="pro_number">
+                                <label class="i_box">
+                                    <input class="pro_num J_input"
+                                    onchange="countChange(this);" maxlength="5"
+                                    onkeyup="(this.v=function(){ this.value ==''? this.value = 1 : this.value; }).call(this);countChange(this);"
+                                    type="text" value="<%= item.Number %>" carts_key="<%= item.ID%>"/>
+                                    <input class="pro_add J_add" type="button" value="+" />
+                                    <input class="pro_less J_minus" type="button" value="-" />
+                                </label>
+                            </p>
+                            <% total = item.Number * item.product.ProductPrice %>
+                            <% if item.product.Type != 2 and stock < 60 %>
+                              <p class="stock">库存:<%= stock %></p>
+                            <% end %>
+                        </td>
+                        <td width="128">
+                            <i>&yen;<span class="TotalPrice"><%= number_to_currency(total, unit: "", delimiter: '')%></span></i>
+                        </td>
+                        <td class="td_2" width="102">
+                            <a href="javascript:void(0)" onclick="CartCollect('<%= item.product.ID %>')">移入收藏夹</a>
+                            <a href="javascript:void(0)" onclick="return CartDelete('<%= item.ID%>',this)">删除</a>
+                        </td>
+                    </tr>
+                    <% if item.product.is_group_product? %>
+                      <tr class="tr_2 is-group" id="tr_2">
+                        <td class="td_zh" colspan="12">
+                            <div class="lunbo">
+                                <ul class="lunbo-box clearfix">
+                                  <% item.product.group_products.includes(:sub_product).each do |g_product| %>
+                                    <% sub_product = g_product.sub_product %>
+                                    <li class="clearfix">
+                                        <p class="left">
+                                          <a href="" title="" >
+                                            <%= image_tag sub_product.cover_url('v150') , width: "105", height: "105", alt:sub_product.Name%>
+                                            <!-- <img src="images/buycar/kl.jpg" alt="" width="105" height="105"> -->
+                                          </a>
+                                        </p>
+                                        <div class="left text">
+                                          <span class="sp1"><%= sub_product.Name %></span>
+                                          <span><%= sub_product.Specification %></span>
+                                          <span>￥<%= sub_product.ProductPrice %>/<%= sub_product.Unit %></span>
+                                          <span>数量：<%= g_product.Number %></span>
+                                        </div>
+                                    </li>
+                                  <% end %>
+                                </ul>
+                                <a href="javascript:;" class="lft-btn"></a>
+                                <a href="javascript:;" class="rgt-btn"></a>
+                            </div>
+                            <div class="sanj"></div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  <% end %>
+                  <tr class="tr_2">
+                      <td class="select-num" colspan=6>
+                        <strong ><%= third_name(company) %><i class="group-count red-color"></i>件</strong>
+                        <div class="right">
+                            合计: &yen;<span class="group-price"></span>
+                            <span class="group-tip"></span>
+                        </div>
+                      </td>
+                  </tr>
+                </table>
+            </div>
+            <% end %>
+            <div class="car_list_bottom clearfix">
+                <div class="bto_l left">
+                    <span><input id="allSelect"  type="checkbox" /><label for="allSelect">全选</label></span>
+                    <a href="javascript:void(0);" onclick="return CartDeletes();">删除</a>
+                    <a href="javascript:void(0);" onclick="return CartCollects();">批量移入收藏夹</a>
+                    <!--a href="">分享</a-->
+                    <div class="bto_l_r right">
+                        <span>已选商品&nbsp;<i id="TotalCount">0</i>&nbsp;件</span>
+                    </div>
+                </div>
+                <div class="bto_r right">
+                    <div class="bto_r_l left">
+                        <span>合计(不含运费)：<i>&yen;&nbsp;<font id="TotalPrice">00.00</font></i></span>
+                    </div>
+                    <div class="bto_r_l right">
+                        <input id="submit" type="button" value="提交" />
+
+                    </div>
+                </div>
+                <!-- <div class="rb_code_box"></div> -->
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            checkAllCheck();
+
+            $(".pro_num").click(function () {
+                countChange(this);
+            })
+            $(".pro_add").click(function (e) {
+                $(e.target).parent().find(".pro_num").click()
+            });
+            $(".pro_less").click(function (e) {
+                $(e.target).parent().find(".pro_num").click()
+            });
+
+            $("#CartList input[type=checkbox]").click(function (e) {
+                // var allChecked = true;
+                // $("#CartList input:checkbox").each(function (e,obj) {
+                //     if(!$(obj).is(':checked')){
+                //         allChecked = false;
+                //         return false;
+                //     }
+                // });
+                // console.log(allChecked);
+                // if (allChecked) {
+                //         $("#allSelect").prop("checked",true);
+                // } else {
+                //     $("#allSelect").prop("checked", false);
+                // };
+                var surfix;
+                if($(e.target).is(':checked')) {
+                    surfix = "/check"
+                } else {
+                    surfix = "/uncheck"
+                }
+                $.ajax({
+                    dataType: "json",
+                    type: 'put',
+                    url: "/carts/" + e.target.getAttribute("ckey") + surfix,
+                    data: { },
+                    success: function(e){
+                        if(e.status == 'ok'){
+                          checkAllCheck();
+                        }
+                    }
+                });
+
+
+
+
+
+
+            });
+
+        })
+
+        function countChange(node) {
+            var number = parseInt(node.value);
+            if(number < 1) {
+              node.value=1;
+              number=1;
+            }
+
+
+            var nb = $($(node).parents()[3]).find('em').html()-0;
+            // console.log(nb);
+            // return false;
+
+
+            var tr = $($(node).parents()[3]);
+            var unit = parseFloat($(tr).find(".unit").html().replace(',',''));
+            $(tr).find(".TotalPrice").html("&nbsp" + (number * 10000 * unit / 10000).toFixed(2));
+            if(isLimitBuy && number>nb){
+                node.value=nb;
+                // console.log(nb);
+                alert('单件商品数量不能超过'+nb);
+                SaveNumber(node, parseInt(tr.data('stock')));
+            }else{
+              SaveNumber(node, parseInt(tr.data('stock')));
+            }
+        }
+
+        function SaveNumber(node,stock) {
+            var num = parseInt(node.value);
+            var tr = $($(node).parents()[3]);
+            delay(function(){
+                $.ajax({
+                    dataType: "json",
+                    type: 'put',
+                    url: "/carts/"+ $(node).attr("carts_key") +"/update_num",
+                    data: {num: num},
+                    success: function (e) {
+                        if (e.status == 'ok') {
+                            updatePrice()
+                            if (stock && stock>=0) {
+                                if (num > stock) {
+                                    if (tr.find('.product_name>span').length==0){
+                                    tr.find('.product_name').append('<span class="low_stocks ">库存不足</span>')
+                                    }
+                                } else {
+                                 tr.find('.product_name').find('span').remove()
+                                }
+
+                            }
+                        } else {
+                          alert(e.message);
+                        }
+                    },
+                    error: function (e) {
+                        alert(e);
+                    }
+                });
+            });
+
+        }
+
+        function CartDelete(id, node) {
+            if (!confirm("您确定要删除商品？")) {
+                return false
+            }
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: 'Delete',
+                url: "/carts/" + id,
+                success: function (e) {
+                    console.log(1)
+                    if (e.status == 'ok') {
+                        $(node).parent().parent().remove();
+                        var isGroup = $(node).parent().parent().next(".is-group");
+                        if(isGroup){
+                            isGroup.remove();
+                        }
+
+                        // $('#tr_2').remove();
+                        cartClearn();
+                        window.updatePrice();
+                        // total();
+                    }
+                },
+                error: function (e) {
+                    alert(e);
+                }
+            });
+        }
+
+        function CartDeletes() {
+            var ids = new Array();
+            console.log(0)
+            $(".car_list table input:checkbox:checked").each(function () {
+                console.log(1)
+                ids.push($(this).attr("cKey"));
+            });
+            if (ids.length < 1) {
+                alert("请选择商品");
+                return;
+            }
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: 'DELETE',
+                url: "/carts/destroy_more",
+                data: { "ids": ids },
+                success: function (e) {
+                    if (e.status == 'ok') {
+                        $(".car_list table input:checkbox:checked").each(function () {
+                            var isGroup = $(this).parent().parent().parent().next(".is-group");
+                            if(isGroup){
+                                isGroup.remove();
+                            }
+                            $(this).parent().parent().parent().remove();
+                        });
+                        cartClearn();
+                        window.updatePrice();
+                        // total();
+                    } else {
+                      alert(e.message);
+                    }
+                },
+                error: function (e) {
+                    alert(e);
+                }
+            });
+        }
+
+        function CartCollect(id) {
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: 'POST',
+                url: "/enshrines",
+                data: {"ids": [id]},
+                success: function (e) {
+                  if (e.status == 'ok') {
+                     alert('添加成功');
+                  } else if (e.error_code == 'IsNotVerified') {
+                    Login();
+                  } else {
+                    alert(e.message);
+                  }
+                },
+                error: function (e) {
+                    alert(e);
+                }
+            });
+        }
+
+        function CartCollects() {
+            var ids = new Array();
+            $("#CartList input:checkbox:checked").each(function () {
+                ids.push($(this).attr("ekey"));
+            });
+            if (ids.length < 1) {
+                alert("请选择商品");
+                return;
+            }
+            $.ajax({
+                cache: false,
+                dataType: "json",
+                type: 'POST',
+                url: "/enshrines",
+                data: {"ids": ids},
+                success: function (e) {
+                  if (e.status == 'ok') {
+                     alert('添加成功');
+                  } else if (e.error_code == 'IsNotVerified') {
+                    Login();
+                  } else {
+                    alert(e.message);
+                  }
+                },
+                error: function (e) {
+                    alert(e);
+                }
+            });
+        }
+
+        function checkAllCheck() {
+
+          $("table").each(function(){
+            var checkedNum = $(this).find("input[type='checkbox']:checked").length;
+            var inputNum = $(this).find("input[type='checkbox']").length;
+            var name = $(this).find("input").attr("name") + "-parent";
+            if(checkedNum == inputNum){
+                $("input:checkbox[name='"+ name  +"']").prop("checked",true);
+            }else{
+                $("input:checkbox[name='"+ name  +"']").prop("checked",false);
+            }
+          })
+
+          if($("input:checkbox[name$='-parent']:checked").length == $("input:checkbox[name$='-parent']").length){
+            $("#allSelect").prop("checked",true);
+          }else{
+            $("#allSelect").prop("checked",false);
+          }
+        }
+
+        function cartClearn(){
+            $(".message").each(function(){
+                var tempLength = $(this).find("tr").length;
+                console.log(tempLength);
+                if ( tempLength == 1){
+                    $(this).remove();
+                }
+            });
+        }
+
+
+    </script>
+
+<%= javascript_include_tag 'pc/carts'%>

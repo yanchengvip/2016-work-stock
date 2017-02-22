@@ -1,0 +1,302 @@
+<% content_for :header do %>
+ <%= render 'shared_mobile/search_header' %>
+<% end %>
+
+<% content_for :main do %>
+<main class="index">
+  <div id="ptr">
+      <div class="genericon genericon-next">
+
+      </div>
+
+      <!-- <div class="baoye-gif">
+        <%= image_tag "mobile/baoye.gif" %>
+      </div> -->
+  </div>
+
+  <div id="content">
+    <% @floors.each do |floor| %>
+      <% if floor.LayoutType == 0 %>
+        <div id='slider' class='swipe'>
+          <div class='swipe-wrap'>
+            <% floor.floor_items.each_with_index do |item, index| %>
+              <a href="<%= item.recommend_link || item.LinkUrl %>" ><%= image_tag item.cover_url + image_webp, class: "responsive-img" %></a>
+            <% end %>
+          </div>
+          <ul class="indicators">
+            <% floor.floor_items.each_with_index do |item, index| %>
+              <li class="indicator-item <%= 'active' if index == 0 %>" data-index=<%= index %>></li>
+            <% end %>
+          </ul>
+        </div>
+      <% elsif floor.LayoutType == 1 %>
+        <% if Time.now > Time.parse('2016-10-14 23:00') && Time.now < Time.parse('2016-10-21 00:00') %>
+          <div class="anniver-activity  <%=  Time.now < Time.parse('2016-10-16 00:00') ? 'anniver-start' : 'anniver-end' %>">
+            <div class="anniver-time">
+              <div class="time-box" data-time="<%= Time.now.strftime('%Y/%m/%d %H:%M:%S') %>">
+                <span class="day">00</span><em>天</em><span class="hour">00</span><em>时</em><span class="minute">00</span><em>分</em><span class="second">00</span><em>秒</em>
+              </div>
+              <a href="/activity/anniversary" class="anniver-link"></a>
+            </div>
+            <div class="activity clearfix">
+              <% floor.floor_items.each_with_index do |item,index| %>
+                <a href="<%= item.recommend_link || item.LinkUrl %>" class="activity<%= index %>">
+                  <div class="item">
+                    <%= image_tag "mobile/events/anniversary/wenzi#{index}.png" %>
+                    <div><%= item.SubTitle %></div>
+                  </div>
+                </a>
+              <% end %>
+            </div>
+            <% if cookies['company_id'] == "22294f4c-dacc-48d6-aba8-d6c8fbe8cf7e" or cookies['company_id'] == "d1d929ec-3af1-45f3-8047-b9abd47e8de5"%>
+              <a href="/activity/golden_egg" class="anniver-egg"></a>
+            <% end %>
+          </div>
+        <% else %>
+        <div class="activity clearfix">
+          <% floor.floor_items.each_with_index do |item,index| %>
+            <a href="<%= item.recommend_link || item.LinkUrl %>" class="activity<%= index %>">
+              <div class="item">
+                <%= image_tag item.cover_url %>
+                <div><%= item.SubTitle %></div>
+              </div>
+            </a>
+          <% end %>
+        </div>
+      <% end %>
+    <% elsif floor.LayoutType == 13 %>
+      <!-- 进货宝头条 -->
+      <div class="headlines">
+        <em></em>
+        <div class="headlines-cont">
+          <ul>
+            <% floor.floor_items.each do |item| %>
+              <li>
+                <a href="<%= item.recommend_link || item.LinkUrl %>">
+                  <span><%= item.SubTitle %></span><strong><%= item.Title %></strong>
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      <% elsif floor.LayoutType == 2 %>
+        <!-- 首页秒杀专区块 -->
+        <% items = floor.floor_items %>
+        <% if items.present? %>
+        <div class="activity-one">
+          <%
+            item = items.first
+            product = item.rush_products(session[:depot_ids]).where("ActivityBeginTime > ?", Time.now).order("ActivityBeginTime").first
+            product_current = item.rush_products(session[:depot_ids]).where("ActivityBeginTime < ? and ActivityBeginTime > ?", Time.now, Date.today).order("ActivityBeginTime").last
+            product_current ||= product
+          %>
+          <div class="one-left" >
+            <div class="left-title seckill-data"></div>
+            <% if product_current %>
+              <% buy_status = (product_current.CurrentActivityAmount.to_i < product_current.MaxActivityAmount.to_i ? "seckill-ing" : "seckill-end") %>
+              <div class="sckill-cont <%= buy_status%>" data-time="<%= product.ActivityBeginTime.strftime('%Y/%m/%d %H:%M:%S') if product %>" onClick="window.location.href='<%= item.recommend_link || item.LinkUrl %>'">
+                <% if product %>
+                  <% if product.ActivityBeginTime >= Date.tomorrow %>
+                    <p>距离明天场还剩<span class="red-text seckill-time"></span></p>
+                  <% else %>
+                    <p>距<span><%= product.ActivityBeginTime.hour %></span>点场还剩<span class="red-text seckill-time"></span></p>
+                  <% end %>
+                <% else %>
+                  <p><span>&nbsp;</span></p>
+                <% end %>
+                <div class="hot-img">
+                  <a href="javascript:;"><img src="<%= product_current.cover_url %>"></a>
+                </div>
+              </div>
+            <% else %>
+              <div class="no-seckill">
+              </div>
+            <% end %>
+          </div>
+          <div class="one-right row">
+            <% item = items[1] %>
+            <div class="r-top col s12" onClick="window.location.href='<%= item.recommend_link || item.LinkUrl %>'">
+              <h3 style="color:#9013FE">
+                <%= item.Title %>
+              </h3>
+              <p><%= item.SubTitle %></p>
+              <a href="javascript:;"><img src="<%= item.products(session[:depot_ids]).first.try(:cover_url) %>"></a>
+            </div>
+            <div class="r-bottom ">
+              <% items[2..3].each do |item| %>
+              <div class="rb-left col s6" onClick="window.location.href='<%= item.recommend_link || item.LinkUrl %>'">
+                <h4><%= item.Title %></h4>
+                <p><%= item.SubTitle %></p>
+                <a href="javascript:;"><img src="<%= item.products(session[:depot_ids]).first.try(:cover_url) %>"></a>
+              </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <% end %>
+      <% elsif floor.LayoutType == 3 %>
+        <!-- 宫格导航 -->
+        <ul class="gg-nav clearfix" data-count="<%= floor.Squareworkshop %>">
+          <% floor.floor_items.each do |item| %>
+            <li class="<%=  Time.now < Time.parse('2016-10-21 00:00') ? 'anniversary-li' : '' %>" >
+            <a class="gg-nav-link" href="<%= item.recommend_link || item.LinkUrl %>">
+              <%= image_tag item.cover_url + image_webp %>
+              <span><%= item.Title %></span>
+            </a>
+            </li>
+          <% end %>
+        </ul>
+      <% elsif floor.LayoutType == 4 %>
+      <!-- 热门推荐 -->
+      <% if (floor_items = floor.floor_items).present? %>
+      <div class="hot-show">
+        <h2>热门推荐</h2>
+        <% floor_items.each do |item| %>
+          <div class="show-cont">
+            <div class="cont-img">
+              <a href="<%= item.recommend_link || item.LinkUrl %>"><img src="<%= item.cover_url('v400') %>"></a>
+              <em></em>
+            </div>
+            <div class="cont-box">
+              <ul class="cont-items clearfix">
+                <% item.products(session[:depot_ids], floor.CompanyID).first(8).each do |product| %>
+                  <li class="cont-item" data-data="<%= product.list_attrs_json %>" id="p-<%= product.ID %>">
+                    <div class="item-img">
+                      <img src="<%= product.cover_url('v220') + image_webp %>">
+                      <% if product.CornerMark.present? %>
+                        <i class="img-tip"><%= product.CornerMark %></i>
+                      <% end %>
+                    </div>
+                    <div class="item-text">
+                      <div class="text-top">
+                        <h3 class="text-title"><%= product.Name %></h3>
+                        <!-- <p class="speci">规格:<span></span></p> -->
+                      </div>
+                      <div class="price"><strong class="red-text">¥<%= product.ProductPrice %><i>/<%= product.Unit %> </i></strong>
+                        <div class="item-console <%= 'show-console' if product.cart_for(current_user) > 0 %>">
+                          <a href="javascript:;" onclick="setAmount.add('<%= product.ID %>')" class="add-item">＋</a>
+                          <div class="item-num" data-min-buycount="<%= product.MinBuyCount || 1 %>">
+                            <input id="<%= product.ID %>" class="number" data-id="<%= product.ID %>" type="num" num="<%= product.cart_for(current_user) %>" value="<%= product.cart_for(current_user) %>" disabled>
+                          </div>
+                          <a href="javascript:;" onclick="setAmount.reduce('<%= product.ID %>')" class="remove-item">－</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <% end %>
+                  <li class="no-cont-item">
+                    <a href="<%= item.recommend_link || item.LinkUrl %>">
+                      <div class="item-img">
+                        <!-- <img src=""> -->
+                      </div>
+                      <div class="item-text">
+                        <div class="text-top">
+                          <p class="text-title red-text">查看更多商品</p>
+                          <p class="speci">MORE  GOODS</p>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <% end %>
+      <% elsif floor.LayoutType == 5 %>
+        <!-- 猜你需要 -->
+        <div class="think-love" data-id="<%= floor.ID %>">
+          <h2 class="love-title">
+            <% if Time.now > Time.parse('2016-10-14 23:00') && Time.now < Time.parse('2016-10-21 00:00') %>
+            <span>周年庆商品推荐</span>
+            <% else %>
+            <span>猜你需要</span>
+            <% end %>
+          </h2>
+        <ul class="cont-items clearfix">
+          <% item_products = (floor.floor_item and floor.floor_item.products(session[:depot_ids], floor.CompanyID).first(6)) %>
+          <% item_products.each do |product| %>
+            <li class="cont-item" data-data="<%= product.list_attrs_json %>" id="p-<%= product.ID %>">
+              <div class="item-img">
+                <img src="<%= product.cover_url('v400') + image_webp %>">
+                <% if product.CornerMark.present? %>
+                  <i class="img-tip"><%= product.CornerMark %></i>
+                <% end %>
+              </div>
+              <div class="item-text">
+                <div class="text-top">
+                  <h3 class="text-title"><%= product.Name %></h3>
+                  <!-- <p class="speci">规格:<span></span></p> -->
+                </div>
+                <div class="price"><strong class="red-text">¥<%= product.ProductPrice %><i>/<%= product.Unit %> </i></strong>
+                  <div class="item-console <%= 'show-console' if product.cart_for(current_user) > 0 %>">
+                    <a href="javascript:;" onclick="setAmount.add('<%= product.ID %>');" class="add-item">＋</a>
+                    <div class="item-num" data-min-buycount="<%= product.MinBuyCount || 1 %>">
+                      <input id="<%= product.ID %>" class="number" num="<%= product.cart_for(current_user) %>" value="<%= product.cart_for(current_user) %>" data-id="<%= product.ID %>" type="num" disabled>
+                    </div>
+                    <a href="javascript:;" onclick="setAmount.reduce('<%= product.ID %>')" class="remove-item">－</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <% end if item_products %>
+          </ul>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <script type="text/javascript">
+    // 限制标题
+    $(".item-text .text-title").each(function(){
+      $(this).html().length > 19 ? $(this).html($(this).html().slice(0,17)+ '...') : '';
+    })
+    // 限制规格字数
+    $(".hot-show .speci").each(function(){
+      $(this).text().length > 13 ? $(this).text($(this).text().slice(0,11)+ '...') : '';
+    })
+    // 设置热门推荐的宽度
+    $(".hot-show .cont-items").each(function(){
+      var $aLi = $(this).find("li");
+      if($aLi.length != 9){
+        var liWidth = Math.ceil(parseFloat($aLi.css("width")) + parseFloat($aLi.css("marginRight"))) * $aLi.length;
+        $(this).width(Math.ceil(liWidth)+10);
+      }
+    })
+    // 登录用户不用弹信息
+    function showPackage() {
+      return $.getJSON("/gift_bag", function(data) {
+        var html, price;
+        if (data.status === "ok") {
+          price = data.data.money;
+          if ($("#show-dialog").length === 0) {
+            html = "<div id=\"show-dialog\" class=\"hidden\">\n    <div id=\"showPackage\">\n        <i class=\"closed\"></i>\n        <div class=\"package-price\">￥" + price + "</div>\n        <div class=\"text\">恭喜您获得了" + price + "元新人红包</div>\n        <a href=\"/sign_up\" class=\"btn\"></a>\n    </div>\n</div>";
+            $("body").append(html);
+            $('#show-dialog').removeClass('hidden');
+            return $("#showPackage .closed,#showPackage .btn").click(function() {
+              $('#show-dialog').remove();
+              return localStorage.setItem("onlyOne", 1);
+            });
+          }
+        }
+      });
+    };
+    $(function(){
+      <% if sign_in? %>
+        // localStorage.setItem("onlyOne",1);
+      <% else %>
+        // var packageShow = localStorage.getItem("onlyOne");
+        // if(packageShow == null){
+        //   showPackage()
+        // }
+      <% end %>
+    })
+  </script>
+ </main>
+<% end %>
+<% content_for :script do %>
+  <%= javascript_include_tag 'index', 'data-turbolinks-track' => true %>
+<% end %>
+
+
+
